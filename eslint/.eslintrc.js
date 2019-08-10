@@ -118,9 +118,6 @@ module.exports = {
     // Custom Rules
     //========================================================================================
 
-    //
-    'import/order': 2,
-
     // Custom rule for checking the copyright.
     copyright: 2,
 
@@ -131,7 +128,9 @@ module.exports = {
     'require-statement-match': 2,
 
     // Require @public/@private for this.something = result;
-    'property-visibility-annotation': 2
+    'property-visibility-annotation': 2,
+
+    'sort-require-statements': 2
   },
   env: {
     browser: true,
