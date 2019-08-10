@@ -38,7 +38,8 @@ module.exports = function( repo, useCache, rulePath ) {
 
     ignorePattern: [
       '**/.git',
-      '**/node_modules'
+      '**/node_modules',
+      '**/third-party'
     ]
   } );
 
