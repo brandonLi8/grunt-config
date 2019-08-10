@@ -12,8 +12,7 @@
 // modules
 const path = require( 'path' );
 const eslinter = require( './eslint/eslinter' );
-
-
+const assert = require( 'assert' );
 
 module.exports = grunt => {
   'use strict';
@@ -32,19 +31,8 @@ module.exports = grunt => {
 
     const useCache = !grunt.option( 'no-cache' );
 
-    // Check package.json was implemented correctly.
-    assert( packageObject && packageObject.eslintConfig && packageObject.eslintConfig.extends !== null,
-      'package.json either doesn\'t exist or doesn\'t have a eslintConfig - extends path.'
-      + '\n\nSee https://github.com/brandonLi8/grunt-config#readme for installation instructions.' );
-
-    //----------------------------------------------------------------------------------------
     handleTask( () => {
-
-      const pathToRules = process.cwd()
-                          + '/'
-                          + path.dirname( packageObject.eslintConfig.extends )
-                          + '/rules';
-      eslinter( packageObject.name, useCache, pathToRules );
+      eslinter( packageObject.name, useCache, packageObject );
     } );
   } );
 
@@ -69,22 +57,6 @@ module.exports = grunt => {
     }
     catch( error ) {
       assert( false, `Task failed:\n${ error.stack || error }` );
-    }
-  }
-
-
-  /**
-   * Grunt specific assertion.
-   *
-   * @param {boolean} value
-   * @param {string} message
-   */
-  function assert( value, message ) {
-    if ( value === false ) {
-      grunt.fail.fatal( message || 'assertion failed' );
-    }
-    else if ( value !== true ) {
-      grunt.fail.fatal( `invalid value ${ value }. Must be a boolean.` );
     }
   }
 

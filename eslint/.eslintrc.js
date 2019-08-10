@@ -118,6 +118,9 @@ module.exports = {
     // Custom Rules
     //========================================================================================
 
+    //
+    'import/order': 2,
+
     // Custom rule for checking the copyright.
     copyright: 2,
 

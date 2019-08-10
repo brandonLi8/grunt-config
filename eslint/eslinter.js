@@ -15,16 +15,31 @@ const grunt = require( 'grunt' );
 const md5 = require( 'md5' );
 const path = require( 'path' );
 const child_process = require( 'child_process' );
+const assert = require( 'assert' );
 
 /**
  * @public
  *
  * @param {string} repo
  * @param {boolean} useCache
- * @param {string} rulePath
+ * @param {object} packageObject
  * @returns {Object} - ESLint report object.
  */
-module.exports = function( repo, useCache, rulePath ) {
+module.exports = function( repo, useCache, packageObject ) {
+
+
+  // Check package.json was implemented correctly.
+  assert( packageObject && packageObject.eslintConfig && packageObject.eslintConfig.extends !== null,
+      'package.json either doesn\'t exist or doesn\'t have a eslintConfig - extends path.'
+      + '\n\nSee https://github.com/brandonLi8/grunt-config#readme for installation instructions.' );
+
+  //----------------------------------------------------------------------------------------
+
+  const pathToRules = process.cwd()
+                      + '/'
+                      + path.dirname( packageObject.eslintConfig.extends )
+                      + '/rules';
+
 
   const cli = new eslint.CLIEngine( {
 
@@ -32,7 +47,7 @@ module.exports = function( repo, useCache, rulePath ) {
 
     cache: useCache,
 
-    rulePaths: [ rulePath ],
+    rulePaths: [ pathToRules ],
 
     cacheFile: `eslint/cache/${md5( [ repo ].join( ',' ) )}.eslintcache`,
 

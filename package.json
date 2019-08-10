@@ -13,6 +13,7 @@
     "url": "git+https://github.com/brandonLi8/grunt-config.git"
   },
   "devDependencies": {
+    "assert": "^2.0.0",
     "eslint": "^6.1.0",
     "grunt": "~1.0.0",
     "md5": "^2.2.1"
