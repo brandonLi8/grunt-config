@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/brandonLi8/grunt-config#readme",
   "eslintConfig": {
-    "extends": "./lint/.eslintrc.js"
+    "extends": "./eslint/.eslintrc.js"
   }
 }
