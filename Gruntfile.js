@@ -1,18 +1,20 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * Grunt configuration file for the project. This file should generally stay the same, as the configurations for
- * specific tasks are not found here. This file is more of a gathering of tasks.
+ * Grunt configuration file for the project.
+ *
+ * This file should generally stay the same, as the configurations for specific tasks are not found here.
+ * This file is more of a gathering of tasks.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
-'use strict';
-
 // modules
 const path = require( 'path' );
+const eslinter = require( './eslint/eslinter' );
 
 module.exports = grunt => {
+  'use strict';
 
   // Convenience reference
   const packageObject = grunt.file.readJSON( 'package.json' );
@@ -26,12 +28,12 @@ module.exports = grunt => {
   //========================================================================================
   grunt.registerTask( 'eslint', 'lint all js files specific to the repo', () => {
 
-    const useCache = !grunt.option( 'no-cache' ); /./
+    const useCache = !grunt.option( 'no-cache' );
 
     // Check package.json was implemented correctly.
     assert( packageObject && packageObject.eslintConfig && packageObject.eslintConfig.extends !== null,
       'package.json either doesn\'t exist or doesn\'t have a eslintConfig - extends path.'
-      + '\n\nSee https://github.com/brandonLi8/grunt-config#readme for installation instructions.' )
+      + '\n\nSee https://github.com/brandonLi8/grunt-config#readme for installation instructions.' );
 
     //----------------------------------------------------------------------------------------
     handleTask( () => {
@@ -39,8 +41,8 @@ module.exports = grunt => {
       const pathToRules = process.cwd()
                           + '/'
                           + path.dirname( packageObject.eslintConfig.extends )
-                          + '/rules'
-      eslint( packageObject.name, useCache, pathToRules );
+                          + '/rules';
+      eslinter( packageObject.name, useCache, pathToRules );
     } );
   } );
 
@@ -64,7 +66,7 @@ module.exports = grunt => {
       task();
     }
     catch( error ) {
-      assert( false, `Task failed:\n${ error.stack || error }` )
+      assert( false, `Task failed:\n${ error.stack || error }` );
     }
   }
 
