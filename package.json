@@ -1,0 +1,26 @@
+{
+  "name": "grunt-config",
+  "author": {
+    "name": "Brandon Li",
+    "email": "brandon.li820@gmail.com",
+    "url": "https://brandonwli.com/"
+  },
+  "version": "1.0.0-dev.0",
+  "description": "Preconfigured/customizable grunt tools for linting, compiling, etc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brandonLi8/grunt-config.git"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.0"
+  },
+   "bugs": {
+    "url": "https://github.com/brandonLi8/grunt-config/issues",
+    "email": "brandon.li820@gmail.com"
+  },
+  "homepage": "https://github.com/brandonLi8/grunt-config#readme",
+  "eslintConfig": {
+    "extends": "./eslint/.eslintrc.js"
+  }
+}
