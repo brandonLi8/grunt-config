@@ -10,9 +10,8 @@
  */
 
 // modules
-const path = require( 'path' );
-const eslinter = require( './eslint/eslinter' );
 const assert = require( 'assert' );
+const eslinter = require( './eslint/eslinter' );
 
 module.exports = grunt => {
   'use strict';
