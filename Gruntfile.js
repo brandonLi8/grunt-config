@@ -12,6 +12,8 @@
 // modules
 const assert = require( 'assert' );
 const eslinter = require( './eslint/eslinter' );
+const generateTravis = require( './grunt-commands/generateTravis' );
+
 
 module.exports = grunt => {
   'use strict';
@@ -21,7 +23,7 @@ module.exports = grunt => {
 
 
   //========================================================================================
-  // ES-LINT - linting JS files
+  // ES-LINT - linting JS files (`grunt eslint`)
   //
   // Uses a cache by default (i.e. if a file doesn't change, no need to re-lint)
   // Use `grunt eslint --no-cache` to ignore the cache
@@ -29,12 +31,34 @@ module.exports = grunt => {
   grunt.registerTask( 'eslint', 'lint all js files specific to the repo', () => {
 
     const useCache = !grunt.option( 'no-cache' );
-
     handleTask( () => {
       eslinter( packageObject.name, useCache, packageObject );
     } );
   } );
 
+  //========================================================================================
+  // CAN-BUILD - lints html, css, and javascript which effectively checks if the repo is in a
+  // state to be built/compiled.
+  //
+  // Usage: 'grunt can-build'
+  // Will automatically not use cache
+  //========================================================================================
+  grunt.registerTask( 'can-build', 'checks to makes sure the repo is linted correctly', [
+    'grunt eslint --no-cache' // lint javascript (no cache)
+  ] );
+
+
+  //========================================================================================
+  // GENERATE-TRAVIS - generates a .travis.yml file in the Root directory.
+  //
+  // Uses a cache by default (i.e. if a file doesn't change, no need to re-lint)
+  // Use `grunt eslint --no-cache` to ignore the cache
+  //========================================================================================
+  grunt.registerTask( 'generate-travis', 'Generates a travis.yml file', () => {
+    handleTask( () => {
+      generateTravis( packageObject );
+    } );
+  } );
 
 
   //========================================================================================
@@ -48,9 +72,7 @@ module.exports = grunt => {
    * @param {function} task
    */
   function handleTask( task ) {
-
     assert( typeof task === 'function', `invalid task: ${task}` );
-
     try {
       task();
     }
