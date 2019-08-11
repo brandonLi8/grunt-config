@@ -17,10 +17,6 @@
 #===========================================================================-->
 # {{NAME}} <!-- 'name' key in package.json. Should match repository name. -->
 
-<!-- NOTE: WERCKER_KEY and TRAVIS are defined in package.json as `wercker-key` and `travis` respectively. -->
-[![wercker status](https://app.wercker.com/status/{{WERCKER_KEY}}/m/master "wercker status")](https://app.wercker.com/project/byKey/{{WERCKER_KEY}})
-[![build status](https://api.travis-ci.org/{{TRAVIS}}.svg?branch=master)](https://travis-ci.org/{{TRAVIS}})
-
 {{DESCRIPTION}} <!-- Found in the 'description' key. If not provided, this should be empty -->
 
 ## Try it!
