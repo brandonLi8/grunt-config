@@ -11,7 +11,7 @@
 
 // modules
 const assert = require( 'assert' );
-const eslinter = require( './eslint/eslinter' );
+const eslinter = require( './grunt-commands/eslinter' );
 const generateTravis = require( './grunt-commands/generateTravis' );
 
 
