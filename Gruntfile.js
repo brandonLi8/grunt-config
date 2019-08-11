@@ -14,6 +14,7 @@ const assert = require( './grunt-commands/helpers/assert' );
 const createTask = require( './grunt-commands/helpers/createTask' );
 const eslinter = require( './grunt-commands/eslinter' );
 const generateTravis = require( './grunt-commands/generateTravis' );
+const generateReadme = require( './grunt-commands/generateReadme' );
 
 
 module.exports = grunt => {
@@ -35,7 +36,6 @@ module.exports = grunt => {
   } ) );
 
 
-
   //========================================================================================
   // GENERATE-TRAVIS - generates a .travis.yml file in the Root directory.
   //
@@ -45,6 +45,15 @@ module.exports = grunt => {
   grunt.registerTask( 'generate-travis', 'Generates a travis.yml file', createTask( () => {
     generateTravis( packageObject );
   } ) );
+
+
+  //========================================================================================
+  // `grunt generate-readme` - generates a README.md file in the toot directory.
+  //========================================================================================
+  grunt.registerTask( 'generate-readme', 'Generates a travis.yml file', createTask( () => {
+    generateReadme( packageObject );
+  } ) );
+
 
   //========================================================================================
   // CAN-BUILD - lints html, css, and javascript which effectively checks if the repo is in a

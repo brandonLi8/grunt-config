@@ -15,14 +15,12 @@ const assert = require( './helpers/assert' );
 const grunt = require( 'grunt' );
 const replaceAll = require( './helpers/replaceAll' );
 
-
 /**
  * @param {object} packageObject - object literal of package.JSON
  */
 module.exports = packageObject => {
-  'use strict';
 
-  let readme = grunt.file.read( '../templates/readme-template.md' );
+  let readme = grunt.file.read( 'templates/readme-template.md' );
 
   //========================================================================================
   // Replace the year - not part of package.json.
@@ -31,7 +29,7 @@ module.exports = packageObject => {
 
   //========================================================================================
   // Replace author traits.
-  assert( packageObject.author && package.author.email && packageObject.author.email !== null,
+  assert( packageObject.author && packageObject.author.email && packageObject.author.email !== null,
     `Package.json should contain an author key-value pairing with a name and a email specified. Something like:
 
     "author": {
@@ -92,5 +90,5 @@ module.exports = packageObject => {
   // Write to the repository's root directory.
   grunt.file.write( './README.md', readme );
 
-  grunt.log.write( 'README successfully generated!' );
+  grunt.log.write( '\n\nREADME successfully generated!' );
 };
