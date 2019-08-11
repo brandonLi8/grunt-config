@@ -1,12 +1,14 @@
 <!-- Copyright © 2019 Brandon Li. All rights reserved. -->
-grunt-config
-=============
+# grunt-config
 
 [![wercker status](https://app.wercker.com/status/60307013102cc6d5ab0c4268bb705be8/m/master "wercker status")](https://app.wercker.com/project/byKey/60307013102cc6d5ab0c4268bb705be8)
 [![build status](https://api.travis-ci.org/brandonLi8/grunt-config.svg?branch=master)](https://travis-ci.org/brandonLi8/grunt-config)
+<br>
 
-Preconfigured/customizable grunt tools for linting, compiling, and various other development tasks.
+Preconfigured/customizable grunt tools for linting, compiling, and various other development tasks. <br>
 ***Customizable*** for your project, follow the [Installation and Configuration](#installation-configuration) directions.
+
+<br>
 
 ### Table of Contents
  * [Installation and Configuration](#installation-configuration)
