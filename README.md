@@ -8,8 +8,6 @@
 Preconfigured/customizable grunt tools for linting, compiling, and various other development tasks. <br>
 ***Customizable*** for your project, follow the [Installation and Configuration](#installation-configuration) directions.
 
-<br>
-
 ### Table of Contents
  * [Installation and Configuration](#installation-configuration)
  * [Linting](#linting)
