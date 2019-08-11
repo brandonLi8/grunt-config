@@ -19,10 +19,6 @@ module.exports = packageObject => {
 
   let defaultTravis = grunt.file.read( 'templates/travis-template.yml' );
 
-  const replaceAll = ( str, find, replaceWith ) => {
-    return str.replace( new RegExp( find.replace( /[-\/\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), replaceWith );
-  }
-
   // Replace placeholders in the template.
   defaultTravis = replaceAll( defaultTravis, '{{CURRENT_YEAR}}', new Date().getFullYear() );
   defaultTravis = replaceAll( defaultTravis, '{{AUTHOR}}', packageObject.author.name );

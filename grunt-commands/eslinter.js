@@ -49,7 +49,7 @@ module.exports = function( repo, useCache, packageObject ) {
 
     rulePaths: [ pathToRules ],
 
-    cacheFile: `eslint/cache/${md5( [ repo ].join( ',' ) )}.eslintcache`,
+    cacheFile: `${pathToRules}/../cache/${md5( [ repo ].join( ',' ) )}.eslintcache`,
 
     ignorePattern: [
       '**/.git',
