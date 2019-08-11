@@ -34,5 +34,11 @@ build:
         code: |
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
+    - script:
+        name: install grunt
+        code: |
+          npm install -g grunt-cli
+          npm install grunt --save-dev
     - grunt:
         tasks: eslint
+
