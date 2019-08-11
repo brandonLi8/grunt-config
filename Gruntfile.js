@@ -44,7 +44,7 @@ module.exports = grunt => {
   // Will automatically not use cache
   //========================================================================================
   grunt.registerTask( 'can-build', 'checks to makes sure the repo is linted correctly', [
-    'grunt eslint --no-cache' // lint javascript (no cache)
+    'eslint' // lint javascript (no cache)
   ] );
 
 

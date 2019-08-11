@@ -31,4 +31,4 @@ before_script:
 script:
   - grunt can-build               # test for a successful build
 after_script:
-  - echo "{{REPO}} Was succefully built!"
+  - echo "goodbye {{REPO}}, travis is done..."
