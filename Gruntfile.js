@@ -11,8 +11,10 @@
 
 // modules
 const assert = require( './grunt-commands/helpers/assert' );
+const createTask = require( './grunt-commands/helpers/createTask' );
 const eslinter = require( './grunt-commands/eslinter' );
 const generateTravis = require( './grunt-commands/generateTravis' );
+
 
 module.exports = grunt => {
   'use strict';
@@ -27,13 +29,9 @@ module.exports = grunt => {
   // Uses a cache by default (i.e. if a file doesn't change, no need to re-lint)
   // Use `grunt eslint --no-cache` to ignore the cache
   //========================================================================================
-  grunt.registerTask( 'eslint', 'lint all js files specific to the repo', () => {
-
-    const useCache = !grunt.option( 'no-cache' );
-    handleTask( () => {
-      eslinter( packageObject.name, useCache, packageObject );
-    } );
-  } );
+  grunt.registerTask( 'eslint', 'lint all js files specific to the repo', createTask( () => {
+    eslinter( packageObject.name, !grunt.option( 'no-cache' ), packageObject );
+  } ) );
 
   //========================================================================================
   // CAN-BUILD - lints html, css, and javascript which effectively checks if the repo is in a
@@ -43,7 +41,7 @@ module.exports = grunt => {
   // Will automatically not use cache
   //========================================================================================
   grunt.registerTask( 'can-build', 'checks to makes sure the repo is linted correctly', [
-    'eslint' // lint javascript (no cache)
+    'eslint' // lint javascript (no cache) TODO add linters for html, css, etc
   ] );
 
 
@@ -53,31 +51,8 @@ module.exports = grunt => {
   // Uses a cache by default (i.e. if a file doesn't change, no need to re-lint)
   // Use `grunt eslint --no-cache` to ignore the cache
   //========================================================================================
-  grunt.registerTask( 'generate-travis', 'Generates a travis.yml file', () => {
-    handleTask( () => {
-      generateTravis( packageObject );
-    } );
-  } );
-
-
-  //========================================================================================
-  // Helper functions
-  //========================================================================================
-
-  /**
-   * Custom handling of a grunt task. Ensures that if a failure happens, a full stack trace is provided, regardless of
-   * whether --stack was provided.
-   *
-   * @param {function} task
-   */
-  function handleTask( task ) {
-    assert( typeof task === 'function', `invalid task: ${task}` );
-    try {
-      task();
-    }
-    catch( error ) {
-      assert( false, `Task failed:\n${ error.stack || error }` );
-    }
-  }
+  grunt.registerTask( 'generate-travis', 'Generates a travis.yml file',createTask( () => {
+    generateTravis( packageObject );
+  } ) );
 
 };

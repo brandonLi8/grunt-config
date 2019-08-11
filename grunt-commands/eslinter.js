@@ -15,7 +15,7 @@ const grunt = require( 'grunt' );
 const md5 = require( 'md5' );
 const path = require( 'path' );
 const child_process = require( 'child_process' );
-const assert = require( 'assert' );
+const assert = require( './helpers/assert' );
 
 /**
  * @public
@@ -68,6 +68,4 @@ module.exports = function( repo, useCache, packageObject ) {
 
   report.warningCount && grunt.fail.warn( report.warningCount + ' Lint Warnings' );
   report.errorCount && grunt.fail.fatal( report.errorCount + ' Lint Errors' );
-
-  return report;
 };

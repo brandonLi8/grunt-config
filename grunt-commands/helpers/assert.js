@@ -34,6 +34,6 @@ module.exports = ( predicate, message ) => {
   //----------------------------------------------------------------------------------------
   // assert the predicate is true
   if ( predicate === false ) {
-    ERROR_FUNCTION( message || DEFUALT_MESSAGE );
+    ERROR_FUNCTION( message || DEFAULT_MESSAGE );
   }
 };
