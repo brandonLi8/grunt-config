@@ -40,5 +40,5 @@ build:
           npm install -g grunt-cli
           npm install grunt --save-dev
     - grunt:
-        tasks: eslint
+        tasks: eslint --gruntfile ./Gruntfile.js
 
