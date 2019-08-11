@@ -31,7 +31,7 @@ branches:                         # build only master
     - master
 
 before_script:
-  - rm -rf node_modules           # create a fresh copy of node_modules
+  - npm prune -production=true    # prune - ensure a fresh copy of node_modules
   - npm install                   # install dependencies
   - npm install -g grunt-cli      # install grunt
   - npm install grunt --save-dev
