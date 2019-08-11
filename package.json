@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brandonLi8/grunt-config.git"
+    "url": "https://github.com/brandonLi8/grunt-config.git"
   },
   "devDependencies": {
     "eslint": "^6.1.0",
