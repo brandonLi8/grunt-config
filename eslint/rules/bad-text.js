@@ -44,6 +44,7 @@ const BAD_TEXTS = [
   ' on on ',
   ' with with ',
   ' for for ',
+  ' from from ',
   ' it it '
 ];
 
