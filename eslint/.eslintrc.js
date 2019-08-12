@@ -45,6 +45,10 @@ module.exports = {
     //   tabwidth: 2
     // } ],
 
+    'no-trailing-spaces': 2,
+
+    'require-statement-match': 2,
+
     // Should never have a space (e.g. foo ( args ) should be foo( args ))
     'func-call-spacing': [ 2, 'never' ],
 
@@ -76,7 +80,7 @@ module.exports = {
     'no-new-func': 2,
 
     // Require or disallow strict mode directives (strict)
-    strict: 2,
+    strict: [ 2, 'global' ],
 
     // Encourages use of dot notation whenever possible (foo.bar, not foo[ 'bar' ] )
     'dot-notation': 2,
