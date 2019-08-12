@@ -29,7 +29,7 @@
 ## Quick Start
 (1) Clone the repository in a desired spot
 ```
-{{REPO_URL}}
+{{GIT_URL}}
 ```
 (2) Start an http-server
 ```
@@ -40,9 +40,9 @@ http-server
 
 ## Get Involved
 
-Contact me via <a href="mailto:{{AUTHOR_EMAIL}}" target="_blank"> email </a>.
+Contact me via <a href="mailto:{{AUTHOR_EMAIL}}" target="_blank"> email</a>.
 
-Help improve the app by creating a <a href="{{REPO_URL}}" target="_blank">New Issue</a>
+Help improve the app by creating a <a href="{{ISSUE_URL}}" target="_blank">New Issue</a>.
 
 <!-- NOTE: this can change to whatever you want.. create a fork to customizable the code style -->
 Use this [code style guideline](https://github.com/brandonLi8/grunt-config/templates/code-style.md) for this project.

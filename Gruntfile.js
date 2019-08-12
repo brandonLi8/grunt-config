@@ -13,8 +13,7 @@
 const assert = require( './grunt-commands/helpers/assert' );
 const createTask = require( './grunt-commands/helpers/createTask' );
 const eslinter = require( './grunt-commands/eslinter' );
-const generateTravis = require( './grunt-commands/generateTravis' );
-const generateReadme = require( './grunt-commands/generateReadme' );
+const generate = require( './grunt-commands/generate' );
 
 
 module.exports = grunt => {
@@ -51,7 +50,7 @@ module.exports = grunt => {
   // `grunt generate-readme` - generates a README.md file in the toot directory.
   //========================================================================================
   grunt.registerTask( 'generate-readme', 'Generates a travis.yml file', createTask( () => {
-    generateReadme( packageObject );
+    generate( packageObject, 'templates/readme-template.md', 'tests/readme-test.md' );
   } ) );
 
 
