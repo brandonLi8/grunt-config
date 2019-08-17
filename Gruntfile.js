@@ -20,28 +20,36 @@ module.exports = grunt => {
 
 
   //========================================================================================
-  // The following commands generate files
+  // The following commands "generate" files
   //========================================================================================
 
   /**
-   * Generates a README.md file (in the root directory) based on the template in './tests/readme-test.md'
-   * @usage: `grunt generate-readme` || `grunt eslint --test`
+   * Generates a README.md file (in the root directory) based on the template in './templates/readme-template.md'
+   * @usage: `grunt generate-readme` || `grunt generate-readme --test`
    *
-   * @option '--test' - generates a readme.test file in ./tests/readme-test.md instead, but uses the same template.
+   * @option '--test' - generates a readme test file in './tests/readme-test.md' instead, but uses the same template.
    */
   grunt.registerTask( 'generate-readme', 'Generates a README.md file', createTask( () => {
 
     // flag that indicates where to generate the file to.
     const generatePath = grunt.option( 'test' ) === true ? 'tests/readme-test.md' : 'README.md';
 
-    // generate the file using the template
     generate( packageObject, 'templates/readme-template.md', generatePath );
-
   } ) );
 
+  /**
+   * Generates a .travis.yml file (in the root directory) based on the template in './templates/travis-template.yml'
+   * @usage: `grunt generate-travis` || `grunt generate-travis --test`
+   *
+   * @option '--test' - generates a travis test file in ./tests/travis-test.md instead, but uses the same template.
+   */
+  grunt.registerTask( 'generate-travis', 'Generates a .travis.yml file', createTask( () => {
 
+    // flag that indicates where to generate the file to.
+    const generatePath = grunt.option( 'test' ) === true ? 'tests/travis-test.yml' : '.travis.yml';
 
-
+    generate( packageObject, 'templates/travis-template.yml', generatePath );
+  } ) );
 
 
 
@@ -56,16 +64,6 @@ module.exports = grunt => {
     eslinter( packageObject.name, !grunt.option( 'no-cache' ), packageObject );
   } ) );
 
-
-  //========================================================================================
-  // GENERATE-TRAVIS - generates a .travis.yml file in the Root directory.
-  //
-  // Uses a cache by default (i.e. if a file doesn't change, no need to re-lint)
-  // Use `grunt eslint --no-cache` to ignore the cache
-  //========================================================================================
-  grunt.registerTask( 'generate-travis', 'Generates a travis.yml file', createTask( () => {
-    generateTravis( packageObject );
-  } ) );
 
 
 
