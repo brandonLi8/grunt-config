@@ -56,7 +56,7 @@ module.exports = ( packageObject, templatePath, writePath ) => {
         }`
     },
 
-    '{{NAME}}': {
+    '{{REPO}}': {
       value: packageObject.name,
       failExample: '\n        "name": "grunt-config"'
     },
