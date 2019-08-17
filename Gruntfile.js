@@ -1,23 +1,23 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * Grunt configuration file for the project.
- *
- * This file should generally stay the same, as the configurations for specific tasks are not found here.
- * This file is rather of a gathering of tasks.
+ * Grunt configuration file. For more context, see https://gruntjs.com/getting-started
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
-// modules
-const assert = require( './grunt-commands/helpers/assert' );
-const createTask = require( './grunt-commands/helpers/createTask' );
-const eslinter = require( './grunt-commands/eslinter' );
-const generate = require( './grunt-commands/generate' );
-
-
 module.exports = grunt => {
   'use strict';
+
+  // modules
+  const assert = require( './grunt-commands/helpers/assert' );
+  const createTask = require( './grunt-commands/helpers/createTask' );
+  const eslinter = require( './grunt-commands/eslinter' );
+  const generate = require( './grunt-commands/generate' );
+
+
+
+
 
   // Convenience reference
   const packageObject = grunt.file.readJSON( 'package.json' );

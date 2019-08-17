@@ -80,7 +80,7 @@ module.exports = {
     'no-new-func': 2,
 
     // Require or disallow strict mode directives (strict)
-    strict: [ 2, 'global' ],
+    strict: 2,
 
     // Encourages use of dot notation whenever possible (foo.bar, not foo[ 'bar' ] )
     'dot-notation': 2,
@@ -137,7 +137,8 @@ module.exports = {
   },
   env: {
     browser: true,
-    es6: true
+    es6: true,
+    node: true
   },
   parserOptions: {
     ecmaVersion: 8
