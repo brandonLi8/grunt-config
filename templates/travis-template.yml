@@ -9,7 +9,7 @@
 #            https://github.com/brandonLi8/grunt-config/Gruntfile.js). Your repository's
 #            Gruntfile must extend to this Gruntfile to run the command.
 #
-# Entry point for travis-cli.org. This file instructs travis-ci.org to solely check that master can be 'built' by
+# Entry point for travis-cli.org. This file instructs travis-ci.org to solely check that every branch can be 'built' by
 # checking if everything can be linted. This is to prevent rogue commits/merges on this project that aren't linted.
 #
 # @author {{AUTHOR}} {{AUTHOR_EMAIL}}
@@ -17,14 +17,14 @@
 #====================================================================================================
 
 language:
-  node_js                         # only node for now. Other templates for other languages to be added later.
+  node_js                         # use Node.js
 
 node_js:
-  - '10'                          # tentative version
+  - node                          # tentative version
 
-branches:                         # build only master
+branches:
   only:
-    - master
+    - /.*/                        # test every branch.  This file needs to be present on all branches as well.
 
 before_script:
   - npm prune -production=true    # prune - ensure a fresh copy of node_modules
@@ -34,7 +34,7 @@ before_script:
   - npm update                    # update npm dependencies
 
 script:
-  - grunt can-build               # test for a successful build
+  - grunt lint-all                # lint everything. NOTE: this is another custom command...
 
 after_script:
-  - echo goodbye {{REPO}}, travis is done...
+  - echo {{REPO}} is lint free!
