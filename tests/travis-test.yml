@@ -24,7 +24,7 @@ language:
   node_js                         # only node for now. Other templates for other languages to be added later.
 
 node_js:
-  - '10'                          # tentative version
+  - node                          # tentative version
 
 branches:                         # build only master
   only:
