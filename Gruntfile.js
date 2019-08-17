@@ -15,14 +15,36 @@ module.exports = grunt => {
   const eslinter = require( './grunt-commands/eslinter' );
   const generate = require( './grunt-commands/generate' );
 
-
-
-
-
   // Convenience reference
   const packageObject = grunt.file.readJSON( 'package.json' );
 
-  //
+
+  //========================================================================================
+  // The following commands generate files
+  //========================================================================================
+
+  /**
+   * Generates a README.md file (in the root directory) based on the template in './tests/readme-test.md'
+   * @usage: `grunt generate-readme` || `grunt eslint --test`
+   *
+   * @option '--test' - generates a readme.test file in ./tests/readme-test.md instead, but uses the same template.
+   */
+  grunt.registerTask( 'generate-readme', 'Generates a README.md file', createTask( () => {
+
+    // flag that indicates where to generate the file to.
+    const generatePath = grunt.option( 'test' ) === true ? 'tests/readme-test.md' : 'README.md';
+
+    // generate the file using the template
+    generate( packageObject, 'templates/readme-template.md', generatePath );
+
+  } ) );
+
+
+
+
+
+
+
 
   //========================================================================================
   // ES-LINT - linting JS files (`grunt eslint`)
@@ -46,12 +68,7 @@ module.exports = grunt => {
   } ) );
 
 
-  //========================================================================================
-  // `grunt generate-readme` - generates a README.md file in the toot directory.
-  //========================================================================================
-  grunt.registerTask( 'generate-readme', 'Generates a travis.yml file', createTask( () => {
-    generate( packageObject, 'templates/readme-template.md', 'tests/readme-test.md' );
-  } ) );
+
 
 
   //========================================================================================
