@@ -40,10 +40,13 @@ module.exports = {
     'brace-style': [ 2, 'stroustrup' ],
 
     // Enforces a max line length
-    // 'max-len': [ 2, {
-    //   code: 120,
-    //   tabwidth: 2
-    // } ],
+    'max-len': [ 2, {
+      code: 120,
+      tabWidth: 2,
+      ignoreUrls: true,
+      ignoreRegExpLiterals: true,
+      ignorePattern: '^\\s*var\\s.+=\\s*require\\s*\\('
+    } ],
 
     'no-trailing-spaces': 2,
 
@@ -80,7 +83,7 @@ module.exports = {
     'no-new-func': 2,
 
     // Require or disallow strict mode directives (strict)
-    strict: 2,
+    strict: [ 2, 'function' ],
 
     // Encourages use of dot notation whenever possible (foo.bar, not foo[ 'bar' ] )
     'dot-notation': 2,

@@ -12,7 +12,7 @@
 
 module.exports = function( context ) {
   'use strict';
-
+  // the the extends Object a a
   return {
 
     Program: function checkCopyright( node ) {
