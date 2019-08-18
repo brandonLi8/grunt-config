@@ -1,4 +1,5 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
+/* eslint-disable */
 
 /**
  * Custom eslint rule that checks for:
@@ -76,31 +77,32 @@ module.exports = {
    */
   create: context => {
 
-    const Program = node => {
+    return {
+      Program( node ) {
 
-      // get the source code text
-      const sourceCodeText = context.getSourceCode().text;
+        // get the source code text
+        const sourceCodeText = context.getSourceCode().text;
 
-      BAD_TEXTS.forEach( badText => {
+        BAD_TEXTS.forEach( badText => {
 
-        // reference to a potential failure
-        let failedText = null;
-        if ( badText.regex instanceof RegExp && badText.regex.test( sourceCodeText ) ) {
-          failedText = badText.name;
-        }
-        if ( sourceCodeText.indexOf( badText ) >= 0 ) {
-          failedText = badText;
-        }
+          // reference to a potential failure
+          let failedText = null;
+          if ( badText.regex instanceof RegExp && badText.regex.test( sourceCodeText ) ) {
+            failedText = badText.name;
+          }
+          if ( sourceCodeText.indexOf( badText ) >= 0 ) {
+            failedText = badText;
+          }
 
-        // report if a failure occurs
-        failedText && context.report( {
-          node,
-          message: `File contains bad text: ${ badText }`
-       } );
+          // report if a failure occurs
+          failedText && context.report( {
+            node,
+            message: `File contains bad text: ${ badText }`
+         } );
 
-      } );
+        } );
+      }
     };
 
-    return { Program };
   }
 };

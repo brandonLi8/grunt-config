@@ -106,7 +106,7 @@ module.exports = ( packageObject, templatePath, writePath ) => {
 
 
   }
-
+  grunt.log.write(  grunt.option( 'test' ) === true )
 
   Object.keys( replacementStrings ).forEach( replacementString => {
 
