@@ -27,7 +27,7 @@ module.exports = ( predicate, message ) => {
   if ( typeof predicate !== 'boolean' ) {
     ERROR_FUNCTION( `invalid predicate:${ predicate }` );
   }
-  if ( typeof message !== 'string' || message === null ) {
+  if ( typeof message !== 'string' && message ) {
     ERROR_FUNCTION( `invalid message: ${ message }` );
   }
 
