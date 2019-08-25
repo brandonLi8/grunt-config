@@ -1,21 +1,26 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * A custom rule that requires a correct copyright statement on the first line
+ * A custom rule that requires a correct copyright statement on the first line of every **.js file.
  *
- * ## Documentation:
- *  - The copyright statement must be in the form "Copyright © {{YEARS}} {{AUTHOR}}. All rights reserved."
- *  - the '{{YEARS}}' can be a single year (eg. '2019') or multiple years (eg. '2019-2022')
- *  - the {{AUTHOR}} is based on the author in the package.json file. The author should look like:
- *      "author": {
- *        "name": "Brandon Li",
- *        "email": "brandon.li820@gmail.com"
- *      }
+ * Copyright statements MUST be in one of the two forms (case-sensitive):
+ *    1. // Copyright © ${ YEAR } ${ AUTHOR }. All rights reserved.
+ *    2. // Copyright © ${ YEAR }-${ YEAR } ${ AUTHOR }. All rights reserved.
+ *
+ *    - where `${ YEAR }` is any 4 digit year (eg. '2019')
+ *    - where `${ AUTHOR }` is the author listed in **package.json**. The author key-value should look like:
+ *
+ *      ```
+ *        "author": {
+ *           "name": "Brandon Li",              // {required} your name
+ *           "email": "brandon.li820@gmail.com" // {optional} your email
+ *        }
+ *      ```
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
-module.exports = ( () => {
+module.exports = ( ( args ) => {
   'use strict';
 
   // modules
@@ -23,22 +28,18 @@ module.exports = ( () => {
   const grunt = require( 'grunt' );
 
   // constants
-  const PACKAGE = grunt.file.readJSON( 'package.json' );
-  const AUTHOR = ( PACKAGE.author && PACKAGE.author.name ) ? PACKAGE.author.name : null;
+
+  // String literal using RegExp for any 4-digit year. See https://www.rexegg.com/regex-quickstart.html for context.
+  const YEAR = '\\d\\d\\d\\d';
 
 
-  //------------------------------------------------------------------------------
-  // Rule Definition
-  //------------------------------------------------------------------------------
   return {
 
-    //----------------------------------------------------------------------------------------
     // Meta-data
-    //----------------------------------------------------------------------------------------
     meta: {
       type: 'problem',
       docs: {
-        description: 'require correct copyright statements',
+        description: 'Require correct copyright statements. See grunt-config//rules/copyright.js for more doc.',
         category: 'Best Practices',
         recommended: true
       },
@@ -47,7 +48,7 @@ module.exports = ( () => {
     },
 
     /**
-     * Creates the rule function
+     * Creates the Rule Definition
      * @param {Object} context - Object literal that contains information relevant to the rule. See
      *                           https://eslint.org/docs/developer-guide/working-with-rules
      *
@@ -57,35 +58,38 @@ module.exports = ( () => {
 
       return {
 
+        /**
+         * Checks to make sure the copyright is correct. Called at the start of every file.
+         *
+         * @param {ASTNode} node - the current node (of the file)
+         */
         Program( node ) {
 
+          // convenience references
+          const packageObj = grunt.file.readJSON( 'package.json' );
+          const author = ( packageObj.author && packageObj.author.name ) ? packageObj.author.name : null;
+
           // Check that the package.json was implemented correctly.
-          assert( typeof AUTHOR === 'string',
-            'package.json was not implemented correctly. See grunt-config/eslint/rules/copyright.js' );
+          assert( typeof author === 'string',
+            'package.json was not implemented correctly. See grunt-config/eslint/rules/copyright.js for doc.' );
 
-          // Get the comments of the source code
-          const comments = context.getSourceCode().getAllComments();
+          // Get the first line of code of the file. Derived be getting the entire source code but extracting
+          // the string up to either the first newline or the end of the file (which ever occurs first).
+          // If the file is empty, this results in an empty string.
+          const firstLine = context.getSourceCode().text.split( '\n' )[ 0 ];
 
+          // Array of booleans that indicate if they correspond to the template.
+          const isValidCopyrights = [
+            new RegExp( `// Copyright © ${ YEAR }-${ YEAR } ${ author }. All rights reserved.` ).test( firstLine ),
+            new RegExp( `// Copyright © ${ YEAR } ${ author }. All rights reserved.` ).test( firstLine )
+          ];
 
-          if ( !comments || comments.length === 0 ) {
-            context.report( {
-              node: node,
-              loc: 1,
-              message: 'Incorrect copyright statement in first comment'
-            } );
-          }
-          else {
-            grunt.log.write( new RegExp( ` Copyright © \\d\\d\\d\\d-\\d\\d\\d\\d ${ AUTHOR }. All rights reserved\.` ) )
-            var isDateRangeOK = new RegExp( ` Copyright © \\d\\d\\d\\d-\\d\\d\\d\\d ${ AUTHOR }. All rights reserved\.` ).test( comments[ 0 ].value );
-            var isSingleDateOK = new RegExp( ` Copyright © \\d\\d\\d\\d ${ AUTHOR }. All rights reserved\.` ).test( comments[ 0 ].value );
-            if ( !isDateRangeOK && !isSingleDateOK ) {
-              context.report( {
-                node: node,
-                loc: comments[ 0 ].loc.start,
-                message: 'Incorrect copyright statement in first comment'
-              } );
-            }
-          }
+          // If there aren't any valid copyrights, report the incorrect copy right statement
+          !isValidCopyrights.includes( true ) && context.report( {
+            node: node,
+            loc: 1,
+            message: 'Incorrect copyright statement on first line.'
+          } );
         }
 
       };
