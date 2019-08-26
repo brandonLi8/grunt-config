@@ -15,7 +15,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const assert = require( '../../grunt-commands/helpers/assert' );
+  // const assert = require( '../../grunt-commands/helpers/assert' );
 
 
   //------------------------------------------------------------------------------
@@ -46,67 +46,68 @@ module.exports = ( () => {
      */
     create: context => {
 
-      var sourceCode = context.getSourceCode();
+      const sourceCode = context.getSourceCode();
 
-      var hasRequire = /require\(/;
-      var groups = [];
-      var previousNode = void 0;
+      const hasRequire = /require\(/;
+      const groups = [];
+      let previousNode = void 0;
 
-      function check(group) {
-        var texts = group.map(function (decl) {
-          return sourceCode.getText(decl);
-        });
+      function check( group ) {
+        const texts = group.map( function( decl ) {
+          return sourceCode.getText( decl );
+        } );
 
-        if (!isSorted(texts)) {
-          texts.sort(function (a, b) {
-            var aLower = a.toLowerCase();
-            var bLower = b.toLowerCase();
+        if ( !isSorted( texts ) ) {
+          texts.sort( function( a, b ) {
+            const aLower = a.toLowerCase();
+            const bLower = b.toLowerCase();
             return aLower < bLower ? -1 : aLower > bLower ? 1 : 0;
-          });
+          } );
 
-          context.report({
-            loc: { start: group[0].loc.start, end: last(group).loc.end },
+          context.report( {
+            loc: { start: group[ 0 ].loc.start, end: last( group ).loc.end },
             message: 'This group of requires is not sorted',
-            fix: function fix(fixer) {
-              return fixer.replaceTextRange([group[0].start, last(group).end], texts.join('\n'));
+            fix: function fix( fixer ) {
+              return fixer.replaceTextRange( [ group[ 0 ].start, last( group ).end ], texts.join( '\n' ) );
             }
-          });
+          } );
         }
       }
 
-      function last(ary) {
-        return ary[ary.length - 1];
+      function last( ary ) {
+        return ary[ ary.length - 1 ];
       }
 
-      function shouldStartNewGroup(node, previousNode) {
-        if (!previousNode) return true;
-        if (node.parent !== previousNode.parent) return true;
+      function shouldStartNewGroup( node, previousNode ) {
+        if ( !previousNode ) return true;
+        if ( node.parent !== previousNode.parent ) return true;
 
-        var lineOfNode = sourceCode.getFirstToken(node).loc.start.line;
-        var lineOfPrev = sourceCode.getLastToken(previousNode).loc.start.line;
+        const lineOfNode = sourceCode.getFirstToken( node ).loc.start.line;
+        const lineOfPrev = sourceCode.getLastToken( previousNode ).loc.start.line;
         return lineOfNode - lineOfPrev !== 1;
       }
 
-      function isSorted(ary) {
-        return ary.every(function (value, idx) {
-          return idx === 0 || ary[idx - 1].toLowerCase() <= value.toLowerCase();
-        });
+      function isSorted( ary ) {
+        return ary.every( function( value, idx ) {
+          return idx === 0 || ary[ idx - 1 ].toLowerCase() <= value.toLowerCase();
+        } );
       }
 
       return {
-        VariableDeclaration: function VariableDeclaration(node) {
-          if (!hasRequire.test(sourceCode.getText(node))) return;
+        VariableDeclaration: function VariableDeclaration( node ) {
+          if ( !hasRequire.test( sourceCode.getText( node ) ) ) return;
 
-          if (shouldStartNewGroup(node, previousNode)) {
-            groups.push([node]);
-          } else {
-            last(groups).push(node);
+          if ( shouldStartNewGroup( node, previousNode ) ) {
+            groups.push( [ node ] );
+          }
+          else {
+            last( groups ).push( node );
           }
 
           previousNode = node;
         },
-        'Program:exit': function ProgramExit(node) {
-          groups.forEach(check);
+        'Program:exit': function ProgramExit() {
+          groups.forEach( check );
         }
       };
 
