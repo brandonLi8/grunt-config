@@ -50,6 +50,8 @@ module.exports = {
 
     // via code style guidline, always add parens
     'space-in-parens': [ 2, 'always' ],
+    'array-bracket-spacing': [ 2, 'always' ],
+    'no-multi-spaces': 2,
 
     'no-trailing-spaces': 2,
     'no-unused-vars': 2,
