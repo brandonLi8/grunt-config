@@ -52,6 +52,15 @@ module.exports = {
     'space-in-parens': [ 2, 'always' ],
     'array-bracket-spacing': [ 2, 'always' ],
     'no-multi-spaces': 2,
+    'block-spacing': 2,
+    'comma-spacing': [ 2, { 'before': false, 'after': true } ],
+    'computed-property-spacing': [ 2, 'always' ],
+    'func-call-spacing': [ 2, 'never' ],
+    'key-spacing': 2,
+    'object-curly-spacing': [ 2, 'always' ],
+    'space-before-function-paren': 2,
+    'spaced-comment': [ 2, 'always', { 'exceptions': [ '-', '*', '=' ] } ],
+
 
     'no-trailing-spaces': 2,
     'no-unused-vars': 2,
