@@ -20,7 +20,7 @@
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
-module.exports = ( ( args ) => {
+module.exports = ( () => {
   'use strict';
 
   // modules

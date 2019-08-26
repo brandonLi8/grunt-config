@@ -48,8 +48,11 @@ module.exports = {
       ignorePattern: '^\\s*var\\s.+=\\s*require\\s*\\('
     } ],
 
-    'no-trailing-spaces': 2,
+    // via code style guidline, always add parens
+    'space-in-parens': [ 2, 'always' ],
 
+    'no-trailing-spaces': 2,
+    'no-unused-vars': 2,
     'require-statement-match': 2,
 
     // Should never have a space (e.g. foo ( args ) should be foo( args ))
