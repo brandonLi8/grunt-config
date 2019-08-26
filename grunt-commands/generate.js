@@ -11,7 +11,6 @@
 // modules
 const assert = require( './helpers/assert' );
 const grunt = require( 'grunt' );
-const replaceAll = require( './helpers/replaceAll' );
 
 /**
  * @param {object} packageObject - object literal of package.JSON

@@ -67,6 +67,8 @@ module.exports = {
     // Always require a semi-colon. Avoid javascript ASI.
     semi: [ 2, 'always' ],
 
+    'template-curly-spacing': [ 2, 'always' ],
+
     // Variables that don't change should always use a const declaration
     'prefer-const': [ 2, {
       destructuring: 'any',
