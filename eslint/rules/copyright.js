@@ -86,7 +86,7 @@ module.exports = ( () => {
 
           // If there aren't any valid copyrights, report the incorrect copy right statement
           !isValidCopyrights.includes( true ) && context.report( {
-            node: node,
+            node,
             loc: 1,
             message: 'Incorrect copyright statement on first line.'
           } );
