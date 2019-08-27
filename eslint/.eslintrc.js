@@ -147,9 +147,6 @@ module.exports = {
     // Rule to disallow 'bad text'
     'bad-text': 2,
 
-    // Require @public/@private for this.something = result;
-    'property-visibility-annotation': 2,
-
     'sort-require-statements': 2
 
 
