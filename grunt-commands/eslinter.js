@@ -32,11 +32,13 @@ module.exports = ( repo, useCache, packageObject ) => {
 
   //----------------------------------------------------------------------------------------
 
-  const pathToRules = process.cwd()
-                      + '/'
-                      + path.dirname( packageObject.eslintConfig.extends )
+  const pathToRules =
+                      path.dirname( packageObject.eslintConfig.extends )
                       + '/rules';
-
+                      grunt.log.write( process.cwd()
+                      , '/'
+                      , path.dirname( packageObject.eslintConfig.extends )
+                      , '/rules', "ererer\n", pathToRules)
 
   const cli = new eslint.CLIEngine( {
 
@@ -51,7 +53,9 @@ module.exports = ( repo, useCache, packageObject ) => {
     ignorePattern: [
       '**/.git',
       '**/node_modules',
-      '**/third-party'
+      '**/third-party',
+      '**/ExternalModules',
+      '**/Sherpa'
     ]
   } );
 
