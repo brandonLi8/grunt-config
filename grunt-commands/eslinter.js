@@ -6,16 +6,12 @@
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
-'use strict';
-
 // modules
+const assert = require( './helpers/assert' );
 const eslint = require( 'eslint' );
-const fs = require( 'fs' );
 const grunt = require( 'grunt' );
 const md5 = require( 'md5' );
 const path = require( 'path' );
-const child_process = require( 'child_process' );
-const assert = require( './helpers/assert' );
 
 /**
  * @public
@@ -25,7 +21,8 @@ const assert = require( './helpers/assert' );
  * @param {object} packageObject
  * @returns {Object} - ESLint report object.
  */
-module.exports = function( repo, useCache, packageObject ) {
+module.exports = ( repo, useCache, packageObject ) => {
+  'use strict';
 
 
   // Check package.json was implemented correctly.
@@ -40,7 +37,6 @@ module.exports = function( repo, useCache, packageObject ) {
                       + path.dirname( packageObject.eslintConfig.extends )
                       + '/rules';
 
-
   const cli = new eslint.CLIEngine( {
 
     cwd: path.dirname( process.cwd() ),
@@ -49,7 +45,7 @@ module.exports = function( repo, useCache, packageObject ) {
 
     rulePaths: [ pathToRules ],
 
-    cacheFile: `${pathToRules}/../cache/${md5( [ repo ].join( ',' ) )}.eslintcache`,
+    cacheFile: `${ pathToRules }/../cache/${ md5( [ repo ].join( ',' ) ) }.eslintcache`,
 
     ignorePattern: [
       '**/.git',

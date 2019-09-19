@@ -21,7 +21,7 @@ module.exports = task => {
   'use strict';
 
   // double check the task was a function
-  assert( typeof task === 'function', `invalid task: ${task}` );
+  assert( typeof task === 'function', `invalid task: ${ task }` );
 
   return () => {
     try {
