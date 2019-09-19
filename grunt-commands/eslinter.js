@@ -6,12 +6,16 @@
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
+'use strict';
+
 // modules
-const assert = require( './helpers/assert' );
 const eslint = require( 'eslint' );
+const fs = require( 'fs' );
 const grunt = require( 'grunt' );
 const md5 = require( 'md5' );
 const path = require( 'path' );
+const child_process = require( 'child_process' );
+const assert = require( './helpers/assert' );
 
 /**
  * @public
@@ -21,8 +25,7 @@ const path = require( 'path' );
  * @param {object} packageObject
  * @returns {Object} - ESLint report object.
  */
-module.exports = ( repo, useCache, packageObject ) => {
-  'use strict';
+module.exports = function( repo, useCache, packageObject ) {
 
 
   // Check package.json was implemented correctly.
@@ -32,13 +35,11 @@ module.exports = ( repo, useCache, packageObject ) => {
 
   //----------------------------------------------------------------------------------------
 
-  const pathToRules =
-                      path.dirname( packageObject.eslintConfig.extends )
+  const pathToRules = process.cwd()
+                      + '/'
+                      + path.dirname( packageObject.eslintConfig.extends )
                       + '/rules';
-                      grunt.log.write( process.cwd()
-                      , '/'
-                      , path.dirname( packageObject.eslintConfig.extends )
-                      , '/rules', "ererer\n", pathToRules)
+
 
   const cli = new eslint.CLIEngine( {
 
@@ -48,14 +49,12 @@ module.exports = ( repo, useCache, packageObject ) => {
 
     rulePaths: [ pathToRules ],
 
-    cacheFile: `${ pathToRules }/../cache/${ md5( [ repo ].join( ',' ) ) }.eslintcache`,
+    cacheFile: `${pathToRules}/../cache/${md5( [ repo ].join( ',' ) )}.eslintcache`,
 
     ignorePattern: [
       '**/.git',
       '**/node_modules',
-      '**/third-party',
-      '**/ExternalModules',
-      '**/Sherpa'
+      '**/third-party'
     ]
   } );
 

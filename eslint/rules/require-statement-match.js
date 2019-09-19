@@ -1,19 +1,13 @@
-// Copyright © 2019 Brandon Li. All rights reserved.
-
+// Copyright 2002-2015, University of Colorado Boulder
 /**
- * A custom rule that checks that RequireJS statements match the variable name.
- *
- * For instance:
- * ```
- *  // correct
- *  const CustomModule = Require( 'CustomModule' );
- *
- *  // incorrect
- *  const WrongName = Require( 'CustomModule' ); // variable name should be `CustomModule`
- * ```
- *
- * @author Brandon Li <brandon.li820@gmail.com>
+ * @fileoverview Rule to check that a require statement assigns to the correct variable name.
+ * @author Sam Reid (PhET Interactive Simulations)
+ * @copyright 2015 University of Colorado Boulder
  */
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 module.exports = function( context ) {
   'use strict';

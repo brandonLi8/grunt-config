@@ -40,30 +40,13 @@ module.exports = {
     'brace-style': [ 2, 'stroustrup' ],
 
     // Enforces a max line length
-    'max-len': [ 2, {
-      code: 120,
-      tabWidth: 2,
-      ignoreUrls: true,
-      ignoreRegExpLiterals: true,
-      ignorePattern: '^\\s*var\\s.+=\\s*require\\s*\\('
-    } ],
-
-    // via code style guidline, always add parens
-    'space-in-parens': [ 2, 'always' ],
-    'array-bracket-spacing': [ 2, 'always' ],
-    'no-multi-spaces': 2,
-    'block-spacing': 2,
-    'comma-spacing': [ 2, { 'before': false, 'after': true } ],
-    'computed-property-spacing': [ 2, 'always' ],
-    'func-call-spacing': [ 2, 'never' ],
-    'key-spacing': 2,
-    'object-curly-spacing': [ 2, 'always' ],
-    'space-before-function-paren': [ 2, 'never' ],
-    'spaced-comment': [ 2, 'always', { 'exceptions': [ '-', '*', '=' ] } ],
-
+    // 'max-len': [ 2, {
+    //   code: 120,
+    //   tabwidth: 2
+    // } ],
 
     'no-trailing-spaces': 2,
-    'no-unused-vars': 2,
+
     'require-statement-match': 2,
 
     // Should never have a space (e.g. foo ( args ) should be foo( args ))
@@ -81,8 +64,6 @@ module.exports = {
     // Always require a semi-colon. Avoid javascript ASI.
     semi: [ 2, 'always' ],
 
-    'template-curly-spacing': [ 2, 'always' ],
-
     // Variables that don't change should always use a const declaration
     'prefer-const': [ 2, {
       destructuring: 'any',
@@ -99,7 +80,7 @@ module.exports = {
     'no-new-func': 2,
 
     // Require or disallow strict mode directives (strict)
-    strict: [ 2, 'function' ],
+    strict: 2,
 
     // Encourages use of dot notation whenever possible (foo.bar, not foo[ 'bar' ] )
     'dot-notation': 2,
@@ -146,6 +127,9 @@ module.exports = {
 
     // Rule to disallow 'bad text'
     'bad-text': 2,
+
+    // Require @public/@private for this.something = result;
+    'property-visibility-annotation': 2,
 
     'sort-require-statements': 2
 

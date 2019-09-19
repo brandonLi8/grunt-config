@@ -11,6 +11,7 @@
 // modules
 const assert = require( './helpers/assert' );
 const grunt = require( 'grunt' );
+const replaceAll = require( './helpers/replaceAll' );
 
 /**
  * @param {object} packageObject - object literal of package.JSON
@@ -21,9 +22,9 @@ module.exports = ( packageObject, templatePath, writePath ) => {
   'use strict';
 
   assert( !packageObject || Object.getPrototypeOf( packageObject ) === Object.prototype,
-    `Extra prototype on Options: ${ packageObject }` );
-  assert( typeof templatePath === 'string', `invalid templatePath: ${ templatePath }` );
-  assert( typeof writePath === 'string', `invalid writePath: ${ writePath }` );
+    `Extra prototype on Options: ${packageObject}` );
+  assert( typeof templatePath === 'string', `invalid templatePath: ${templatePath}` );
+  assert( typeof writePath === 'string', `invalid writePath: ${writePath}` );
 
   // get the template file
   let template = grunt.file.read( templatePath );
@@ -92,7 +93,7 @@ module.exports = ( packageObject, templatePath, writePath ) => {
         },`
     },
 
-    '{{ISSUE_URL}}': {
+    "{{ISSUE_URL}}": {
       value: ( packageObject.bugs && packageObject.bugs.url ) ? packageObject.bugs.url : null,
       failExample: `
         "bugs": {
@@ -104,11 +105,12 @@ module.exports = ( packageObject, templatePath, writePath ) => {
 
 
 
-  };
+  }
+
 
   Object.keys( replacementStrings ).forEach( replacementString => {
 
-    const obj = replacementStrings[ replacementString ];
+    let obj = replacementStrings[ replacementString ];
 
     if ( template.includes( replacementString ) ) {
 
