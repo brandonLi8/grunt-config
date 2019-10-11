@@ -5,9 +5,10 @@
     "email": "brandon.li820@gmail.com",
     "url": "https://brandonwli.com/"
   },
-  "version": "0.0.0-dev.0",
+  "version": "0.0.0-dev.1",
   "description": "Preconfigured/customizable grunt tools for linting, compiling, etc.",
   "license": "MIT",
+  "main": "Gruntfile.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/brandonLi8/grunt-config.git"
