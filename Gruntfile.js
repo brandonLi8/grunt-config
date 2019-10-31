@@ -53,6 +53,21 @@ module.exports = grunt => {
 
 
 
+  /**
+   * Generates a .gitignore file (in the root directory) based on the template in
+   * './templates/gitignore_template.gitignore'
+   * @usage: `grunt generate-gitignore` || `grunt generate-gitignore --test`
+   *
+   * @option '--test' - generates a gitignore test file in ./tests/gitignore-test.md.
+   */
+  grunt.registerTask( 'generate-gitignore', 'Generates a .gitignore file', createTask( () => {
+
+    // flag that indicates where to generate the file to.
+    const generatePath = grunt.option( 'test' ) === true ? 'tests/gitignore-test.yml' : '.gitignore';
+
+    generate( packageObject, 'templates/gitignore-template.gitignore', generatePath );
+  } ) );
+
 
   //========================================================================================
   // ES-LINT - linting JS files (`grunt eslint`)
