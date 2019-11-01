@@ -76,7 +76,7 @@ module.exports = grunt => {
   // Use `grunt eslint --no-cache` to ignore the cache
   //========================================================================================
   grunt.registerTask( 'eslint', 'lint all js files specific to the repo', createTask( () => {
-    eslinter( packageObject.name, !grunt.option( 'no-cache' ), packageObject );
+    eslinter( packageObject.name.split( '/' )[ 1 ], !grunt.option( 'no-cache' ), packageObject );
   } ) );
 
 
