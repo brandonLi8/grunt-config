@@ -14,6 +14,8 @@ module.exports = grunt => {
   const createTask = require( './grunt-commands/helpers/createTask' );
   const eslinter = require( './grunt-commands/eslinter' );
   const generate = require( './grunt-commands/generate' );
+  const labels = require( './grunt-commands/labels' );
+  const githubLabelSync = require( 'github-label-sync' );
 
   // Convenience reference
   const packageObject = grunt.file.readJSON( 'package.json' );
@@ -67,6 +69,21 @@ module.exports = grunt => {
 
     generate( packageObject, 'templates/gitignore-template.gitignore', generatePath );
   } ) );
+
+
+  grunt.registerTask( 'generate-labels', 'Generates github labels', ( accessToken, repo ) => {
+
+    const done = grunt.task.current.async();
+
+    grunt.log.writeln( 'Generating labels...\n' );
+
+    githubLabelSync( { repo, labels, accessToken } ).catch( error => {
+      assert( false, 'Something went wrong: ' + error )
+    } ).then( () => {
+      grunt.log.writeln( 'Successfully generated Github Labels.' );
+      done();
+    } );
+  }  );
 
 
   //========================================================================================
