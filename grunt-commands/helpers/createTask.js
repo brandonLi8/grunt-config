@@ -16,16 +16,14 @@ const assert = require( './assert' );
  * @param {function} task
  * @returns {function}
  */
-module.exports = task => {
-
-  'use strict';
+module.exports = ( task, ...args ) => {
 
   // double check the task was a function
   assert( typeof task === 'function', `invalid task: ${ task }` );
 
-  return () => {
+  return ( ...args ) => {
     try {
-      task();
+      task( ...args );
     }
     catch( error ) {
       assert( false, `Task failed:\n${ error.stack || error }` );
