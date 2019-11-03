@@ -17,7 +17,7 @@ const grunt = require( 'grunt' );
  * @param {string} templatePath - path to the template file
  * @param {string} writePath - path to the file (doesn't have to exist) to write to
  */
-module.exports = ( packageObject, templatePath, writePath ) => {
+module.exports = ( packageObject, templatePath, relativePath, writePath ) => {
   'use strict';
 
   assert( !packageObject || Object.getPrototypeOf( packageObject ) === Object.prototype,
@@ -25,35 +25,14 @@ module.exports = ( packageObject, templatePath, writePath ) => {
   assert( typeof templatePath === 'string', `invalid templatePath: ${ templatePath }` );
   assert( typeof writePath === 'string', `invalid writePath: ${ writePath }` );
 
-  // Modify the templatePath by adding on a relative path to the grunt-config
-  if ( packageObject[ 'grunt-config' ] && packageObject[ 'grunt-config' ].relativePath ) {
-    
-    // Get the relative path to grunt-config in the project via `package.json`
-    let relativePath = packageObject[ 'grunt-config' ].relativePath;
 
-    const lastChar = relativePath.charAt( relativePath.length - 1 );
 
-    ( lastChar !== '/' ) && ( relativePath += '/' );
+  const lastChar = relativePath.charAt( relativePath.length - 1 );
 
-    templatePath = relativePath + templatePath;
+  ( lastChar !== '/' ) && ( relativePath += '/' );
 
-    try {
-      // grunt.file.read( templatePath );
-    }
-    catch( e ) {
-      assert( false, `
+  templatePath = relativePath + templatePath;
 
-relativePath ${templatePath} is incorrect` );
-    }
-  }
-  else {
-    assert( false, `
-
-package.json was not implemented correctly for generating files via grunt-config.
-"grunt-config": {
-  "relativePath": "./node_modules/@brandonli8/grunt-config" // this path be different for your project
-}` );
-  }
 
 
   // get the template file

@@ -18,8 +18,17 @@ module.exports = grunt => {
   const githubLabelSync = require( 'github-label-sync' );
 
   // Convenience reference
-  const packageObject = grunt.file.readJSON( 'package.json' );
+  const packageObject = grunt.file.readJSON( 'package.json' ) || {};
 
+
+  const relativePath = packageObject[ 'grunt-config' ];
+
+  if ( !relativePath ) {
+    assert( false, `
+
+package.json was not implemented correctly for generating files via grunt-config.
+"grunt-config": ./node_modules/@brandonli8/grunt-config" // this path be different for your project` );
+  }
 
   //========================================================================================
   // The following commands "generate" files
@@ -36,7 +45,7 @@ module.exports = grunt => {
     // flag that indicates where to generate the file to.
     const generatePath = grunt.option( 'test' ) === true ? 'tests/readme-test.md' : 'README.md';
 
-    generate( packageObject, 'templates/readme-template.md', generatePath );
+    generate( packageObject, 'templates/readme-template.md', relativePath, generatePath );
   } ) );
 
   /**
@@ -50,7 +59,7 @@ module.exports = grunt => {
     // flag that indicates where to generate the file to.
     const generatePath = grunt.option( 'test' ) === true ? 'tests/travis-test.yml' : '.travis.yml';
 
-    generate( packageObject, 'templates/travis-template.yml', generatePath );
+    generate( packageObject, 'templates/travis-template.yml', relativePath, generatePath );
   } ) );
 
 
@@ -67,7 +76,7 @@ module.exports = grunt => {
     // flag that indicates where to generate the file to.
     const generatePath = grunt.option( 'test' ) === true ? 'tests/gitignore-test.yml' : '.gitignore';
 
-    generate( packageObject, 'templates/gitignore-template.gitignore', generatePath );
+    generate( packageObject, 'templates/gitignore-template.gitignore', relativePath, generatePath );
   } ) );
 
 
@@ -93,7 +102,7 @@ module.exports = grunt => {
   // Use `grunt eslint --no-cache` to ignore the cache
   //========================================================================================
   grunt.registerTask( 'eslint', 'lint all js files specific to the repo', createTask( () => {
-    eslinter( packageObject.name.split( '/' )[ 1 ], !grunt.option( 'no-cache' ), packageObject );
+    eslinter( packageObject.name.split( '/' )[ 1 ], !grunt.option( 'no-cache' ), relativePath, packageObject );
   } ) );
 
 

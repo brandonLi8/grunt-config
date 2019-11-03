@@ -21,25 +21,34 @@ const path = require( 'path' );
  * @param {object} packageObject
  * @returns {Object} - ESLint report object.
  */
-module.exports = ( repo, useCache, packageObject ) => {
+module.exports = ( repo, useCache, relativePath, packageObject ) => {
   'use strict';
 
 
   // Check package.json was implemented correctly.
-  assert( packageObject && packageObject.eslintConfig && packageObject.eslintConfig.extends !== null,
-      'package.json either doesn\'t exist or doesn\'t have a eslintConfig - extends path.'
-      + '\n\nSee https://github.com/brandonLi8/grunt-config#readme for installation instructions.' );
+  // assert( packageObject && packageObject.eslintConfig && packageObject.eslintConfig.extends !== null,
+      // 'package.json either doesn\'t exist or doesn\'t have a eslintConfig - extends path.'
+      // + '\n\nSee https://github.com/brandonLi8/grunt-config#readme for installation instructions.' );
 
   //----------------------------------------------------------------------------------------
 
-  const pathToRules = process.cwd()
-                      + '/'
-                      + path.dirname( packageObject.eslintConfig.extends )
-                      + '/rules';
+  repo = path.basename( packageObject.name );
+  if ( relativePath !== '.' && relativePath !== '' && relativePath.charAt( 0 ) === '.' ) {
+    relativePath = relativePath.substr( 1, relativePath.length )
+  }
 
+  const prefix = relativePath === '.' ? path.dirname( process.cwd() ) : process.cwd();
+
+  const pathToBefore = prefix + ( path.dirname( relativePath ) === '.' ? '' : path.dirname( relativePath ) );
+
+
+  const pathToRules = pathToBefore + '/grunt-config/eslint/rules';
+
+  grunt.log.writeln(  path.dirname( process.cwd() ) )
+  //  a a adfas
   const cli = new eslint.CLIEngine( {
 
-    cwd: path.dirname( process.cwd() ),
+    cwd:  path.dirname( process.cwd() ),
 
     cache: useCache,
 
