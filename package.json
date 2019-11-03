@@ -5,7 +5,7 @@
     "email": "brandon.li820@gmail.com",
     "url": "https://brandonwli.com/"
   },
-  "version": "0.0.0-dev.6",
+  "version": "0.0.0-dev.7",
   "description": "Preconfigured/customizable grunt tools for linting, compiling, etc.",
   "license": "MIT",
   "main": "Gruntfile.js",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/brandonLi8/grunt-config.git"
   },
-  "devDependencies": {
+  "dependencies": {
     "eslint": "^6.1.0",
     "github-label-sync": "^1.4.1",
     "grunt": "~1.0.0",
