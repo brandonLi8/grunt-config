@@ -157,7 +157,10 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    ecmaVersion: 8
+    ecmaVersion: 8,
+    ecmaFeatures: {
+      experimentalObjectRestSpread: true
+    }
   },
   globals: {
 
