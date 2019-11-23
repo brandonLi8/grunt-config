@@ -59,11 +59,12 @@ module.exports = {
     'key-spacing': 2,
     'object-curly-spacing': [ 2, 'always' ],
     'space-before-function-paren': [ 2, 'never' ],
-    'spaced-comment': [ 2, 'always', { 'exceptions': [ '-', '*', '=' ] } ],
+    'space-before-blocks': 2,
+    'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=' ] } ],
 
 
     'no-trailing-spaces': 2,
-    'no-unused-vars': 2,
+    'no-unused-vars': [ 2, { args: 'none' } ],
     'require-statement-match': 2,
 
     // Should never have a space (e.g. foo ( args ) should be foo( args ))
