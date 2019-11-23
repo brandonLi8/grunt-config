@@ -24,7 +24,6 @@ const path = require( 'path' );
 module.exports = ( repo, useCache, relativePath, packageObject ) => {
   'use strict';
 
-
   // Check package.json was implemented correctly.
   // assert( packageObject && packageObject.eslintConfig && packageObject.eslintConfig.extends !== null,
       // 'package.json either doesn\'t exist or doesn\'t have a eslintConfig - extends path.'
@@ -44,7 +43,6 @@ module.exports = ( repo, useCache, relativePath, packageObject ) => {
 
   const pathToRules = pathToBefore + '/grunt-config/eslint/rules';
 
-  grunt.log.writeln(  path.dirname( process.cwd() ) )
   //  a a adfas
   const cli = new eslint.CLIEngine( {
 

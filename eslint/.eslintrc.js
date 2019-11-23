@@ -51,7 +51,7 @@ module.exports = {
     // via code style guidline, always add parens
     'space-in-parens': [ 2, 'always' ],
     'array-bracket-spacing': [ 2, 'always' ],
-    'no-multi-spaces': [ 2, { 'ignoreEOLComments': false } ],
+    'no-multi-spaces': [ 2, { 'ignoreEOLComments': true } ],
     'block-spacing': 2,
     'comma-spacing': [ 2, { 'before': false, 'after': true } ],
     'computed-property-spacing': [ 2, 'always' ],
@@ -157,10 +157,7 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    ecmaVersion: 8,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true
-    }
+    ecmaVersion: 9
   },
   globals: {
 
