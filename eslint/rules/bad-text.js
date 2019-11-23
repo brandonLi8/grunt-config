@@ -28,7 +28,6 @@ module.exports = ( () => {
     'instanceof Array',     // use lodash's _.isArray
 
     // common wrong annotations
-    '@return ',             // use @returns
     '@params',              // use @param
     '@authors',             // use @author
     '@extend',              // use @extends
