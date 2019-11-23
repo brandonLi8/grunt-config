@@ -37,7 +37,7 @@ module.exports = {
     'block-spacing': [ 2, 'always' ],
 
     // Code styling lint: see https://eslint.org/docs/rules/brace-style (stroustrup method)
-    'brace-style': [ 2, 'stroustrup' ],
+    'brace-style': [ 2, 'stroustrup',  { 'allowSingleLine': true } ],
 
     // Enforces a max line length
     'max-len': [ 2, {
