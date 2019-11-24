@@ -94,6 +94,46 @@ package.json was not implemented correctly for generating files via grunt-config
     } );
   }  );
 
+  grunt.registerTask( 'build', 'Generates Build', createTask( ( src, buildLocation ) => {
+
+    var Terser = require( "terser" );
+    const path = require('path');
+
+    grunt.file.delete( './dist' );
+    grunt.file.mkdir( './dist' );
+    var fs = require("fs"); //Load the filesystem module
+
+    function callback( abspath, rootdir, subdir, filename)  {
+
+      const code = grunt.file.read( abspath );
+      var options = {
+        compress: {
+            global_defs: {
+              require: false,
+            },
+            passes: 2,
+            drop_console: false,
+        },
+        mangle: {
+          reserved: [ 'require' ],
+        },
+        output: {
+          beautify: false,
+          preamble: "/* minified */"
+        }
+      };
+      const minify = Terser.minify( code, options );
+      const nameNoExtension = path.parse(filename).name;
+      const extension = path.parse(filename).ext;;
+
+      grunt.log.writeln( fs.statSync( abspath).size )
+      grunt.file.write( './dist' + ( subdir ? `/${subdir}/` : '/' ) + nameNoExtension + extension, minify.code );
+
+    }
+
+    grunt.file.recurse(src, callback)
+
+  } ) );
 
   //========================================================================================
   // ES-LINT - linting JS files (`grunt eslint`)

@@ -57,7 +57,9 @@ module.exports = ( repo, useCache, relativePath, packageObject ) => {
     ignorePattern: [
       '**/.git',
       '**/node_modules',
-      '**/third-party'
+      '**/third-party',
+      '**/dist',
+      '**/build'
     ]
   } );
 
