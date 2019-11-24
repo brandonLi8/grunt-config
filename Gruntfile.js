@@ -103,6 +103,9 @@ package.json was not implemented correctly for generating files via grunt-config
     grunt.file.mkdir( './dist' );
     var fs = require("fs"); //Load the filesystem module
 
+    let originalSize = 0;
+    let newSize = 0;
+
     function callback( abspath, rootdir, subdir, filename)  {
 
       const code = grunt.file.read( abspath );
@@ -111,7 +114,7 @@ package.json was not implemented correctly for generating files via grunt-config
             global_defs: {
               require: false,
             },
-            passes: 2,
+            passes: 3,
             drop_console: false,
         },
         mangle: {
@@ -119,19 +122,28 @@ package.json was not implemented correctly for generating files via grunt-config
         },
         output: {
           beautify: false,
-          preamble: "/* minified */"
+          preamble:
+`// Copyright © ${ new Date().getFullYear() } ${ packageObject.author.name }. All rights reserved.
+
+// Minified distribution version - ${ packageObject.name } ${ packageObject.version } - ${ packageObject.license }.`
         }
       };
       const minify = Terser.minify( code, options );
-      const nameNoExtension = path.parse(filename).name;
-      const extension = path.parse(filename).ext;;
 
-      grunt.log.writeln( fs.statSync( abspath).size )
-      grunt.file.write( './dist' + ( subdir ? `/${subdir}/` : '/' ) + nameNoExtension + extension, minify.code );
+      grunt.file.write( './dist' + ( subdir ? `/${subdir}/` : '/' ) + filename, minify.code );
 
+      originalSize += fs.statSync( abspath ).size;
+      newSize += fs.statSync( './dist' + ( subdir ? `/${subdir}/` : '/' ) + filename).size;
     }
 
     grunt.file.recurse(src, callback)
+
+    grunt.log.writeln( '\n\nFinished...\n' );
+
+    grunt.log.writeln( `Original Size: ${ originalSize } bytes` );
+    grunt.log.writeln( `Minified Size: ${ newSize } bytes` );
+    grunt.log.writeln( `Saved ${ ( originalSize - newSize ) } bytes (${( ( originalSize - newSize ) / originalSize * 100 ).toFixed( 2 ) }% saved)`)
+
 
   } ) );
 
