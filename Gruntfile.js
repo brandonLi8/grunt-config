@@ -175,12 +175,6 @@ package.json was not implemented correctly for generating files via grunt-config
     // Use process.stdout.write to allow for same line printing
     grunt.log.write( printMessage );
   }
-  grunt.registerTask( 'test', () => {
-
-    const Util = require( './src/Util.js' );
-    Util.assert( false )
-
-  } );
 
 
 
