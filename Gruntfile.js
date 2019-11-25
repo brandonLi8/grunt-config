@@ -10,11 +10,11 @@ module.exports = grunt => {
   'use strict';
 
   // modules
-  const assert = require( './grunt-commands/helpers/assert' );
-  const createTask = require( './grunt-commands/helpers/createTask' );
-  const eslinter = require( './grunt-commands/eslinter' );
-  const generate = require( './grunt-commands/generate' );
-  const labels = require( './grunt-commands/labels' );
+  const assert = require( './src/util/assert' );
+  const createTask  = require( './src/util/createTask' );
+  const eslinter = require( './src/eslinter' );
+  const generate = require( './src/generate' );
+  const labels = require( './src/labels' );
   const githubLabelSync = require( 'github-label-sync' );
 
   // Convenience reference
@@ -158,6 +158,29 @@ package.json was not implemented correctly for generating files via grunt-config
   } ) );
 
 
+  function print( message, ...colors ) {
+    // Attempt type coercion of message.
+    assert( message !== null && message !== undefined, `invalid message: ${ message }` );
+    assert( Array.isArray( colors ) && colors.every( code => typeof code === 'number' ),
+      `invalid colors: ${ colors }` );
+
+    //----------------------------------------------------------------------------------------
+    // Format the message via ANSI escape codes.
+    let printMessage = '';
+    colors.forEach( code => {
+      printMessage += `\x1b[${ code }m`;
+    } );
+    printMessage += `${ message }\x1b[0m`;
+
+    // Use process.stdout.write to allow for same line printing
+    grunt.log.write( printMessage );
+  }
+  grunt.registerTask( 'test', () => {
+
+    const Util = require( './src/Util.js' );
+    Util.assert( false )
+
+  } );
 
 
 

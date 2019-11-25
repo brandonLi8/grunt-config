@@ -7,7 +7,7 @@
  */
 
 // modules
-const assert = require( './helpers/assert' );
+const assert = require( './util/assert' );
 const eslint = require( 'eslint' );
 const grunt = require( 'grunt' );
 const md5 = require( 'md5' );

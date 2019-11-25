@@ -9,7 +9,7 @@
  */
 
 // modules
-const assert = require( './helpers/assert' );
+const assert = require( './util/assert' );
 const grunt = require( 'grunt' );
 
 /**
