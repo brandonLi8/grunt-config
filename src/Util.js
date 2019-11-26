@@ -64,8 +64,8 @@ module.exports = ( () => {
      * @param {async function} asyncTask - the task function to execute
      * @returns {function} - the wrapper function
      */
-    async asyncWrap( asyncTask ) {
-      Util.assert( task.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
+    asyncWrap( asyncTask ) {
+      Util.assert( asyncTask.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
       return Util.wrap( async ( ...args ) => {
 
@@ -117,7 +117,7 @@ module.exports = ( () => {
     },
 
     /**
-     * Converts a string in dash case to title case. For instance: Util.toTitleCase( 'foo-bar' ) returns 'Foo Bar'.
+     * Converts a string to title case. For instance: Util.toTitleCase( 'foo-bar' ) returns 'Foo Bar'.
      * @public
      *
      * @param {string} str - the input string

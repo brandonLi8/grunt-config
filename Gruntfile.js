@@ -9,14 +9,16 @@
 module.exports = grunt => {
   'use strict';
 
+  // modules
+  const Util = require( './src/Util' );
 
-  grunt.registerTask( 'test', () => {
 
-    const Util = require( './src/Util' );
+  grunt.registerTask( 'test', Util.asyncWrap( async ( arg ) => {
 
-    grunt.log.writeln( Util.toTitleCase( 'foo-bar' ) );
 
-  } );
+    grunt.log.writeln( arg );
+
+  } ) );
 
 
 
