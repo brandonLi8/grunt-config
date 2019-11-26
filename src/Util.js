@@ -64,7 +64,6 @@ module.exports = ( () => {
      * @returns {function} - the wrapper function
      */
     async asyncWrap( asyncTask ) {
-
       Util.assert( task.constructor.name === "AsyncFunction", `invalid asyncTask: ${ asyncTask }` );
 
       return Util.wrap( ( ...args ) => {
@@ -89,8 +88,30 @@ module.exports = ( () => {
      * @returns {string}
      */
     replaceAll( str, find, replaceWith ) {
+      Util.assert( typeof str === 'string', `invalid str: ${ str }` );
+
       return str.replace( new RegExp( find.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), replaceWith );
     },
+
+    /**
+     * Replaces all instances of the keys (as placeholder substrings) of the mapping with the corresponding values.
+     * For instance, Util.replacePlaceholders( '{{NAME}} {{AGE}}', { NAME: 'bob', AGE: 5 } ) returns 'bob 5'.
+     * Used to customize template files with content from package.json.
+     * @public
+     *
+     * @param {string} str - the input string
+     * @param {Object} mapping - object literal of the keys as the substring to find and replace with the value.
+     * @returns {string}
+     */
+    replacePlaceholders( str, mapping ) {
+      Util.assert( typeof str === 'string', `invalid str: ${ str }` );
+      Util.assert( Object.getPrototypeOf( mapping ) === Object.prototype, `Extra prototype on mapping: ${ mapping }` );
+
+      Object.keys( mapping ).forEach( key => {
+        str = Util.replaceAll( str, `{{${ key }}}`, mapping[ key ] );
+      } );
+      return str;
+    }
   };
 
   return Util;
