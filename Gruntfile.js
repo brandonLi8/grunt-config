@@ -16,7 +16,7 @@ module.exports = grunt => {
   grunt.registerTask( 'test', Util.asyncWrap( async ( arg ) => {
 
 
-    grunt.log.writeln( arg );
+    Util.assert( false, 'werhwerh')
 
   } ) );
 

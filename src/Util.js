@@ -27,7 +27,7 @@ module.exports = ( () => {
       if ( !predicate ) {
 
         // Use a default message if a message was not provided.
-        message = message ? 'Assertion failed: ' + message : 'Assertion failed.';
+        message = message ? message : 'Assertion failed.';
 
         grunt.fail.fatal( message.bold.red );
       }
