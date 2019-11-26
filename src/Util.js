@@ -1,7 +1,7 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * A combination of utility static methods for grunt-config development.
+ * A combination of utility static methods for the development of grunt-related tasks.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -16,7 +16,7 @@ module.exports = ( () => {
 
     /**
      * A basic grunt-specific assertion function, which uses `grunt.fail.fatal` to throw errors.
-     * See https://gruntjs.com/api/grunt.fail for background.
+     * See https://gruntjs.com/api/grunt.fail.
      * @public
      *
      * @param {boolean} predicate - throws an error if not truthy.
@@ -25,10 +25,33 @@ module.exports = ( () => {
     assert( predicate, message ) {
       if ( !predicate ) {
 
+        // Use a default message if a message was not provided.
         message = message ? 'Assertion failed: ' + message : 'Assertion failed.';
 
         grunt.fail.fatal( message.bold.red );
       }
+    },
+
+    /**
+     * Custom handling of a grunt task by wrapping a 'task' inside a try-catch statement. Arguments passed to the
+     * wrapper from the grunt task are transmitted to the task. Ensures that if a failure happens, a full stack trace is
+     * provided, regardless of whether --stack was provided.
+     * @public
+     *
+     * @param {function} task - the task function to execute. Arguments passed to the wrapper are passed to this task.
+     * @returns {function} - the wrapper function
+     */
+    wrap( task ) {
+      Util.assert( typeof task === 'function', `invalid task: ${ task }` );
+
+      return ( ...args ) => {
+        try {
+          task( ...args ); // When the wrapper is called, execute the task and transfer the args.
+        }
+        catch( error ) {
+          Util.assert( false, `Task failed:\n${ error.stack || error }` );
+        }
+      };
     },
 
     /**
@@ -43,27 +66,6 @@ module.exports = ( () => {
     replaceAll( str, find, replaceWith ) {
       return str.replace( new RegExp( find.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), replaceWith );
     },
-
-    /**
-     * Custom handling of a grunt task by wrapping a 'task' inside a try-catch statement. Ensures that if a failure
-     * happens, a full stack trace is provided, regardless of whether --stack was provided.
-     *
-     * @param {function} task - the task function to execute
-     * @param {...*} args - args passed from the grunt task. This is passed to the task function.
-     * @returns {function}
-     */
-    wrap( task, ...args ) {
-      Util.assert( typeof task === 'function', `invalid task: ${ task }` );
-
-      return ( ...args ) => {
-        try {
-          task( ...args );
-        }
-        catch( error ) {
-          Util.assert( false, `Task failed:\n${ error.stack || error }` );
-        }
-      };
-    }
   };
 
   return Util;
