@@ -11,6 +11,7 @@ module.exports = ( () => {
 
   // modules
   const grunt = require( 'grunt' );
+  const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 
   const Util = {
 
@@ -66,7 +67,7 @@ module.exports = ( () => {
     async asyncWrap( asyncTask ) {
       Util.assert( task.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
-      return Util.wrap( ( ...args ) => {
+      return Util.wrap( async ( ...args ) => {
 
         // Retrieve the promise object from the async task, passing the arguments passed to the wrapper.
         const promise = asyncTask( ...args );
@@ -75,6 +76,8 @@ module.exports = ( () => {
         const done = grunt.task.current.async();
 
         await promise;
+
+        done();
       } );
     },
 
@@ -124,14 +127,8 @@ module.exports = ( () => {
 
       Util.assert( typeof str === 'string' && str.length > 0, `invalid str: ${ str }` );
 
-      // First convert to camel case.
-      // Solution from http://stackoverflow.com/questions/10425287/convert-string-to-camelcase-with-regular-expression.
-      const camelCaseStr = str.toLowerCase().replace( /-(.)/g, ( match, group ) => {
-        return group.toUpperCase();
-      } );
-
-      // Captilize the first letter and convert to title case.
-      return camelCaseStr.replace( /([A-Z]+)/g, ' $1' ).replace( /([A-Z][a-z])/g, ' $1' );
+      // Use Lodash's start case. See https://lodash.com/docs#startCase.
+      return _.startCase( str );
     }
   };
 
