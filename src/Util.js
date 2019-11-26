@@ -55,6 +55,31 @@ module.exports = ( () => {
     },
 
     /**
+     * Wraps an async task's promise inside a try-catch statement with grunt's async handling API. Arguments passed to
+     * the wrapper from the grunt task are transmitted to the task when executed. Ensures that if a failure happens, a
+     * full stack trace is provided, regardless of whether --stack was provided.
+     * @public
+     *
+     * @param {async function} asyncTask - the task function to execute
+     * @returns {function} - the wrapper function
+     */
+    async asyncWrap( asyncTask ) {
+
+      Util.assert( task.constructor.name === "AsyncFunction", `invalid asyncTask: ${ asyncTask }` );
+
+      return Util.wrap( ( ...args ) => {
+
+        // Retrieve the promise object from the async task, passing the arguments passed to the wrapper.
+        const promise = asyncTask( ...args );
+
+        // Instruct Grunt to wait for the completion of the promise.
+        const done = grunt.task.current.async();
+
+        await promise;
+      } );
+    },
+
+    /**
      * A improved version of string.prototype.replace to replace all instances of a substring in a string.
      * @public
      *
