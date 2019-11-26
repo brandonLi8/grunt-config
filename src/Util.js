@@ -93,6 +93,7 @@ module.exports = ( () => {
     replaceAll( str, find, replaceWith ) {
       Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
+      // Solution borrowed from https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string
       return str.replace( new RegExp( find.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), replaceWith );
     },
 
