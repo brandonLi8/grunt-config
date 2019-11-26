@@ -64,7 +64,7 @@ module.exports = ( () => {
      * @returns {function} - the wrapper function
      */
     async asyncWrap( asyncTask ) {
-      Util.assert( task.constructor.name === "AsyncFunction", `invalid asyncTask: ${ asyncTask }` );
+      Util.assert( task.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
       return Util.wrap( ( ...args ) => {
 
@@ -111,6 +111,27 @@ module.exports = ( () => {
         str = Util.replaceAll( str, `{{${ key }}}`, mapping[ key ] );
       } );
       return str;
+    },
+
+    /**
+     * Converts a string in dash case to title case. For instance: Util.toTitleCase( 'foo-bar' ) returns 'Foo Bar'.
+     * @public
+     *
+     * @param {string} str - the input string
+     * @returns {string}
+     */
+    toTitleCase( str ) {
+
+      Util.assert( typeof str === 'string' && str.length > 0, `invalid str: ${ str }` );
+
+      // First convert to camel case.
+      // Solution from http://stackoverflow.com/questions/10425287/convert-string-to-camelcase-with-regular-expression.
+      const camelCaseStr = str.toLowerCase().replace( /-(.)/g, ( match, group ) => {
+        return group.toUpperCase();
+      } );
+
+      // Captilize the first letter and convert to title case.
+      return camelCaseStr.replace( /([A-Z]+)/g, ' $1' ).replace( /([A-Z][a-z])/g, ' $1' );
     }
   };
 
