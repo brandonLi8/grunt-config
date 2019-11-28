@@ -29,7 +29,7 @@ module.exports = ( () => {
         // Use a default message if a message was not provided.
         message = message ? message : 'Assertion failed.';
 
-        grunt.fail.fatal( message.bold.red );
+        grunt.fail.fatal( message );
       }
     },
 
@@ -67,18 +67,36 @@ module.exports = ( () => {
     asyncWrap( asyncTask ) {
       Util.assert( asyncTask.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
-      return Util.wrap( async ( ...args ) => {
+      return ( ...args ) => {
 
-        // Retrieve the promise object from the async task, passing the arguments passed to the wrapper.
-        const promise = asyncTask( ...args );
+        ( async promise => {
+            const done = grunt.task.current.async();
 
-        // Instruct Grunt to wait for the completion of the promise.
-        const done = grunt.task.current.async();
+            try {
+              await promise;
+            }
+            catch( e ) {
+              if ( e.stack ) {
+                grunt.fail.fatal( `Perennial task failed:\n${e.stack}\nFull Error details:\n${JSON.stringify( e, null, 2 )}` );
+              }
 
-        await promise;
+              // The toString check handles a weird case found from an Error object from puppeteer that doesn't stringify with
+              // JSON or have a stack, JSON.stringifies to "{}", but has a `toString` method
+              else if ( typeof e === 'string' || ( JSON.stringify( e ).length === 2 && e.toString ) ) {
+                grunt.fail.fatal( `Perennial task failed: ${e}` );
+              }
+              else {
+                grunt.fail.fatal( `Perennial task failed with unknown error: ${JSON.stringify( e, null, 2 )}` );
+              }
+            }
 
-        done();
-      } );
+            done();
+
+
+
+
+        } )( asyncTask( ...args ) )
+      };
     },
 
     /**
