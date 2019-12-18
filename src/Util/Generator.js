@@ -40,14 +40,14 @@ module.exports = ( () => {
     DESCRIPTION: [ 'description' ],
     GIT_REMOTE: [ 'repository', 'url' ],
     HOMEPAGE: [ 'homepage' ],
-    ISSUES_URL: [ 'bugs' ],
+    ISSUES_URL: [ 'bugs', 'url' ],
     LICENSE: [ 'license' ],
     REPO_NAME: [ 'name' ],
     REPO_TITLE: { path: 'name', parse: Util.toTitleCase },
     YEAR: new Date().getFullYear()
   };
 
-  class Generator {
+  // class Generator {
 
 
     /**
@@ -56,26 +56,26 @@ module.exports = ( () => {
      * will error out with a useful message to guide the user to correct the package object.
      * @private
      */
-    static validatePackageJSON() {
+    // static validatePackageJSON() {
 
-      Object.entries( TEMPLATE_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
+    //   Object.entries( TEMPLATE_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
 
-        if ( Array.isArray( schema ) ) {
-          let obj = PACKAGE_JSON;
-          schema.forEach( subpath => {
-            if ( !Object.prototype.hasOwnProperty.call( obj, subpath ) ) Generator.throwPackageError( schema );
+    //     if ( Array.isArray( schema ) ) {
+    //       let obj = PACKAGE_JSON;
+    //       schema.forEach( subpath => {
+    //         if ( !Object.prototype.hasOwnProperty.call( obj, subpath ) ) Generator.throwPackageError( schema );
 
-            obj = obj[ subpath ];
-          } );
+    //         obj = obj[ subpath ];
+    //       } );
 
-          assert( obj)
-        }
-        else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
-          schema.
+    //       assert( obj)
+    //     }
+    //     else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
+    //       schema.
 
-        }
+    //     }
 
-      } );
+    //   } );
   // var args = Array.prototype.slice.call(arguments, 1);
 
 
@@ -89,9 +89,9 @@ module.exports = ( () => {
 // package.json was not implemented correctly when replacing ${ replacementString }.
 // Double check that you have something like
 // ${ obj.failExample || 'something went wrong :( unable to find example' }
-    }
+    // }
 
-  }
+  // }
   // Generator.validatePackageJSON();
 
   // return Generator;
@@ -121,19 +121,6 @@ module.exports = ( () => {
   //----------------------------------------------------------------------------------------
   // Helpers
   //----------------------------------------------------------------------------------------
-  /**
-   * Parses all query parameters of the URI into an object literal. Values without the value operator ('=') are given
-   * the value `null`.
-   *
-   * This function is for internal use (not public facing). For performance reasons, this function should be called once
-   * at startup.
-   *
-   * For background of implementation, see:
-   *  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
-   *  - https://www.w3schools.com/jsref/prop_loc_search.asp
-   *
-   * @returns {Object} - parsed into an object literal with the keys as the parameter names.
-   */
 
   /**
    * Retrieves a nested property value of the package.json object. Uses an array of sub-paths to represent the nested
@@ -146,17 +133,56 @@ module.exports = ( () => {
    * @returns {number|string} - the parsed value
    */
   function parseNestedPackageValue( subpaths ) {
-    let currentSubObject = PACKAGE_JSON;
+    Util.assert( subpaths.every( path => typeof path === 'string' ) );
 
+    // Create a flag for the package.json object and traverse throw each nested path to the value.
+    let value = PACKAGE_JSON;
     subpaths.forEach( subpath => {
-      if ( !Object.prototype.hasOwnProperty.call( currentSubObject, subpath ) ) {
-
-      }
-
-      currentSubObject = currentSubObject[ subpath ];
+      if ( !Object.prototype.hasOwnProperty.call( value, subpath ) ) throwPackageError( subpaths );
+      value = value[ subpath ];
     } );
+
+    // We have traversed through the Package to the current path. Double check that the value is a string or a number.
+    if ( !( typeof value === 'number' || typeof value === 'string' ) ) throwPackageError( subpaths );
+    return value;
   }
 
+  /**
+   * Throws an error such that the message is helpful to guide the user to correct package.json.
+   * For instance, throwPackageError( [ 'hello', 'world' ] ) would throw:
+   * ```
+   *    package.json was not implemented correctly. Ensure that you have:
+   *      "hello": {
+   *         "world": {{WORLD}}
+   *      }
+   * ```
+   * See parseNestedPackageValue for context of subpaths. This function is implemented recursively.
+   *
+   * @param {String[]} subpaths
+   */
+  function throwPackageError( subpaths ) {
+    Util.assert( subpaths.every( path => typeof path === 'string' ) );
+
+    // First, get the error message by recursively creating the error message.
+    const getPackageErrorMessage = paths => {
+      // Base case - one path left is the value
+      if ( paths.length === 1 ) {
+        return `  "${ paths[ 0 ] }": {{${ subpaths.map( path => path.toUpperCase() ).join( '_' ) }}}`;
+      }
+      else {
+        return `  "${ paths[ 0 ] }": {\n` +
+               `  ${ Util.replaceAll( getPackageErrorMessage( paths.slice( 1 ) ), '\n', '\n  ' ) }\n` +
+               `  }${ paths.length === subpaths.length ? '' : ',' }`;
+      }
+    };
+    // Throw the package error.
+    Util.assert(
+      false,
+      ` package.json was not implemented correctly. Ensure that you have: \n${ getPackageErrorMessage( subpaths ) }`
+    );
+  }
+
+  console.log( parseNestedPackageValue( [ 'bugs', 'emaila' ]))
 } )();
 
 
