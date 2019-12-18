@@ -1,8 +1,15 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * Generator enscapulation that retrieves and validates values from package.json and replaces template strings
- * from a template file with these values. The result is then outputed in a specified file.
+ * Generator encapsulation that retrieves and validates values from package.json and replaces template strings
+ * from a template file with these values. The result is then outputted in a specified file.
+ *
+ * ## Background
+ *  - A template string is a string that changes for each project. It is is wrapped with {{}}.
+ *    For instance, `{{REPO_TITLE}}` (template for the title of the project) is used in template files. This class will
+ *    retrieve the name property from the package.json object and convert it to title case. However, there is a chance
+ *    that the user might have not implemented this property, so this class will validate all of package.json
+ *    to replace all template strings from the TEMPLATE_STRINGS_SCHEMA.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -25,7 +32,7 @@ module.exports = ( () => {
   //                - a parse key that correlates to a function that is called to 'parse' a value that is
   //                  retrieved from the package object. The returned value is is the replacement value.
   // 3. * - the actual replacement value to replace the replacement string in the template file.
-  const REPLACEMENT_STRINGS_SCHEMA = {
+  const TEMPLATE_STRINGS_SCHEMA = {
     AUTHOR: [ 'author', 'name' ],
     AUTHOR_EMAIL: [ 'author', 'email' ],
     DESCRIPTION: [ 'description' ],
@@ -34,6 +41,8 @@ module.exports = ( () => {
     ISSUES_URL: [ 'bugs' ],
     LICENSE: [ 'license' ],
     REPO_NAME: { path: 'name', parse: Util.toTitleCase },
+    REPO_NAME: { path: 'name', parse: Util.toTitleCase },
+
     YEAR: new Date().getFullYear()
   };
 
@@ -41,14 +50,14 @@ module.exports = ( () => {
 
 
     /**
-     * Checks package.json such that all of the replacement strings in REPLACEMENT_STRINGS_SCHEMA
+     * Checks package.json such that all of the replacement strings in TEMPLATE_STRINGS_SCHEMA
      * contain a value that is either a number or a string. If the package doesn't have a path, this method
      * will error out with a useful message to guide the user to correct the package object.
      * @private
      */
     static validatePackageJSON() {
 
-      Object.entries( REPLACEMENT_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
+      Object.entries( TEMPLATE_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
 
         if ( Array.isArray( schema ) ) {
           let obj = PACKAGE_JSON;
@@ -71,7 +80,7 @@ module.exports = ( () => {
 
   // return true;
 
-  //     REPLACEMENT_STRINGS_SCHEMA.forEach( replacementString => {
+  //     TEMPLATE_STRINGS_SCHEMA.forEach( replacementString => {
 
       // } );
 //       assert( obj && typeof obj.value === 'string', `
