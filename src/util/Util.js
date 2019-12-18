@@ -121,7 +121,7 @@ module.exports = ( () => {
      * @returns {string}
      */
     toCamelCase( str ) {
-      assert( typeof str === 'string', `invalid str: ${ str }` );
+      Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
       return str.toLowerCase().replace( /-(.)/g, ( match, group ) => {
         return group.toUpperCase();
@@ -136,7 +136,7 @@ module.exports = ( () => {
      * @returns {string}
      */
     toTitleCase( str ) {
-      assert( typeof str === 'string', `invalid str: ${ str }` );
+      Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
       return str.split( '-' )
                 .map( word => word.length > 0 ? word[ 0 ].toUpperCase() + word.substr( 1 ).toLowerCase() : '' )

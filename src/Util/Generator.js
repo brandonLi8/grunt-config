@@ -43,11 +43,11 @@ module.exports = ( () => {
     ISSUES_URL: [ 'bugs', 'url' ],
     LICENSE: [ 'license' ],
     REPO_NAME: [ 'name' ],
-    REPO_TITLE: { path: 'name', parse: Util.toTitleCase },
+    REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
     YEAR: new Date().getFullYear()
   };
 
-  // class Generator {
+  class Generator {
 
 
     /**
@@ -56,45 +56,26 @@ module.exports = ( () => {
      * will error out with a useful message to guide the user to correct the package object.
      * @private
      */
-    // static validatePackageJSON() {
+    static validatePackageJSON() {
 
-    //   Object.entries( TEMPLATE_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
+      Object.entries( TEMPLATE_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
+        let value;
+        if ( Array.isArray( schema ) ) {
+          value = parseNestedPackageValue( schema );
+        }
+        else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
+          value = schema.parse( parseNestedPackageValue( schema.path ) );
+        }
+        else {
+          value = schema;
+        }
+        console.log( value )
+        Util.assert( !!value, `something went wrong` );
+      } );
+    }
+  }
+  Generator.validatePackageJSON();
 
-    //     if ( Array.isArray( schema ) ) {
-    //       let obj = PACKAGE_JSON;
-    //       schema.forEach( subpath => {
-    //         if ( !Object.prototype.hasOwnProperty.call( obj, subpath ) ) Generator.throwPackageError( schema );
-
-    //         obj = obj[ subpath ];
-    //       } );
-
-    //       assert( obj)
-    //     }
-    //     else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
-    //       schema.
-
-    //     }
-
-    //   } );
-  // var args = Array.prototype.slice.call(arguments, 1);
-
-
-  // return true;
-
-  //     TEMPLATE_STRINGS_SCHEMA.forEach( replacementString => {
-
-      // } );
-//       assert( obj && typeof obj.value === 'string', `
-
-// package.json was not implemented correctly when replacing ${ replacementString }.
-// Double check that you have something like
-// ${ obj.failExample || 'something went wrong :( unable to find example' }
-    // }
-
-  // }
-  // Generator.validatePackageJSON();
-
-  // return Generator;
 
 
     /**
@@ -182,64 +163,5 @@ module.exports = ( () => {
     );
   }
 
-  console.log( parseNestedPackageValue( [ 'bugs', 'emaila' ]))
+  return Generator;
 } )();
-
-
-
-// /**
-//  * @param {object} packageObject - object literal of package.JSON
-//  * @param {string} templatePath - path to the template file
-//  * @param {string} writePath - path to the file (doesn't have to exist) to write to
-//  */
-// module.exports = ( packageObject, templatePath, relativePath, writePath ) => {
-//   'use strict';
-
-//   assert( !packageObject || Object.getPrototypeOf( packageObject ) === Object.prototype,
-//     `Extra prototype on Options: ${ packageObject }` );
-//   assert( typeof templatePath === 'string', `invalid templatePath: ${ templatePath }` );
-//   assert( typeof writePath === 'string', `invalid writePath: ${ writePath }` );
-
-
-
-//   const lastChar = relativePath.charAt( relativePath.length - 1 );
-
-//   ( lastChar !== '/' ) && ( relativePath += '/' );
-
-//   templatePath = relativePath + templatePath;
-
-
-
-//   // get the template file
-//   let template = grunt.file.read( templatePath );
-
-
-
-//   Object.keys( replacementStrings ).forEach( replacementString => {
-
-//     const obj = replacementStrings[ replacementString ];
-
-//     if ( template.includes( replacementString ) ) {
-
-
-//       assert( obj && typeof obj.value === 'string', `
-
-// package.json was not implemented correctly when replacing ${ replacementString }.
-// Double check that you have something like
-// ${ obj.failExample || 'something went wrong :( unable to find example' }
-
-// inside your package.json.` );
-
-//       template = template.replace( new RegExp( replacementString.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), obj.value );
-
-//     }
-
-//   } );
-
-
-//   //========================================================================================
-
-//   // Write to the repository's root directory.
-//   grunt.file.write( writePath, template );
-
-//   grunt.log.write( '\n\nSuccessfully generated!' );

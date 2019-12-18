@@ -10,7 +10,7 @@ module.exports = grunt => {
   'use strict';
 
   // modules
-  const Util = require( './src/Util' );
+  const Util = require( './src/util/Util' );
 
   // constants
   const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
