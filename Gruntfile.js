@@ -65,18 +65,23 @@ module.exports = grunt => {
    *
    * @option '--test' - generates a readme test file in './tests/readme-test.md' instead, but uses the same template.
    */
-  grunt.registerTask( 'generate-readme', 'Generates a README.md file', wrapTask( async () => {
+  grunt.registerTask( 'generate-readme', 'Generates a README.md file', Util.wrapAsync( async ( name ) => {
     let out;
 
-    try {
-      out = await execSh( 'git statsdfsdfus', true);
-    } catch (e) {
-      Util.assert( false, `\n${ e }\n\n` + `${ e.stderr }`.bold );
-    }
+    // try {
+    await ( async () => {
+      throw new Error( 'adsf')
 
-    grunt.log.writeln( out.stdout, out.stderr);
+      // console.log(name)
+      // console.log( 'erherh')
+    } )();
+
+    // } catch (e) {
+    //   Util.assert( false, `\n${ e }\n\n` + `${ e.stderr }`.bold );
+    // }
+
+    // grunt.log.writeln( out.stdout, out.stderr);
   } ) );
-
 
 
 };

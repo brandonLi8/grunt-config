@@ -11,13 +11,12 @@ module.exports = ( () => {
 
   // modules
   const grunt = require( 'grunt' );
-  const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
 
   const Util = {
 
     /**
      * A basic grunt-specific assertion function, which uses `grunt.fail.fatal` to throw errors.
-     * See https://gruntjs.com/api/grunt.fail.
+     * See https://gruntjs.com/api/grunt.fail for documentation.
      * @public
      *
      * @param {boolean} predicate - throws an error if not truthy.
@@ -40,7 +39,7 @@ module.exports = ( () => {
      * @public
      *
      * @param {function} task - the task function to execute. Arguments passed to the wrapper are passed to this task.
-     * @returns {function} - the wrapper function
+     * @returns {function} - the wrapper function to be passed as the grunt task
      */
     wrap( task ) {
       Util.assert( typeof task === 'function', `invalid task: ${ task }` );
@@ -57,46 +56,24 @@ module.exports = ( () => {
 
     /**
      * Wraps an async task's promise inside a try-catch statement with grunt's async handling API. Arguments passed to
-     * the wrapper from the grunt task are transmitted to the task when executed. Ensures that if a failure happens, a
-     * full stack trace is provided, regardless of whether --stack was provided.
+     * the wrapper from the grunt task are transmitted to the asynchronous task when executed. Ensures that if a
+     * failure happens, a full stack trace is provided, regardless of whether --stack was provided.
      * @public
      *
-     * @param {async function} asyncTask - the task function to execute
-     * @returns {function} - the wrapper function
+     * @param {async function} asyncTask - the task function to execute. Arguments to the grunt task are transmitted.
+     * @returns {function} - the wrapper function to be passed as the grunt task
      */
-    asyncWrap( asyncTask ) {
-      Util.assert( asyncTask.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
+    wrapAsync( asyncTask ) {
+      Util.assert( asyncTask.constructor.name == 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
-      return ( ...args ) => {
+      return Util.wrap( async ( ...args ) => {
+        const done = grunt.task.current.async();
 
-        ( async promise => {
-            const done = grunt.task.current.async();
-
-            try {
-              await promise;
-            }
-            catch( e ) {
-              if ( e.stack ) {
-                grunt.fail.fatal( `Perennial task failed:\n${e.stack}\nFull Error details:\n${JSON.stringify( e, null, 2 )}` );
-              }
-
-              // The toString check handles a weird case found from an Error object from puppeteer that doesn't stringify with
-              // JSON or have a stack, JSON.stringifies to "{}", but has a `toString` method
-              else if ( typeof e === 'string' || ( JSON.stringify( e ).length === 2 && e.toString ) ) {
-                grunt.fail.fatal( `Perennial task failed: ${e}` );
-              }
-              else {
-                grunt.fail.fatal( `Perennial task failed with unknown error: ${JSON.stringify( e, null, 2 )}` );
-              }
-            }
-
-            done();
-
-
-
-
-        } )( asyncTask( ...args ) )
-      };
+        await asyncTask( ...args ).catch( error => {
+          Util.assert( false, `Task failed:\n${ error.stack || error }` );
+        } );
+        done();
+      } );
     },
 
     /**
@@ -114,6 +91,7 @@ module.exports = ( () => {
       // Solution borrowed from https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string
       return str.replace( new RegExp( find.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), replaceWith );
     },
+
 
     /**
      * Replaces all instances of the keys (as placeholder substrings) of the mapping with the corresponding values.
@@ -136,18 +114,33 @@ module.exports = ( () => {
     },
 
     /**
-     * Converts a string to title case. For instance: Util.toTitleCase( 'foo-bar' ) returns 'Foo Bar'.
+     * Converts a string separated with dashes to camel case. For instance: Util.toCamelCase( 'foo-bar' ) -> 'fooBar'
+     * See http://stackoverflow.com/questions/10425287/convert-string-to-camelcase-with-regular-expression
+     *
+     * @param {string} str - the input string
+     * @returns {string}
+     */
+    toCamelCase( str ) {
+      assert( typeof str === 'string', `invalid str: ${ str }` );
+
+      return str.toLowerCase().replace( /-(.)/g, ( match, group ) => {
+        return group.toUpperCase();
+      } );
+    },
+
+    /**
+     * Converts a string separated with dashes to Title Case. For instance: Util.toTitleCase( 'foo-bar' ) -> 'Foo Bar'
      * @public
      *
      * @param {string} str - the input string
      * @returns {string}
      */
     toTitleCase( str ) {
+      assert( typeof str === 'string', `invalid str: ${ str }` );
 
-      Util.assert( typeof str === 'string' && str.length > 0, `invalid str: ${ str }` );
-
-      // Use Lodash's start case. See https://lodash.com/docs#startCase.
-      return _.startCase( str );
+      return str.split( '-' )
+                .map( word => word.length > 0 ? word[ 0 ].toUpperCase() + word.substr( 1 ).toLowerCase() : '' )
+                .join( ' ' );
     }
   };
 
