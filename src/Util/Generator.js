@@ -5,11 +5,13 @@
  * from a template file with these values. The result is then outputted in a specified file.
  *
  * ## Background
- *  - A template string is a string that changes for each project. It is is wrapped with {{}}.
- *    For instance, `{{REPO_TITLE}}` (template for the title of the project) is used in template files. This class will
- *    retrieve the name property from the package.json object and convert it to title case. However, there is a chance
- *    that the user might have not implemented this property, so this class will validate all of package.json
+ *  - A template string is a string that changes for each project. It is is wrapped with two brackets {{}} and are all
+ *    caps. For instance, `{{REPO_TITLE}}` (template for the title of the project) is used in template files. This class
+ *    will retrieve the name property from the package.json object and convert it to title case. However, there is a
+ *    chance that the user might have not implemented this property, so this class will validate all of package.json
  *    to replace all template strings from the TEMPLATE_STRINGS_SCHEMA.
+ *
+ * Will error out and provide helpful error messages if package.json isn't implemented correctly.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -24,13 +26,13 @@ module.exports = ( () => {
   const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
 
   // Object literal that describes the replacement strings in template files to replace. Each key is the replacement
-  // string and correlates with one of the three values stated below:
-  // 1. String[] - nested keys to the package value. For example, PACKAGE_JSON.foo.bar correlates with [ 'foo', 'bar' ]
-  //                The package object is checked to have this value, which is the replacement value.
+  // string (without the brackets for now) and correlates with one of the three values stated below:
+  // 1. String[] - nested keys to the package value. For example, PACKAGE_JSON.foo.bar correlates with [ 'foo', 'bar' ].
+  //               The package object is checked to have this replacement value (see parseNestedPackageValue()).
   // 2. Object literal - an object literal with:
-  //                - a path key that correlates to an array of the nested package keys as described in 1.
-  //                - a parse key that correlates to a function that is called to 'parse' a value that is
-  //                  retrieved from the package object. The returned value is is the replacement value.
+  //                      - a path key that correlates to an array of the nested package keys as described in 1.
+  //                      - a parse key that correlates to a function that is called to 'parse' a value that is
+  //                        retrieved from the package object. The returned value is the replacement value.
   // 3. * - the actual replacement value to replace the replacement string in the template file.
   const TEMPLATE_STRINGS_SCHEMA = {
     AUTHOR: [ 'author', 'name' ],
@@ -40,9 +42,8 @@ module.exports = ( () => {
     HOMEPAGE: [ 'homepage' ],
     ISSUES_URL: [ 'bugs' ],
     LICENSE: [ 'license' ],
-    REPO_NAME: { path: 'name', parse: Util.toTitleCase },
-    REPO_NAME: { path: 'name', parse: Util.toTitleCase },
-
+    REPO_NAME: [ 'name' ],
+    REPO_TITLE: { path: 'name', parse: Util.toTitleCase },
     YEAR: new Date().getFullYear()
   };
 
@@ -91,7 +92,7 @@ module.exports = ( () => {
     }
 
   }
-  Generator.validatePackageJSON();
+  // Generator.validatePackageJSON();
 
   // return Generator;
 
@@ -115,6 +116,47 @@ module.exports = ( () => {
     //   } );
     //   return str;
     // },
+
+
+  //----------------------------------------------------------------------------------------
+  // Helpers
+  //----------------------------------------------------------------------------------------
+  /**
+   * Parses all query parameters of the URI into an object literal. Values without the value operator ('=') are given
+   * the value `null`.
+   *
+   * This function is for internal use (not public facing). For performance reasons, this function should be called once
+   * at startup.
+   *
+   * For background of implementation, see:
+   *  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent
+   *  - https://www.w3schools.com/jsref/prop_loc_search.asp
+   *
+   * @returns {Object} - parsed into an object literal with the keys as the parameter names.
+   */
+
+  /**
+   * Retrieves a nested property value of the package.json object. Uses an array of sub-paths to represent the nested
+   * keys. For instance, parseNestedPackageValue( [ 'foo', 'bar' ] ) gets PACKAGE_JSON.foo.bar.
+   *
+   * The value is then validated such that it must be either a number or a string. If the PACKAGE_JSON object doesn't
+   * contain any of the sub-path keys, it errors out with a helpful error message to guide the user to correct it.
+   *
+   * @param {String[]} subpaths - the nested keys to parse from package.json
+   * @returns {number|string} - the parsed value
+   */
+  function parseNestedPackageValue( subpaths ) {
+    let currentSubObject = PACKAGE_JSON;
+
+    subpaths.forEach( subpath => {
+      if ( !Object.prototype.hasOwnProperty.call( currentSubObject, subpath ) ) {
+
+      }
+
+      currentSubObject = currentSubObject[ subpath ];
+    } );
+  }
+
 } )();
 
 
