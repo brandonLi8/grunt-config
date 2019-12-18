@@ -1,7 +1,7 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * Grunt configuration file. For more context, see https://gruntjs.com/getting-started
+ * Grunt configuration file. For background, see https://gruntjs.com/getting-started.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -11,53 +11,13 @@ module.exports = grunt => {
 
   // modules
   const Util = require( './src/Util' );
-  const githubLabelSync = require( 'github-label-sync' );
-  const execSh = require( 'exec-sh' ).promise;
 
+  // constants
+  const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
 
-  /**
-   * Wraps a promise's completion with grunt's asynchronous handling, with added helpful failure messages (including
-   * stack traces, regardless of whether --stack was provided).
-   * @public
-   *
-   * @param {Promise} promise
-   */
-  async function wrap( promise ) {
-    const done = grunt.task.current.async();
-
-    try {
-      await promise;
-    }
-    catch( e ) {
-      if ( e.stack ) {
-        grunt.fail.fatal( `Perennial task failed:\n${e.stack}\nFull Error details:\n${JSON.stringify( e, null, 2 )}` );
-      }
-
-      // The toString check handles a weird case found from an Error object from puppeteer that doesn't stringify with
-      // JSON or have a stack, JSON.stringifies to "{}", but has a `toString` method
-      else if ( typeof e === 'string' || ( JSON.stringify( e ).length === 2 && e.toString ) ) {
-        grunt.fail.fatal( `Perennial task failed: ${e}` );
-      }
-      else {
-        grunt.fail.fatal( `Perennial task failed with unknown error: ${JSON.stringify( e, null, 2 )}` );
-      }
-    }
-
-    done();
-  }
-
-  /**
-   * Wraps an async function for a grunt task. Will run the async function when the task should be executed. Will
-   * properly handle grunt's async handling, and provides improved error reporting.
-   * @public
-   *
-   * @param {async function} asyncTaskFunction
-   */
-  function wrapTask( asyncTaskFunction ) {
-    return () => {
-      wrap( asyncTaskFunction() );
-    };
-  }
+  //----------------------------------------------------------------------------------------
+  // The following commands generate files.
+  //----------------------------------------------------------------------------------------
 
   /**
    * Generates a README.md file (in the root directory) based on the template in './templates/readme-template.md'
@@ -65,23 +25,17 @@ module.exports = grunt => {
    *
    * @option '--test' - generates a readme test file in './tests/readme-test.md' instead, but uses the same template.
    */
-  grunt.registerTask( 'generate-readme', 'Generates a README.md file', Util.wrapAsync( async ( name ) => {
-    let out;
+  // grunt.registerTask( 'generate-readme', 'Generates a README.md file', Util.wrap( () => {
 
-    // try {
-    await ( async () => {
-      throw new Error( 'adsf')
+  //   // flag that indicates where to generate the file to.
+  //   const generatePath = grunt.option( 'test' ) === true ? 'tests/readme-test.md' : 'README.md';
 
-      // console.log(name)
-      // console.log( 'erherh')
-    } )();
+  //   generate( PACKAGE_JSON, 'templates/readme-template.md', relativePath, generatePath );
+  // } ) );
 
-    // } catch (e) {
-    //   Util.assert( false, `\n${ e }\n\n` + `${ e.stderr }`.bold );
-    // }
-
-    // grunt.log.writeln( out.stdout, out.stderr);
-  } ) );
+  grunt.registerTask( 'hello', () => {
+    require( './src/Util/Generator' )
+  } );
 
 
 };
