@@ -138,7 +138,7 @@ module.exports = ( () => {
     toTitleCase( str ) {
       Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
-      return str.split( '-' )
+      return str.split( /-|_| |/ )
                 .map( word => word.length > 0 ? word[ 0 ].toUpperCase() + word.substr( 1 ).toLowerCase() : '' )
                 .join( ' ' );
     }
