@@ -69,34 +69,45 @@ module.exports = ( () => {
         else {
           value = schema;
         }
-        console.log( value )
         Util.assert( !!value, `something went wrong` );
       } );
     }
-  }
-  Generator.validatePackageJSON();
-
-
 
     /**
-     * Replaces all instances of the keys (as placeholder substrings) of the mapping with the corresponding values.
-     * For instance, Util.replacePlaceholders( '{{NAME}} {{AGE}}', { NAME: 'bob', AGE: 5 } ) returns 'bob 5'.
-     * Used to customize template files with content from package.json.
-     * @public
-     *
-     * @param {string} str - the input string
-     * @param {Object} mapping - object literal of the keys as the substring to find and replace with the value.
-     * @returns {string}
+     * @param {string} templatePath - path to the template file
+     * @param {string} writePath - path to the file (doesn't have to exist) to write to
      */
-    // replacePlaceholders( str, mapping ) {
-    //   Util.assert( typeof str === 'string', `invalid str: ${ str }` );
-    //   Util.assert( Object.getPrototypeOf( mapping ) === Object.prototype, `Extra prototype on mapping: ${ mapping }` );
+    static generateFile( templatePath, relativePath, writePath ) {
 
-    //   Object.keys( mapping ).forEach( key => {
-    //     str = Util.replaceAll( str, `{{${ key }}}`, `${ mapping[ key ] }` );
-    //   } );
-    //   return str;
-    // },
+      Object.keys( TEMPLATE_STRINGS_SCHEMA ).forEach( replacementString => {
+
+        const obj = replacementStrings[ replacementString ];
+
+        if ( template.includes( replacementString ) ) {
+
+
+          assert( obj && typeof obj.value === 'string', `
+
+    package.json was not implemented correctly when replacing ${ replacementString }.
+    Double check that you have something like
+    ${ obj.failExample || 'something went wrong :( unable to find example' }
+
+    inside your package.json.` );
+
+          template = template.replace( new RegExp( replacementString.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), obj.value );
+
+        }
+
+      } );
+
+
+
+      // Write to the repository's root directory.
+      grunt.file.write( writePath, template );
+
+      grunt.log.write( '\n\nSuccessfully generated!' );
+    }
+  }
 
 
   //----------------------------------------------------------------------------------------
