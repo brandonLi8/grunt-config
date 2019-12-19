@@ -1,15 +1,18 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * Generator encapsulation that retrieves and validates values from package.json and replaces template strings
- * from a template file with these values. The result is then outputted in a specified file.
+ * File Generator encapsulation that retrieves and validates values from package.json and replaces placeholder strings
+ * from a template file with these values. The result is then outputted in a specified output file.
  *
  * ## Background
- *  - A template string is a string that changes for each project. It is is wrapped with two brackets {{}} and are all
- *    caps. For instance, `{{REPO_TITLE}}` (template for the title of the project) is used in template files. This class
- *    will retrieve the name property from the package.json object and convert it to title case. However, there is a
- *    chance that the user might have not implemented this property, so this class will validate all of package.json
- *    to replace all template strings from the TEMPLATE_STRINGS_SCHEMA.
+ *  - A placeholder string is a string used in template files (see ../../templates) to indicate a string that changes
+ *    for each project. They are wrapped with two brackets {{}} and all capitalized. For instance, the placeholder
+ *    string '{{REPO_TITLE}}'is used in multiple template files to indicate the title of the project. The output file
+ *    has this string replaced with the actual repository title, as defined in the package.json name property.
+ *
+ *  - This class will retrieve the properties from the package.json object and in same cases parse it. However, there is
+ *    a chance that the user might have not implemented some of the properties correctly, so this class will
+ *    validate all of package.json to ensure all placeholder strings in TEMPLATE_STRINGS_SCHEMA can be replaced.
  *
  * Will error out and provide helpful error messages if package.json isn't implemented correctly.
  *
