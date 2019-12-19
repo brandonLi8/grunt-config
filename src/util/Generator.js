@@ -12,9 +12,9 @@
  *
  *  - This class will retrieve the properties from the package.json object and in same cases parse it. However, there is
  *    a chance that the user might have not implemented some of the properties correctly, so this class will
- *    validate all of package.json to ensure all placeholder strings in TEMPLATE_STRINGS_SCHEMA can be replaced.
+ *    validate all of package.json to ensure all placeholder strings in REPLACEMENT_STRINGS_SCHEMA can be replaced.
  *
- * Will error out and provide helpful error messages if package.json isn't implemented correctly.
+ * NOTE: Will error out and provide helpful error messages if package.json isn't implemented correctly.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -30,14 +30,14 @@ module.exports = ( () => {
 
   // Object literal that describes the replacement strings in template files to replace. Each key is the replacement
   // string (without the brackets for now) and correlates with one of the three values stated below:
-  // 1. String[] - nested keys to the package value. For example, PACKAGE_JSON.foo.bar correlates with [ 'foo', 'bar' ].
-  //               The package object is checked to have this replacement value (see parseNestedPackageValue()).
-  // 2. Object literal - an object literal with:
+  // 1. String[] - nested keys path to the package value. For example, PACKAGE_JSON.foo.bar would have nested keys
+  //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see parseNestedPackageValue()).
+  // 2. Object Literal - an object literal with:
   //                      - a path key that correlates to an array of the nested package keys as described in 1.
   //                      - a parse key that correlates to a function that is called to 'parse' a value that is
   //                        retrieved from the package object. The returned value is the replacement value.
   // 3. * - the actual replacement value to replace the replacement string in the template file.
-  const TEMPLATE_STRINGS_SCHEMA = {
+  const REPLACEMENT_STRINGS_SCHEMA = {
     AUTHOR: [ 'author', 'name' ],
     AUTHOR_EMAIL: [ 'author', 'email' ],
     DESCRIPTION: [ 'description' ],
@@ -54,14 +54,14 @@ module.exports = ( () => {
 
 
     /**
-     * Checks package.json such that all of the replacement strings in TEMPLATE_STRINGS_SCHEMA
+     * Checks package.json such that all of the replacement strings in REPLACEMENT_STRINGS_SCHEMA
      * contain a value that is either a number or a string. If the package doesn't have a path, this method
      * will error out with a useful message to guide the user to correct the package object.
      * @private
      */
     static validatePackageJSON() {
 
-      Object.entries( TEMPLATE_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
+      Object.entries( REPLACEMENT_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
         let value;
         if ( Array.isArray( schema ) ) {
           value = parseNestedPackageValue( schema );
@@ -82,7 +82,7 @@ module.exports = ( () => {
      */
     static generateFile( templatePath, relativePath, writePath ) {
 
-      Object.keys( TEMPLATE_STRINGS_SCHEMA ).forEach( replacementString => {
+      Object.keys( REPLACEMENT_STRINGS_SCHEMA ).forEach( replacementString => {
 
         const obj = replacementStrings[ replacementString ];
 
