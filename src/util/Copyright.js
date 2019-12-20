@@ -12,7 +12,8 @@
  * For instance, for javascript, a copyright statement might be: `// Copyright © 2019 Brandon Li. All rights reserved.`
  * While in a .html file, it would look like: `<!-- Copyright © 2019 Brandon Li. All rights reserved. -->`.
  *
- * See EXTENSIONS_DELIMITER_MAP for a full documentation of supported extensions and their correlated comment delimiters
+ * See EXTENSION_COMMENT_PARSER_MAP for full documentation of supported extensions and their correlated parsers one-line
+ * comment parsers.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -27,7 +28,18 @@ module.exports = ( () => {
   const path = require( 'path' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
-  shell.config.silent = true;
+
+  // constants
+  // Object literal that correlates an extension (without the .) to a parser function such that the parser returns a
+  // correct one-line comment in the respective language.
+  const EXTENSION_COMMENT_PARSER_MAP = {
+    js: copyrightContent => `// ${ copyrightContent }`,
+    md: copyrightContent => `<!-- ${ copyrightContent } -->`,
+    yml: copyrightContent => `# ${ copyrightContent }`,
+    gitignore: copyrightContent => `# ${ copyrightContent }`,
+    html: copyrightContent => `<!-- ${ copyrightContent } -->`,
+    css: copyrightContent => `/* ${ copyrightContentString } */`
+  };
 
   class Copyright {
 

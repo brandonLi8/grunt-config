@@ -13,9 +13,12 @@ module.exports = grunt => {
   const Copyright = require( './src/Util/Copyright' );
   const Generator = require( './src/Util/Generator' );
   const Util = require( './src/util/Util' );
+  const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
 
   // constants
   const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
+
+  shell.config.silent = true;
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.
