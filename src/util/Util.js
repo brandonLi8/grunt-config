@@ -11,6 +11,7 @@ module.exports = ( () => {
 
   // modules
   const grunt = require( 'grunt' );
+  const path = require( 'path' );
 
   const Util = {
 
@@ -145,6 +146,17 @@ module.exports = ( () => {
       Object.keys( object ).forEach( key => {
         iterator( key, object[ key ] );
       } );
+    },
+
+    /**
+     * Convenience method to parse the extension of a file path. For instance Util.getExtension( 'foo/bar.html' )
+     * returns 'html' (without the .)
+     * @public
+     *
+     * @param {String} filePath
+     */
+    getExtension( filePath ) {
+      return path.extname( filePath ).replace( '.', '' ); // remove the . from the extension
     },
 
     // @public {string} CURRENT_YEAR - Static reference to the current full year.

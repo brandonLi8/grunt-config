@@ -30,6 +30,9 @@ module.exports = ( () => {
   const Util = require( './Util' );
 
   // constants
+  // Retrieves the validated and parsed generator replacement values (see Generator.js for more documentation).
+  const GENERATOR_REPLACEMENT_VALUES = Generator.getReplacementValuesMapping();
+
   // Object literal that correlates an extension (without the .) to a parser function such that the parser returns a
   // correct one-line comment in the respective language.
   const EXTENSION_COMMENT_PARSER_MAP = {
@@ -42,6 +45,15 @@ module.exports = ( () => {
   };
 
   class Copyright {
+
+    //----------------------------------------------------------------------------------------
+    // Utility Methods
+    //----------------------------------------------------------------------------------------
+    static getCopyrightString() {
+
+    }
+
+
 
     static updateCopyrightFile( filePath ) {
       Util.assert( shell.which( 'git' ), 'you must have git installed to update a copyright' );
