@@ -20,6 +20,7 @@
  */
 
 module.exports = ( () => {
+  'use strict';
 
   // modules
   const grunt = require( 'grunt' );
