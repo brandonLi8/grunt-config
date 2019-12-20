@@ -10,10 +10,11 @@ module.exports = ( () => {
 
   // modules
   const fs = require( 'fs' );
+  const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
+  const path = require( 'path' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
-  const Generator = require( './Generator' );
   shell.config.silent = true;
 
   class Copyright {
@@ -44,11 +45,14 @@ module.exports = ( () => {
 
       // Check if the first line is already correct
       const firstLine = fileLines[ 0 ];
-      const copyrightLine = `// Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved.`;
+      console.log( path.extname( filePath ))
+      const copyrightLine = path.extname( filePath ) === '.js' ?
+        `// Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved.`:
+        `<!-- Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved. -->`;
 
       // Update the line
       if ( firstLine !== copyrightLine ) {
-        if ( firstLine.indexOf( '// Copyright' ) === 0 ) {
+        if ( firstLine.indexOf( 'Copyright' ) >= 0 ) {
           const concatted = [ copyrightLine ].concat( fileLines.slice( 1 ) );
           const newFileContents = concatted.join( lineSeparator );
           fs.writeFileSync( filePath, newFileContents );

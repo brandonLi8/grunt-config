@@ -23,6 +23,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const Copyright = require( './Copyright' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const Util = require( './Util' );
