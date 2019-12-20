@@ -145,7 +145,10 @@ module.exports = ( () => {
       Object.keys( object ).forEach( key => {
         iterator( key, object[ key ] );
       } );
-    }
+    },
+
+    // @public {string} CURRENT_YEAR - Static reference to the current full year.
+    CURRENT_YEAR: `${ new Date().getFullYear() }`
   };
 
   return Util;

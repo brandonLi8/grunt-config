@@ -13,16 +13,56 @@ module.exports = ( () => {
   const grunt = require( 'grunt' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
+  const Generator = require( './Generator' );
+  shell.config.silent = true;
 
   class Copyright {
 
     static updateCopyrightFile( filePath ) {
+      Util.assert( shell.which( 'git' ), 'you must have git installed to update a copyright' );
 
+      // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
+      const startDate = shell.exec( `git log --diff-filter=A --follow --date=short --format=%cd -1 -- ${ filePath }` )
+        .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
+
+      const endDate = Util.CURRENT_YEAR;
+
+      // Create the single date or date range to use in the copyright statement
+      const dateString = startDate === endDate ? startDate : `${ startDate }-${ endDate }`;
+
+      const fileText = fs.readFileSync( filePath, 'utf8' );
+
+      // Infer the line separator for the platform
+      const firstR = fileText.indexOf( '\r' );
+      const firstN = fileText.indexOf( '\n' );
+      const lineSeparator = firstR >= 0 && firstR < firstN ? '\r' : '\n';
+
+      // Parse by line separator
+      const fileLines = fileText.split( lineSeparator ); // splits using both unix and windows newlines
+
+      const replacementValues = Generator.getReplacementValuesMapping();
+
+      // Check if the first line is already correct
+      const firstLine = fileLines[ 0 ];
+      const copyrightLine = `// Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved.`;
+
+      // Update the line
+      if ( firstLine !== copyrightLine ) {
+        if ( firstLine.indexOf( '// Copyright' ) === 0 ) {
+          const concatted = [ copyrightLine ].concat( fileLines.slice( 1 ) );
+          const newFileContents = concatted.join( lineSeparator );
+          fs.writeFileSync( filePath, newFileContents );
+          console.log( filePath + ', updated with ' + copyrightLine );
+        }
+        else {
+          console.log( filePath + ' FIRST LINE WAS NOT COPYRIGHT: ' + firstLine );
+        }
+      }
     }
   }
 
   return Copyright;
-}
+} )();
 // /**
 //  * @public
 //  * @param {string} repo - The repository of the file to update (should be a git root)
@@ -50,33 +90,5 @@ module.exports = ( () => {
 
 //   const absPath = `../${repo}/${relativeFile}`;
 
-//   // Create the single date or date range to use in the copyright statement
-//   const dateString = ( startDate === endDate ) ? startDate : ( '' + startDate + '-' + endDate );
 
-//   const fileText = fs.readFileSync( absPath, 'utf8' );
-
-//   // Infer the line separator for the platform
-//   const firstR = fileText.indexOf( '\r' );
-//   const firstN = fileText.indexOf( '\n' );
-//   const lineSeparator = firstR >= 0 && firstR < firstN ? '\r' : '\n';
-
-//   // Parse by line separator
-//   const fileLines = fileText.split( lineSeparator ); // splits using both unix and windows newlines
-
-//   // Check if the first line is already correct
-//   const firstLine = fileLines[ 0 ];
-//   const copyrightLine = '// Copyright ' + dateString + ', University of Colorado Boulder';
-
-//   // Update the line
-//   if ( firstLine !== copyrightLine ) {
-//     if ( firstLine.indexOf( '// Copyright' ) === 0 ) {
-//       const concatted = [ copyrightLine ].concat( fileLines.slice( 1 ) );
-//       const newFileContents = concatted.join( lineSeparator );
-//       fs.writeFileSync( absPath, newFileContents );
-//       console.log( absPath + ', updated with ' + copyrightLine );
-//     }
-//     else {
-//       console.log( absPath + ' FIRST LINE WAS NOT COPYRIGHT: ' + firstLine );
-//     }
-//   }
 // };

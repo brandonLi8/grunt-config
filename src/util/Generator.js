@@ -49,7 +49,7 @@ module.exports = ( () => {
     LICENSE: [ 'license' ],
     REPO_NAME: [ 'name' ],
     REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
-    YEARS: new Date().getFullYear()
+    YEARS: Util.CURRENT_YEAR
   };
 
   class Generator {

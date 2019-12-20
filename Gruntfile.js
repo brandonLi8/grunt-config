@@ -1,4 +1,4 @@
-// Copyright © 2019 Brandon Li. All rights reserved.
+// Copyright © 2019-2030 Brandon Li. All rights reserved.
 
 /**
  * Grunt configuration file. For background, see https://gruntjs.com/getting-started.
@@ -10,8 +10,9 @@ module.exports = grunt => {
   'use strict';
 
   // modules
-  const Util = require( './src/util/Util' );
+  const Copyright = require( './src/Util/Copyright' );
   const Generator = require( './src/Util/Generator' );
+  const Util = require( './src/util/Util' );
 
   // constants
   const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
@@ -54,18 +55,7 @@ module.exports = grunt => {
   } ) );
 
   grunt.registerTask( 'hello',  Util.wrap( () => {
-    // const Shell = require( './src/util/Shell' );
-
-    // Shell.execute( 'git', [ 'status' ], output => {
-    //   console.log
-    //   console.log( output );
-    // } );
-var shell = require('shelljs');
-
-if (!shell.which('asdfa')) {
-  shell.echo('Sorry, this script requires git');
-  shell.exit(1);
-}
+    Copyright.updateCopyrightFile( 'Gruntfile.js' );
 
 
 //     const execSh = require( 'exec-sh' );
