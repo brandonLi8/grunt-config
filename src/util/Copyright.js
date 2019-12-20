@@ -1,6 +1,18 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
+ * Copyright utility encapsulation for retrieving, validating, and/or modifying copyright statements correctly.
+ *
+ * The copyright statement is a commented line at the very top of files. The general format of a copyright statement
+ * is one of two following forms:
+ *   1. `{{START_COMMENT}} Copyright © {{YEAR} {{AUTHOR}}. All rights reserved. {{END_COMMENT}}`
+ *   2, `{{START_COMMENT}} Copyright © {{YEAR1-YEAR2}} {{AUTHOR}}. All rights reserved. {{END_COMMENT}}`
+ *
+ * The START_COMMENT and END_COMMENT are comment delimiter placeholders that depend on the language the file is in.
+ * For instance, for javascript, a copyright statement might be: `// Copyright © 2019 Brandon Li. All rights reserved.`
+ * While in a .html file, it would look like: `<!-- Copyright © 2019 Brandon Li. All rights reserved. -->`.
+ *
+ * See EXTENSIONS_DELIMITER_MAP for a full documentation of supported extensions and their correlated comment delimiters
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -45,54 +57,23 @@ module.exports = ( () => {
 
       // Check if the first line is already correct
       const firstLine = fileLines[ 0 ];
-      console.log( path.extname( filePath ))
       const copyrightLine = path.extname( filePath ) === '.js' ?
         `// Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved.`:
         `<!-- Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved. -->`;
 
       // Update the line
-      if ( firstLine !== copyrightLine ) {
-        if ( firstLine.indexOf( 'Copyright' ) >= 0 ) {
-          const concatted = [ copyrightLine ].concat( fileLines.slice( 1 ) );
-          const newFileContents = concatted.join( lineSeparator );
-          fs.writeFileSync( filePath, newFileContents );
-          console.log( filePath + ', updated with ' + copyrightLine );
-        }
-        else {
-          console.log( filePath + ' FIRST LINE WAS NOT COPYRIGHT: ' + firstLine );
-        }
+      if ( firstLine.indexOf( 'Copyright' ) >= 0 || firstLine.indexOf( 'copyright' ) >= 0 ) {
+        const concatted = [ copyrightLine ].concat( fileLines.slice( 1 ) );
+        const newFileContents = concatted.join( lineSeparator );
+        fs.writeFileSync( filePath, newFileContents );
+        grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightLine }` );
       }
+      else {
+        Util.throw( `${ filePath } did not have a valid copyright statement on the first line: \n${ firstLine }` );
+      }
+
     }
   }
 
   return Copyright;
 } )();
-// /**
-//  * @public
-//  * @param {string} repo - The repository of the file to update (should be a git root)
-//  * @param {string} relativeFile - The filename relative to the repository root.
-//  * @returns {Promise}
-//  */
-// module.exports = async ( repo, relativeFile ) => {
-
-//   let startDate = ( await execute( 'git', [
-//     'log', '--diff-filter=A', '--follow', '--date=short', '--format=%cd', '-1', '--', relativeFile
-//   ], {
-//     cwd: `../${repo}`
-//   } ) ).trim().split( '-' )[ 0 ];
-
-//   // There is a bug with the above git log command that sometimes yields a blank link as output
-//   if ( startDate === '' ) {
-//     startDate = '2002';
-//   }
-
-//   const endDate = ( await execute( 'git', [
-//     'log', '--follow', '--date=short', '--format=%cd', '-1', '--', relativeFile
-//   ], {
-//     cwd: `../${repo}`
-//   } ) ).trim().split( '-' )[ 0 ];
-
-//   const absPath = `../${repo}/${relativeFile}`;
-
-
-// };
