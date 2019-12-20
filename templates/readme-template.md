@@ -1,4 +1,4 @@
-<!-- Copyright © {{CURRENT_YEAR}} {{AUTHOR}}. All rights reserved. -->
+<!-- Copyright © {{YEARS}} {{AUTHOR}}. All rights reserved. -->
 
 <!--===========================================================================
 #
@@ -18,7 +18,7 @@
 #
 #===========================================================================-->
 
-# {{REPO}}
+# {{REPO_TITLE}}
 
 {{DESCRIPTION}}
 
@@ -31,7 +31,7 @@
 ### Quick Start
 (1) Clone the repository in a desired spot
 ```
-{{GIT_URL}}
+{{GIT_REMOTE}}
 ```
 (2) Start an http-server
 ```
@@ -44,7 +44,7 @@ http-server
 
 Contact me via <a href="mailto:{{AUTHOR_EMAIL}}" target="_blank"> email</a>.
 
-Help improve the app by creating a <a href="{{ISSUE_URL}}" target="_blank">New Issue</a>.
+Help improve the app by creating a <a href="{{ISSUES_URL}}" target="_blank">New Issue</a>.
 
 <!-- NOTE: this can change to whatever you want.. create a fork to customizable the code style -->
 Use this [code style guideline](https://github.com/brandonLi8/grunt-config/templates/code-style.md) for this project.
@@ -52,4 +52,4 @@ Use this [code style guideline](https://github.com/brandonLi8/grunt-config/templ
 ## License
 See the <a href="{{LICENSE}}" target="_blank">LICENSE</a>
 
-© {{CURRENT_YEAR}} {{AUTHOR}}
+© {{YEARS}} {{AUTHOR}}
