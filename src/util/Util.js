@@ -39,7 +39,8 @@ module.exports = ( () => {
      * @param {string} [message] - message to throw
      */
     throw( message ) {
-      Util.assert( false, message );
+      grunt.log.writeln( '' ); // Add a line of padding before and after.
+      Util.assert( false, `${ message }\n` );
     },
 
     /**
@@ -126,7 +127,7 @@ module.exports = ( () => {
     toTitleCase( str ) {
       Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
-      return str.split( /-|_| |/ )
+      return str.split( /-|_|\// )
                 .map( word => word.length > 0 ? word[ 0 ].toUpperCase() + word.substr( 1 ).toLowerCase() : '' )
                 .join( ' ' );
     },

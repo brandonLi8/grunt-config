@@ -66,10 +66,10 @@ module.exports = ( () => {
 
         // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
         if ( Array.isArray( schema ) ) {
-          mapping[ replacementString ] = parseNestedPackageValue( schema );
+          mapping[ replacementString ] = parseNestedPackageValue( schema, replacementString );
         }
         else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
-          mapping[ replacementString ] = schema.parse( parseNestedPackageValue( schema.path ) );
+          mapping[ replacementString ] = schema.parse( parseNestedPackageValue( schema.path, replacementString ) );
         }
         else {
           mapping[ replacementString ] = schema;
@@ -118,20 +118,21 @@ module.exports = ( () => {
    * contain any of the sub-path keys, it errors out with a helpful error message to guide the user to correct it.
    *
    * @param {String[]} subpaths - the nested keys to parse from package.json
+   * @param {String} valueName - name of the value. Only used if package.json isn't implemented correctly
    * @returns {number|string} - the parsed value
    */
-  function parseNestedPackageValue( subpaths ) {
+  function parseNestedPackageValue( subpaths, valueName ) {
     Util.assert( subpaths.every( path => typeof path === 'string' ) );
 
     // Create a flag for the package.json object and traverse throw each nested path to the value.
     let value = PACKAGE_JSON;
     subpaths.forEach( subpath => {
-      if ( !Object.prototype.hasOwnProperty.call( value, subpath ) ) throwPackageError( subpaths );
+      if ( !Object.prototype.hasOwnProperty.call( value, subpath ) ) throwPackageError( subpaths, valueName );
       value = value[ subpath ];
     } );
 
     // We have traversed through the Package to the current path. Double check that the value is a string or a number.
-    if ( !( typeof value === 'number' || typeof value === 'string' ) ) throwPackageError( subpaths );
+    if ( !( typeof value === 'number' || typeof value === 'string' ) ) throwPackageError( subpaths, valueName );
     return value;
   }
 
@@ -147,15 +148,16 @@ module.exports = ( () => {
    * See parseNestedPackageValue for context of subpaths. This function is implemented recursively.
    *
    * @param {String[]} subpaths
+   * @param {String} valueName - name of the sub-path value. Only used if package.json isn't implemented correctly
    */
-  function throwPackageError( subpaths ) {
+  function throwPackageError( subpaths, valueName ) {
     Util.assert( subpaths.every( path => typeof path === 'string' ) );
 
     // First, get the error message by recursively creating the error message.
     const getPackageErrorMessage = paths => {
       // Base case - one path left is the value
       if ( paths.length === 1 ) {
-        return `  "${ paths[ 0 ] }": {{${ subpaths.map( path => path.toUpperCase() ).join( '_' ) }}}`;
+        return `  "${ paths[ 0 ] }": {{${ valueName }}}`;
       }
       else {
         return `  "${ paths[ 0 ] }": {\n` +
@@ -164,7 +166,7 @@ module.exports = ( () => {
       }
     };
     // Throw the package error.
-    Util.throw( ` package.json was not implemented correctly. Ensure that you have: \n${ getPackageErrorMessage( subpaths ) }` );
+    Util.throw( `package.json should have something like: \n{\n${ getPackageErrorMessage( subpaths ) }\n  ...\n}` );
   }
 
   return Generator;
