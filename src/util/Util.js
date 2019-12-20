@@ -156,6 +156,8 @@ module.exports = ( () => {
      * @param {String} filePath
      */
     getExtension( filePath ) {
+      Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
+
       return path.extname( filePath ).replace( '.', '' ); // remove the . from the extension
     },
 
