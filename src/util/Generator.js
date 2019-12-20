@@ -7,12 +7,12 @@
  * ## Background
  *  - A placeholder string is a string used in template files (see ../../templates) to indicate a string that changes
  *    for each project. They are wrapped with two brackets {{}} and all capitalized. For instance, the placeholder
- *    string '{{REPO_TITLE}}'is used in multiple template files to indicate the title of the project. The output file
- *    has this string replaced with the actual repository title, as defined in the package.json name property.
+ *    string '{{REPO_TITLE}}' is used in multiple template files to indicate the title of the project. In this case,
+ *    the output file has this replaced with the actual repository title, as defined in the package.json name property.
  *
- *  - This class will retrieve the properties from the package.json object and in same cases parse it. However, there is
- *    a chance that the user might have not implemented some of the properties correctly, so this class will
- *    validate all of package.json to ensure all placeholder strings in REPLACEMENT_STRINGS_SCHEMA can be replaced.
+ *  - This class will retrieve the properties from the package.json object and in some cases parse it. However, there is
+ *    a chance that the user might have not implemented some of the properties / sub-properties correctly, so this class
+ *    will validate all of package.json to ensure all placeholder strings in REPLACEMENT_STRINGS_SCHEMA can be replaced.
  *
  * NOTE: Will error out and provide helpful error messages if package.json isn't implemented correctly.
  *
@@ -113,6 +113,7 @@ module.exports = ( () => {
   }
 
 
+  grunt.log.writeln( Util.replaceAll( 'asfasdfasdf', 'a', '_'))
   //----------------------------------------------------------------------------------------
   // Helpers
   //----------------------------------------------------------------------------------------

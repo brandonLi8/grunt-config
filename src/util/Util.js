@@ -33,6 +33,16 @@ module.exports = ( () => {
     },
 
     /**
+     * A grunt-config specific convenience method to throw an error (assert a false value).
+     * @public
+     *
+     * @param {string} [message] - message to throw
+     */
+    throw( message ) {
+      Util.assert( false, message );
+    },
+
+    /**
      * Custom handling of a grunt task by wrapping a 'task' inside a try-catch statement. Arguments passed to the
      * wrapper from the grunt task are transmitted to the task. Ensures that if a failure happens, a full stack trace is
      * provided, regardless of whether --stack was provided.
@@ -88,8 +98,7 @@ module.exports = ( () => {
     replaceAll( str, find, replaceWith ) {
       Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
-      // Solution borrowed from https://stackoverflow.com/questions/1144783/how-to-replace-all-occurrences-of-a-string
-      return str.replace( new RegExp( find.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), replaceWith );
+      return str.split( find ).join( replaceWith );
     },
 
 
