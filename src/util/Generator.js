@@ -62,7 +62,7 @@ module.exports = ( () => {
     static getReplacementValuesMapping() {
       const mapping = {}; // the result mapping
 
-      Object.entries( REPLACEMENT_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
+      Util.iterate( REPLACEMENT_STRINGS_SCHEMA, ( replacementString, schema ) => {
 
         // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
         if ( Array.isArray( schema ) ) {
@@ -86,21 +86,21 @@ module.exports = ( () => {
      * @param {string} templateFilePath - path to the template file, relative to the root of the repository.
      * @param {string} outputFilePath - potential path to the output file, relative to the root of the repository.
      */
-    static generateFile( templateFilePath, , outputFilePath ) {
+    static generateFile( templateFilePath, outputFilePath ) {
 
       // Retrieve the template file via the grunt file reader.
-      let template = grunt.file.read( templatePath );
+      let template = grunt.file.read( templateFilePath );
 
       // Create an object literal that maps replacement strings to their replacement values respectively.
       const replacementValuesMapping = this.getReplacementValuesMapping();
 
-      // Replace each replacement string (wrapped with brackets {{}}) with the respective parsed replacemnt value.
-      Object.keys( replacementValuesMapping ).forEach( replacementString => {
-        template = Util.replaceAll( template, `{{${ replacementString }}}`, mapping[ replacementString ] );
+      // Replace each replacement string (wrapped with brackets {{}}) with the respective parsed replacement value.
+      Util.iterate( replacementValuesMapping, ( replacementString, replacementValue ) => {
+        template = Util.replaceAll( template, `{{${ replacementString }}}`, replacementValue );
       } );
 
       // Write to the repository's root directory.
-      grunt.file.write( writePath, template );
+      grunt.file.write( outputFilePath, template );
       grunt.log.write( '\n\nSuccessfully generated!' );
     }
   }

@@ -103,7 +103,7 @@ module.exports = ( () => {
 
     /**
      * Converts a string separated with dashes to camel case. For instance: Util.toCamelCase( 'foo-bar' ) -> 'fooBar'
-     * See http://stackoverflow.com/questions/10425287/convert-string-to-camelcase-with-regular-expression
+     * @public
      *
      * @param {string} str - the input string
      * @returns {string}
@@ -129,6 +129,21 @@ module.exports = ( () => {
       return str.split( /-|_| |/ )
                 .map( word => word.length > 0 ? word[ 0 ].toUpperCase() + word.substr( 1 ).toLowerCase() : '' )
                 .join( ' ' );
+    },
+
+    /**
+     * Convenience method to iterate through a object literal. The iterator function is given both the key and value.
+     * @public
+     *
+     * @param {Object} object - object literal to loop through
+     * @param {Function} iterator - function to call on each iteration, passing both the key and value.
+     */
+    iterate( object, iterator ) {
+      Util.assert( Object.getPrototypeOf( object ) === Object.prototype, `invalid object: ${ object }` );
+
+      Object.keys( object ).forEach( key => {
+        iterator( key, object[ key ] );
+      } );
     }
   };
 
