@@ -59,7 +59,7 @@ module.exports = ( () => {
           task( ...args ); // When the wrapper is called, execute the task and transfer the args.
         }
         catch( error ) {
-          Util.assert( false, `Task failed:\n${ error.stack || error }` );
+          Util.throw( `Task failed:\n${ error.stack || error }` );
         }
       };
     },
@@ -80,7 +80,7 @@ module.exports = ( () => {
         const done = grunt.task.current.async();
 
         await asyncTask( ...args ).catch( error => {
-          Util.assert( false, `Task failed:\n${ error.stack || error }` );
+          Util.throw( `Task failed:\n${ error.stack || error }` );
         } );
         done();
       } );
@@ -99,27 +99,6 @@ module.exports = ( () => {
       Util.assert( typeof str === 'string', `invalid str: ${ str }` );
 
       return str.split( find ).join( replaceWith );
-    },
-
-
-    /**
-     * Replaces all instances of the keys (as placeholder substrings) of the mapping with the corresponding values.
-     * For instance, Util.replacePlaceholders( '{{NAME}} {{AGE}}', { NAME: 'bob', AGE: 5 } ) returns 'bob 5'.
-     * Used to customize template files with content from package.json.
-     * @public
-     *
-     * @param {string} str - the input string
-     * @param {Object} mapping - object literal of the keys as the substring to find and replace with the value.
-     * @returns {string}
-     */
-    replacePlaceholders( str, mapping ) {
-      Util.assert( typeof str === 'string', `invalid str: ${ str }` );
-      Util.assert( Object.getPrototypeOf( mapping ) === Object.prototype, `Extra prototype on mapping: ${ mapping }` );
-
-      Object.keys( mapping ).forEach( key => {
-        str = Util.replaceAll( str, `{{${ key }}}`, mapping[ key ] );
-      } );
-      return str;
     },
 
     /**

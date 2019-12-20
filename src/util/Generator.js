@@ -52,68 +52,60 @@ module.exports = ( () => {
 
   class Generator {
 
-
     /**
-     * Checks package.json such that all of the replacement strings in REPLACEMENT_STRINGS_SCHEMA
-     * contain a value that is either a number or a string. If the package doesn't have a path, this method
-     * will error out with a useful message to guide the user to correct the package object.
-     * @private
+     * Retrieves and validates all values for replacement strings as defined in REPLACEMENT_STRINGS_SCHEMA.
+     * Will error out if package.json was not implemented correctly (see parseNestedPackageValue()).
+     * @public
+     *
+     * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
      */
-    static validatePackageJSON() {
+    static getReplacementValuesMapping() {
+      const mapping = {}; // the result mapping
 
       Object.entries( REPLACEMENT_STRINGS_SCHEMA ).forEach( ( [ replacementString, schema ] ) => {
-        let value;
+
+        // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
         if ( Array.isArray( schema ) ) {
-          value = parseNestedPackageValue( schema );
+          mapping[ replacementString ] = parseNestedPackageValue( schema );
         }
         else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
-          value = schema.parse( parseNestedPackageValue( schema.path ) );
+          mapping[ replacementString ] = schema.parse( parseNestedPackageValue( schema.path ) );
         }
         else {
-          value = schema;
+          mapping[ replacementString ] = schema;
         }
-        Util.assert( !!value, `something went wrong` );
       } );
+      return mapping;
     }
 
     /**
-     * @param {string} templatePath - path to the template file
-     * @param {string} writePath - path to the file (doesn't have to exist) to write to
+     * The main API of this file. Retrieves and validates values from package.json and replaces placeholder strings
+     * from a template file with these values. The result is then outputted in a specified output file.
+     * @public
+     *
+     * @param {string} templateFilePath - path to the template file, relative to the root of the repository.
+     * @param {string} outputFilePath - potential path to the output file, relative to the root of the repository.
      */
-    static generateFile( templatePath, relativePath, writePath ) {
+    static generateFile( templateFilePath, , outputFilePath ) {
 
-      Object.keys( REPLACEMENT_STRINGS_SCHEMA ).forEach( replacementString => {
+      // Retrieve the template file via the grunt file reader.
+      let template = grunt.file.read( templatePath );
 
-        const obj = replacementStrings[ replacementString ];
+      // Create an object literal that maps replacement strings to their replacement values respectively.
+      const replacementValuesMapping = this.getReplacementValuesMapping();
 
-        if ( template.includes( replacementString ) ) {
-
-
-          assert( obj && typeof obj.value === 'string', `
-
-    package.json was not implemented correctly when replacing ${ replacementString }.
-    Double check that you have something like
-    ${ obj.failExample || 'something went wrong :( unable to find example' }
-
-    inside your package.json.` );
-
-          template = template.replace( new RegExp( replacementString.replace( /[-\\^$*+?.()|[\]{}]/g, '\\$&' ), 'g' ), obj.value );
-
-        }
-
+      // Replace each replacement string (wrapped with brackets {{}}) with the respective parsed replacemnt value.
+      Object.keys( replacementValuesMapping ).forEach( replacementString => {
+        template = Util.replaceAll( template, `{{${ replacementString }}}`, mapping[ replacementString ] );
       } );
-
-
 
       // Write to the repository's root directory.
       grunt.file.write( writePath, template );
-
       grunt.log.write( '\n\nSuccessfully generated!' );
     }
   }
 
 
-  grunt.log.writeln( Util.replaceAll( 'asfasdfasdf', 'a', '_'))
   //----------------------------------------------------------------------------------------
   // Helpers
   //----------------------------------------------------------------------------------------
@@ -172,10 +164,7 @@ module.exports = ( () => {
       }
     };
     // Throw the package error.
-    Util.assert(
-      false,
-      ` package.json was not implemented correctly. Ensure that you have: \n${ getPackageErrorMessage( subpaths ) }`
-    );
+    Util.throw( ` package.json was not implemented correctly. Ensure that you have: \n${ getPackageErrorMessage( subpaths ) }` );
   }
 
   return Generator;
