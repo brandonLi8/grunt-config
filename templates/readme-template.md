@@ -14,7 +14,7 @@
 # IMPORTANT: Your package.json determines the content of this file. See
 #            `../grunt-commands/generate.js` for documentation on setup.
 # 
-# @author {{AUTHOR}} {{AUTHOR_EMAIL}}
+# @author {{AUTHOR}} <{{AUTHOR_EMAIL}}>
 #
 #===========================================================================-->
 

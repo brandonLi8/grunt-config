@@ -23,6 +23,7 @@ module.exports = ( () => {
 
   // modules
   const grunt = require( 'grunt' );
+  const path = require( 'path' );
   const Util = require( './Util' );
 
   // constants
@@ -83,13 +84,13 @@ module.exports = ( () => {
      * from a template file with these values. The result is then outputted in a specified output file.
      * @public
      *
-     * @param {string} templateFilePath - path to the template file, relative to the root of the repository.
+     * @param {string} templateFilePath - path to the template file, relative to the root of THIS repository.
      * @param {string} outputFilePath - potential path to the output file, relative to the root of the repository.
      */
     static generateFile( templateFilePath, outputFilePath ) {
 
       // Retrieve the template file via the grunt file reader.
-      let template = grunt.file.read( templateFilePath );
+      let template = grunt.file.read( path.dirname( path.dirname( __dirname ) ) + '/' + templateFilePath );
 
       // Create an object literal that maps replacement strings to their replacement values respectively.
       const replacementValuesMapping = this.getReplacementValuesMapping();
