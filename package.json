@@ -15,12 +15,12 @@
   },
   "dependencies": {
     "eslint": "^6.1.0",
-    "exec-sh": "^0.3.4",
     "fs": "0.0.1-security",
     "github-label-sync": "^1.4.1",
     "grunt": "~1.0.0",
     "md5": "^2.2.1",
     "path": "^0.12.7",
+    "shelljs": "^0.8.3",
     "terser": "^4.4.0"
   },
   "bugs": {

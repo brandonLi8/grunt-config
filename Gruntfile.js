@@ -53,4 +53,41 @@ module.exports = grunt => {
     Generator.generateFile( 'templates/readme-template.md', generatePath );
   } ) );
 
+  grunt.registerTask( 'hello',  Util.wrap( () => {
+    // const Shell = require( './src/util/Shell' );
+
+    // Shell.execute( 'git', [ 'status' ], output => {
+    //   console.log
+    //   console.log( output );
+    // } );
+var shell = require('shelljs');
+
+if (!shell.which('asdfa')) {
+  shell.echo('Sorry, this script requires git');
+  shell.exit(1);
+}
+
+
+//     const execSh = require( 'exec-sh' );
+// // run interactive bash shell
+// execSh("echo lorem && bash", { cwd: "/home" }, function(err){
+//   console.log( '')
+//   if (err) {
+//     console.log('erehrh')
+//     console.log("Exit code: ", err.code);
+//     return;
+//   }
+
+//   // collect streams output
+//   var child = execSh(["bash -c id", "echo lorem >&2"], true,
+//     function(err, stdout, stderr){
+//       console.log( 'erer')
+//       console.log("error: ", err);
+//       console.log("stdout: ", stdout);
+//       console.log("stderr: ", stderr);
+//     });
+// });
+
+
+  } ) );
 };
