@@ -58,7 +58,7 @@ module.exports = grunt => {
   } ) );
 
   grunt.registerTask( 'hello',  Util.wrap( () => {
-    Copyright.updateCopyright( 'Gruntfile.js' );
+    Copyright.updateAllCopyrights(  );
 
 //     const execSh = require( 'exec-sh' );
 // // run interactive bash shell

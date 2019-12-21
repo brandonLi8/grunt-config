@@ -22,9 +22,9 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const fs = require( 'fs' );
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
+  const ignore = require( 'ignore' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
 
@@ -42,6 +42,9 @@ module.exports = ( () => {
     html: copyrightContent => `<!-- ${ copyrightContent } -->`,
     css: copyrightContent => `/* ${ copyrightContent } */`
   };
+
+  // Files and directories to ignore when updating copyright statements of a directory. See updateAllCopyrights().
+  const IGNORE_PATTERN = ignore().add( [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build' ] );
 
   class Copyright {
 
@@ -104,14 +107,13 @@ module.exports = ( () => {
      * @public
      *
      * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
-     * @param {boolean} forceWrite - if true, this will rewrite the first line regardless of it was already a copyright
-     *                               statement of not.
+     * @param {boolean} [forceWrite] - if true, this will rewrite the first line regardless of it was already a
+     *                                 copyright statement of not.
      */
-    static updateCopyright( filePath, forceWrite = false ) {
+    static updateFileCopyright( filePath, forceWrite = false ) {
       Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
       Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
-      Util.assert( shell.which( 'git' ), 'git must be installed.' );
-      Util.assert( grunt.file.exists( filePath ), `filePath ${ filePath } is not a real file.` );
+      Util.assert( grunt.file.exists( filePath ), `filePath ${ filePath } is not a file.` );
 
       // Read the file first
       const fileContent = grunt.file.read( filePath );
@@ -132,6 +134,34 @@ module.exports = ( () => {
       else {
         Util.throw( `${ filePath } did not have a valid copyright statement on the first line: \n${ fileLines[ 0 ] }` );
       }
+    }
+
+    /**
+     * Updates the copyright statements of all supported files in a directory. If no directory is provided,
+     * the directory is assumed to be the root of the project (where the command was invoked), such that all files in
+     * the project will be updated.
+     * @public
+     *
+     * @param {String} [directory] - directory to update all copyright statements in, relative to the root of the
+     *                               project. If not provided, all files in the project will be updated.
+     * @param {boolean} [forceWrite] - if true, this will rewrite the first line regardless of it was already a
+     *                                 copyright statement of not.
+     */
+    static updateAllCopyrights( directory, forceWrite = false ) {
+      Util.assert( !directory || typeof directory === 'string', `invalid directory: ${ directory }` );
+      Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
+      Util.assert( !directory || grunt.file.isDir( directory ), `directory ${ directory } is not a directory.` );
+
+      // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
+      grunt.file.recurse( directory || '.', ( abspath, rootdir, subdir, filename ) => {
+
+        // Only update the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+        if ( !IGNORE_PATTERN.ignores( abspath ) && Util.getExtension( filename ) in EXTENSION_COMMENT_PARSER_MAP ) {
+
+          // update the copyright statement
+          this.updateFileCopyright( abspath, forceWrite );
+        }
+      } );
     }
   }
 
