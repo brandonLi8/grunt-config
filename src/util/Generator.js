@@ -15,6 +15,7 @@
  *    will validate all of package.json to ensure all placeholder strings in REPLACEMENT_STRINGS_SCHEMA can be replaced.
  *
  * NOTE: Will error out and provide helpful error messages if package.json isn't implemented correctly.
+ * NOTE: Copyright statements will be checked after generating based on when the file was checked into git.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -23,7 +24,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const Copyright = require( './Copyright' );
+  const fs = require( 'fs' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const Util = require( './Util' );
@@ -103,7 +104,12 @@ module.exports = ( () => {
       } );
 
       // Write to the repository's root directory.
-      grunt.file.write( outputFilePath, template );
+      fs.writeFileSync( outputFilePath, template );
+
+      // Update the Copyright Statement now that the file has been generated. The require statement is in here to fix
+      // circular dependency problems.
+      require( './Copyright' ).updateFileCopyright( outputFilePath );
+
       grunt.log.write( '\n\nSuccessfully generated!' );
     }
   }

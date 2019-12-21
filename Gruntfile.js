@@ -58,7 +58,7 @@ module.exports = grunt => {
   } ) );
 
   grunt.registerTask( 'hello',  Util.wrap( () => {
-    Copyright.updateAllCopyrights( './' );
+    // Copyright.updateAllCopyrights( './' );
 //     const execSh = require( 'exec-sh' );
 // // run interactive bash shell
 // execSh("echo lorem && bash", { cwd: "/home" }, function(err){
