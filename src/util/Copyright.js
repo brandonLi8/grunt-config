@@ -125,7 +125,7 @@ module.exports = ( () => {
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
       // the first line or if forceWrite is true
       if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) ) {
-        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\n' );
+        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\r\n' );
         grunt.file.write( filePath, newFileContents );
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
