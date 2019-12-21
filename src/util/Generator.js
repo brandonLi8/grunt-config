@@ -50,7 +50,7 @@ module.exports = ( () => {
     LICENSE: [ 'license' ],
     REPO_NAME: [ 'name' ],
     REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
-    YEARS: Util.CURRENT_YEAR
+    COPYRIGHT_YEARS: Util.CURRENT_YEAR  // Use the current year for now, then use ./Copyright to update after generating
   };
 
   class Generator {

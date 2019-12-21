@@ -45,7 +45,7 @@ module.exports = ( () => {
   };
 
   // Files and directories to ignore when updating copyright statements of a directory. See updateAllCopyrights().
-  const IGNORE_PATTERN = ignore().add( [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build' ] );
+  const IGNORE_PATTERN = ignore().add( [ '**/.git', '**/node_modules', '**/templates', '**/dist', '**/build' ] );
 
   class Copyright {
 
