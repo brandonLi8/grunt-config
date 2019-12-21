@@ -1,3 +1,5 @@
+# Copyright © 2019 Brandon Li. All rights reserved.
+
 # This references the default nodejs container from
 # the Docker Hub: https://registry.hub.docker.com/_/node/
 # If you want Nodesource's container you would reference nodesource/node

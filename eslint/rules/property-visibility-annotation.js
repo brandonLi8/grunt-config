@@ -1,4 +1,4 @@
-// Copyright 2016, University of Colorado Boulder
+// Copyright © 2019 Brandon Li. All rights reserved.
 /**
  * @fileoverview Rule to check that an assignment in a constructor provides @public or @private visibility annotation
  *               Developed with https://astexplorer.net/

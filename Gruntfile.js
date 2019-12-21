@@ -1,4 +1,4 @@
-// Copyright © 2019-2020 Brandon Li. All rights reserved.
+// Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
  * Grunt configuration file. For background, see https://gruntjs.com/getting-started.
@@ -59,7 +59,6 @@ module.exports = grunt => {
 
   grunt.registerTask( 'hello',  Util.wrap( () => {
     Copyright.updateAllCopyrights(  );
-
 //     const execSh = require( 'exec-sh' );
 // // run interactive bash shell
 // execSh("echo lorem && bash", { cwd: "/home" }, function(err){

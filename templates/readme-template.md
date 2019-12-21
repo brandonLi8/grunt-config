@@ -1,4 +1,4 @@
-<!-- Copyright © {{YEARS}} {{AUTHOR}}. All rights reserved. -->
+<!-- Copyright © 2019 Brandon Li. All rights reserved. -->
 
 <!--===========================================================================
 #
