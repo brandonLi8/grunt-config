@@ -71,7 +71,29 @@ module.exports = ( () => {
       return EXTENSION_COMMENT_PARSER_MAP[ fileExtension ]( copyrightContent );
     }
 
+    /**
+     * Utility method to get a copyright string from a file. The start year is computed from git and the end year is
+     * assumed to be the current year.
+     * @public
+     *
+     * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
+     * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
+     */
+    static getFileCopyright( filePath ) {
+      Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
+      Util.assert( shell.which( 'git' ), 'git must be installed.' );
+      Util.assert( grunt.file.exists( filePath ), `filePath ${ filePath } is not a real file.` );
 
+      // Compute the start year of the file from git. If it hasn't been checked into git yet, the start year is the
+      // current year. Solution from:
+      // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
+      const startYear = shell.exec( `git log --diff-filter=A --follow --date=short --format=%cd -1 -- ${ filePath }` )
+        .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
+
+      const endYear = Util.CURRENT_YEAR;
+
+      return this.getCopyrightString( Util.getExtension( filePath ), Number.parseInt( startYear ), endYear );
+    }
 
     static updateCopyrightFile( filePath ) {
       Util.assert( shell.which( 'git' ), 'you must have git installed to update a copyright' );

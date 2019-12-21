@@ -162,8 +162,8 @@ module.exports = ( () => {
       return path.extname( filePath ).replace( '.', '' ); // remove the . from the extension
     },
 
-    // @public {string} CURRENT_YEAR - Static reference to the current full year.
-    CURRENT_YEAR: `${ new Date().getFullYear() }`
+    // @public {number} CURRENT_YEAR - Static reference to the current full year.
+    CURRENT_YEAR: new Date().getFullYear()
   };
 
   return Util;

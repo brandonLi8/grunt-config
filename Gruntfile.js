@@ -59,7 +59,7 @@ module.exports = grunt => {
 
   grunt.registerTask( 'hello',  Util.wrap( () => {
     // Copyright.updateCopyrightFile( 'Gruntfile.js' );
-    console.log( Copyright.getCopyrightString( 'js', 2000 ) )
+    console.log( Copyright.getFileCopyright( 'READMES.md' ) )
 
 //     const execSh = require( 'exec-sh' );
 // // run interactive bash shell
