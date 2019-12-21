@@ -95,47 +95,43 @@ module.exports = ( () => {
       return this.getCopyrightString( Util.getExtension( filePath ), Number.parseInt( startYear ), endYear );
     }
 
-    static updateCopyrightFile( filePath ) {
-      Util.assert( shell.which( 'git' ), 'you must have git installed to update a copyright' );
+    /**
+     * Updates the copyright statement of a file. This is usually called to automate the updating of copyright
+     * statements at the start of each year. The copyright statement is assumed to be at the start of the file.
+     * If it isn't there (checked by checking if the word "copyright" is in the first line), this will error out.
+     * However, passing forceWrite = true will replace the first line with a correct copyright statement no regardless
+     * or its content.
+     * @public
+     *
+     * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
+     * @param {boolean} forceWrite - if true, this will rewrite the first line regardless of it was already a copyright
+     *                               statement of not.
+     */
+    static updateCopyright( filePath, forceWrite = false ) {
+      Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
+      Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
+      Util.assert( shell.which( 'git' ), 'git must be installed.' );
+      Util.assert( grunt.file.exists( filePath ), `filePath ${ filePath } is not a real file.` );
 
-      // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
-      const startDate = shell.exec( `git log --diff-filter=A --follow --date=short --format=%cd -1 -- ${ filePath }` )
-        .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
-
-      const endDate = Util.CURRENT_YEAR;
-
-      // Create the single date or date range to use in the copyright statement
-      const dateString = startDate === endDate ? startDate : `${ startDate }-${ endDate }`;
-
-      const fileText = fs.readFileSync( filePath, 'utf8' );
-
-      // Infer the line separator for the platform
-      const firstR = fileText.indexOf( '\r' );
-      const firstN = fileText.indexOf( '\n' );
-      const lineSeparator = firstR >= 0 && firstR < firstN ? '\r' : '\n';
+      // Read the file first
+      const fileContent = grunt.file.read( filePath );
 
       // Parse by line separator
-      const fileLines = fileText.split( lineSeparator ); // splits using both unix and windows newlines
+      const fileLines = fileContent.split( /\r?\n/ ); // splits for both unix and windows newlines
 
-      const replacementValues = Generator.getReplacementValuesMapping();
+      // Reference the correct copyright statement,
+      const copyrightStatement = this.getFileCopyright( filePath );
 
-      // Check if the first line is already correct
-      const firstLine = fileLines[ 0 ];
-      const copyrightLine = path.extname( filePath ) === '.js' ?
-        `// Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved.`:
-        `<!-- Copyright © ${ dateString } ${ replacementValues.AUTHOR }. All rights reserved. -->`;
-
-      // Update the line
-      if ( firstLine.indexOf( 'Copyright' ) >= 0 || firstLine.indexOf( 'copyright' ) >= 0 ) {
-        const concatted = [ copyrightLine ].concat( fileLines.slice( 1 ) );
-        const newFileContents = concatted.join( lineSeparator );
-        fs.writeFileSync( filePath, newFileContents );
-        grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightLine }` );
+      // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
+      // the first line or if forceWrite is true
+      if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) ) {
+        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\n' );
+        grunt.file.write( filePath, newFileContents );
+        grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
       else {
-        Util.throw( `${ filePath } did not have a valid copyright statement on the first line: \n${ firstLine }` );
+        Util.throw( `${ filePath } did not have a valid copyright statement on the first line: \n${ fileLines[ 0 ] }` );
       }
-
     }
   }
 
