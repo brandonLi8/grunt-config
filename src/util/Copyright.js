@@ -1,4 +1,4 @@
-// Copyright © 2019 Brandon Li. All rights reserved.
+// Copyright © adfasfadf Brandon Li. All rights reserved.
 
 /**
  * Copyright utility encapsulation for retrieving, validating, and/or modifying copyright statements correctly.
@@ -22,6 +22,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const fs = require( 'fs' );
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
   const ignore = require( 'ignore' );
@@ -131,7 +132,7 @@ module.exports = ( () => {
       // the first line or if forceWrite is true
       if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
         const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\r\n' );
-        grunt.file.write( filePath, newFileContents );
+        fs.writeFileSync( filePath, newFileContents );
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
       else {
