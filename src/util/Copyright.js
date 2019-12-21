@@ -25,13 +25,12 @@ module.exports = ( () => {
   const fs = require( 'fs' );
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
-  const path = require( 'path' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
 
   // constants
   // Retrieves the validated and parsed generator replacement values (see Generator.js for more documentation).
-  const GENERATOR_REPLACEMENT_VALUES = Generator.getReplacementValuesMapping();
+  const GENERATOR_VALUES = Generator.getReplacementValuesMapping();
 
   // Object literal that correlates an extension (without the .) to a parser function such that the parser returns a
   // correct one-line comment in the respective language.
@@ -41,16 +40,35 @@ module.exports = ( () => {
     yml: copyrightContent => `# ${ copyrightContent }`,
     gitignore: copyrightContent => `# ${ copyrightContent }`,
     html: copyrightContent => `<!-- ${ copyrightContent } -->`,
-    css: copyrightContent => `/* ${ copyrightContentString } */`
+    css: copyrightContent => `/* ${ copyrightContent } */`
   };
 
   class Copyright {
 
-    //----------------------------------------------------------------------------------------
-    // Utility Methods
-    //----------------------------------------------------------------------------------------
-    static getCopyrightString() {
+    /**
+     * Utility method to get a copyright string (including the comment delimiters described at the top of this file).
+     * If the endYear isn't provided, the copyright is assumed to have one year (as described at the top)
+     * @public
+     *
+     * @param {String} fileExtension - file extension of the file the copyright statement belongs in, without the '.'
+     * @param {number} startYear - the starting year of the copyright.
+     * @param {number} [endYear] - the ending year of the copyright. If not provided, it is assumed to be the same as
+     *                             the startYear (which will format as described at the top of the file).
+     * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
+     */
+    static getCopyrightString( fileExtension, startYear, endYear ) {
+      Util.assert( typeof fileExtension === 'string', `invalid fileExtension: ${ fileExtension }` );
+      Util.assert( typeof startYear === 'number', `invalid startYear: ${ startYear }` );
+      Util.assert( !endYear || typeof endYear === 'number', `invalid endYear: ${ endYear }` );
+      Util.assert( fileExtension in EXTENSION_COMMENT_PARSER_MAP, `invalid fileExtension: ${ fileExtension }` );
 
+      // Create the single date or the date range to use in the copyright statement
+      const dateString = ( !endYear || startYear === endYear ) ? startYear : `${ startYear }-${ endYear }`;
+
+      // Create the copyright line without the commend delimiters first. Then return the parsed value.
+      const copyrightContent = `Copyright © ${ dateString } ${ GENERATOR_VALUES.AUTHOR }. All rights reserved.`;
+
+      return EXTENSION_COMMENT_PARSER_MAP[ fileExtension ]( copyrightContent );
     }
 
 

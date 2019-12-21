@@ -154,6 +154,7 @@ module.exports = ( () => {
      * @public
      *
      * @param {String} filePath
+     * @returns {String} - the extension, without the '.'
      */
     getExtension( filePath ) {
       Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
