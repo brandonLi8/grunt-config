@@ -91,5 +91,19 @@ module.exports = grunt => {
       Generator.generateFile( 'templates/wercker-template.yml', path );
     } ) );
 
+  /**
+   * Generates a index.html file in the root directory that invoked this command based on the template in
+   * 'grunt-config/templates/index-template.html'.
+   *
+   * Run with '--test' to output the file in 'tests/index-test.html' instead (relative to the root directory).
+   */
+  grunt.registerTask( 'generate-index-html',
+    'Generates a index.html file in the root directory that invoked this command. Run with --test to ' +
+    'output the file in \'tests/index-test.html\' instead.',
+    Util.wrap( () => {
+      const path = grunt.option( 'test' ) ? 'tests/index-test.html' : 'index.html';
+      Generator.generateFile( 'templates/index-template.html', path );
+    } ) );
+
 
 };
