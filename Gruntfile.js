@@ -12,8 +12,8 @@ module.exports = grunt => {
   // modules
   const Copyright = require( './src/Util/Copyright' );
   const Generator = require( './src/Util/Generator' );
-  const Util = require( './src/util/Util' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
+  const Util = require( './src/util/Util' );
 
   shell.config.silent = true;
 
@@ -75,6 +75,20 @@ module.exports = grunt => {
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/deploy-heroku-test.yml' : '.github/workflows/deploy-heroku.yml';
       Generator.generateFile( 'templates/deploy-heroku-template.yml', path );
+    } ) );
+
+  /**
+   * Generates a .wercker.yml file in the root directory that invoked this command based on the template in
+   * 'grunt-config/templates/wercker-template.md'.
+   *
+   * Run with '--test' to output the file in 'tests/.wercker-test.yml' instead (relative to the root directory).
+   */
+  grunt.registerTask( 'generate-wercker',
+    'Generates a .wercker.yml file in the root directory that invoked this command. Run with --test to ' +
+    'output the file in \'tests/.wercker-test.yml\' instead.',
+    Util.wrap( () => {
+      const path = grunt.option( 'test' ) ? 'tests/.wercker-test.yml' : '.wercker.yml';
+      Generator.generateFile( 'templates/wercker-template.yml', path );
     } ) );
 
 
