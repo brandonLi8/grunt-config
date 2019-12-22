@@ -24,7 +24,6 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const fs = require( 'fs' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const Util = require( './Util' );
@@ -104,13 +103,13 @@ module.exports = ( () => {
       } );
 
       // Write to the repository's root directory.
-      fs.writeFileSync( outputFilePath, template );
+      grunt.file.write( outputFilePath, template );
 
       // Update the Copyright Statement now that the file has been generated. The require statement is in here to fix
       // circular dependency problems.
       require( './Copyright' ).updateFileCopyright( outputFilePath );
 
-      grunt.log.write( '\n\nSuccessfully generated!' );
+      grunt.log.write( '\nSuccessfully generated!' );
     }
   }
 

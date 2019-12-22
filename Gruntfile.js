@@ -60,10 +60,10 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-gitignore',
     'Generates a .gitignore file in the root directory that invoked this command. Run with --test to ' +
-    'output the file in \'tests/.gitignore-test.yml\' instead.',
+    'output the file in \'tests/.gitignore-test.gitignore\' instead.',
     Util.wrap( () => {
-      const path = grunt.option( 'test' ) ? 'tests/.gitignore-test.yml' : '.gitignore';
-      Generator.generateFile( 'templates/gitignore-template.yml', path );
+      const path = grunt.option( 'test' ) ? 'tests/.gitignore-test.gitignore' : '.gitignore';
+      Generator.generateFile( 'templates/gitignore-template.gitignore', path );
     } ) );
 
   /**
