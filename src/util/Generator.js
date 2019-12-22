@@ -47,8 +47,10 @@ module.exports = ( () => {
     GIT_REMOTE: [ 'repository', 'url' ],
     HOMEPAGE: [ 'homepage' ],
     ISSUES_URL: [ 'bugs', 'url' ],
-    LICENSE: [ 'license' ],
     REPO_NAME: [ 'name' ],
+    VERSION: [ 'version' ],
+    LICENSE: [ 'license' ],
+    LICENSE_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( '.git', '/blob/master/LICENSE' ) },
     REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
     COPYRIGHT_YEARS: Util.CURRENT_YEAR  // Use the current year for now, then use ./Copyright to update after generating
   };

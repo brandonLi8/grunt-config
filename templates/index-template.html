@@ -1,0 +1,87 @@
+<!-- Copyright © {{COPYRIGHT_YEARS}} {{AUTHOR}}. All rights reserved. -->
+
+<!--—————————————————————————————————————————————————————————————————————————*!
+ * {{REPO_TITLE}} {{VERSION}}
+ *
+ * This application is licensed under the {{LICENSE}}.
+ * The full text of the {{LICENSE}} is available here:
+ * {{LICENSE_URL}}.
+ *
+ * The application-specific source code can be accessed at
+ * {{GIT_REMOTE}}.
+ *
+ * Thank you for visiting!
+ *
+ * @author {{AUTHOR}} <{{AUTHOR_EMAIL}}>
+!*——————————————————————————————————————————————————————————————————————————-->
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  <!-- Title -->
+  <title>{{REPO_TITLE}}</title>
+  <!--———————————————————————————————————————————————————————————————————————*!
+   * Google Analytics
+  !*————————————————————————————————————————————————————————————————————————-->
+  <!-- TODO
+  <script async src=""></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push( [ 'js', new Date() ], [ 'config', 'UA-*******-*' ] );
+  </script>
+  -->
+  <!--———————————————————————————————————————————————————————————————————————*!
+   * Meta Data
+  !*————————————————————————————————————————————————————————————————————————-->
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="initial-scale=1,width=device-width,height=device-height,user-scalable=no,maximum-scale=1,minimum-scale=1.0"/>
+  <meta name="keywords" content="{{REPO_NAME}}, {{REPO_TITLE}}"/>
+  <meta name="author" content="{{AUTHOR}}, {{AUTHOR_EMAIL}}"/>
+  <meta name="subject" content="{{REPO_TITLE}}">
+  <meta name="copyright" content="Copyright © {{AUTHOR}}. All rights reserved.">
+  <meta name="description" content="{{DESCRIPTION}}"/>
+
+  <!-- Open Graph Protocol Meta Tags -->
+  <meta name="og:title" content="‪{{REPO_NAME}}">
+  <meta name="og:site_name" content="{{REPO_TITLE}}"/>
+  <meta name="og:type" content="website">
+  <meta name="og:url" content="{{HOMEPAGE}}">
+  <meta name="og:email" content="{{AUTHOR_EMAIL}}"/>
+  <meta name="og:description" content="{{DESCRIPTION}}"/>
+  <!-- TODO <meta name="og:image" content=""> -->
+
+  <!-- Twitter-specific Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="{{AUTHOR}}"/>
+  <meta name="twitter:description" content="{{DESCRIPTION}}"/>
+  <!-- TODO <meta name="twitter:image" content=""> -->
+
+  <!-- Favicon: Image displayed on the browser's address bar.-->
+  <!-- TODO <link rel="icon" type="image/JPG?" href=""/> -->
+</head>
+
+<!-- Make dark-gray for the loading phase so that the splash screen is black -->
+<body style="background-color:#0f0f0f;">
+<script type="text/javascript">
+
+  // Loads a synchronously-executed asynchronously-downloaded script tag, with
+  // optional data-main parameter. See
+  // http://www.html5rocks.com/en/tutorials/speed/script-loading/ for more about
+  // script loading. It helps to load all of the scripts with this method, so
+  // they are treated the same (and placed in the correct execution order)
+  const loadURL = ( preloadURL, main ) => {
+    const script = document.createElement( 'script' );
+    if ( typeof main === 'string' ) {
+      script.setAttribute( 'data-main', main );
+    }
+    script.type = 'text/javascript';
+    script.src = preloadURL;
+    script.async = false;
+    document.head.appendChild( script );
+  };
+
+</script>
+</body>
+</html>
