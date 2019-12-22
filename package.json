@@ -14,15 +14,15 @@
     "url": "https://github.com/brandonLi8/grunt-config.git"
   },
   "dependencies": {
-    "eslint": "^6.1.0",
-    "fs": "0.0.1-security",
+    "eslint": "^6.8.0",
+    "fs": "0.0.2",
     "github-label-sync": "^1.4.1",
-    "grunt": "~1.0.0",
+    "grunt": "~1.0.4",
     "ignore": "^5.1.4",
     "md5": "^2.2.1",
     "path": "^0.12.7",
     "shelljs": "^0.8.3",
-    "terser": "^4.4.0"
+    "terser": "^4.4.3"
   },
   "bugs": {
     "url": "https://github.com/brandonLi8/grunt-config/issues",
