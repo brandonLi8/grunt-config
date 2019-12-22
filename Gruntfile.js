@@ -15,9 +15,6 @@ module.exports = grunt => {
   const Util = require( './src/util/Util' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
 
-  // constants
-  const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
-
   shell.config.silent = true;
 
   //----------------------------------------------------------------------------------------
@@ -80,28 +77,5 @@ module.exports = grunt => {
       Generator.generateFile( 'templates/deploy-heroku-template.yml', path );
     } ) );
 
-  grunt.registerTask( 'hello',  Util.wrap( () => {
-    // Copyright.updateAllCopyrights( './' );
-//     const execSh = require( 'exec-sh' );
-// // run interactive bash shell
-// execSh("echo lorem && bash", { cwd: "/home" }, function(err){
-//   console.log( '')
-//   if (err) {
-//     console.log('erehrh')
-//     console.log("Exit code: ", err.code);
-//     return;
-//   }
 
-//   // collect streams output
-//   var child = execSh(["bash -c id", "echo lorem >&2"], true,
-//     function(err, stdout, stderr){
-//       console.log( 'erer')
-//       console.log("error: ", err);
-//       console.log("stdout: ", stdout);
-//       console.log("stderr: ", stderr);
-//     });
-// });
-
-
-  } ) );
 };
