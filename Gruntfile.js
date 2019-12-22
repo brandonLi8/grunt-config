@@ -25,37 +25,60 @@ module.exports = grunt => {
   //----------------------------------------------------------------------------------------
 
   /**
-   * Generates a README.md file (in the root directory) based on the template in './templates/readme-template.md'
-   * @usage: `grunt generate-readme` || `grunt generate-readme --test`
+   * Generates a README.md file in the root directory that invoked this command based on the template in
+   * 'grunt-config/templates/readme-template.md'.
    *
-   * @option '--test' - generates a readme test file in './tests/readme-test.md' instead, but uses the same template.
+   * Run with '--test' to output the file in 'tests/README-test.md' instead (relative to the root directory).
    */
-  // grunt.registerTask( 'generate-readme', 'Generates a README.md file', Util.wrap( () => {
-
-  //   // flag that indicates where to generate the file to.
-  //   const generatePath = grunt.option( 'test' ) === true ? 'tests/readme-test.md' : 'README.md';
-
-  //   generate( PACKAGE_JSON, 'templates/readme-template.md', relativePath, generatePath );
-  // } ) );
-
-  // grunt.registerTask( 'hello', () => {
-
-  // } );
-
+  grunt.registerTask( 'generate-readme',
+    'Generates a README.md file in the root directory that invoked this command. Run with --test to output ' +
+    'the file in \'tests/README-test.md\' instead.',
+    Util.wrap( () => {
+      const path = grunt.option( 'test' ) ? 'tests/README-test.md' : 'README.md';
+      Generator.generateFile( 'templates/readme-template.md', path );
+    } ) );
 
   /**
-   * Generates a README.md file (in the root directory) based on the template in './templates/readme-template.md'
-   * @usage: `grunt generate-readme` || `grunt generate-readme --test`
+   * Generates a .travis.yml file in the root directory that invoked this command based on the template in
+   * 'grunt-config/templates/travis-template.md'.
    *
-   * @option '--test' - generates a readme test file in './tests/readme-test.md' instead, but uses the same template.
+   * Run with '--test' to output the file in 'tests/.travis-test.yml' instead (relative to the root directory).
    */
-  grunt.registerTask( 'generate-readme',  Util.wrap( () => {
+  grunt.registerTask( 'generate-travis',
+    'Generates a .travis.yml file in the root directory that invoked this command. Run with --test to ' +
+    'output the file in \'tests/.travis-test.yml\' instead.',
+    Util.wrap( () => {
+      const path = grunt.option( 'test' ) ? 'tests/.travis-test.yml' : '.travis.yml';
+      Generator.generateFile( 'templates/travis-template.yml', path );
+    } ) );
 
-    // flag that indicates where to generate the file to.
-    const generatePath = 'README.md';
+  /**
+   * Generates a .gitignore file in the root directory that invoked this command based on the template in
+   * 'grunt-config/templates/gitignore-template.md'.
+   *
+   * Run with '--test' to output the file in 'tests/.gitignore-test.yml' instead (relative to the root directory).
+   */
+  grunt.registerTask( 'generate-gitignore',
+    'Generates a .gitignore file in the root directory that invoked this command. Run with --test to ' +
+    'output the file in \'tests/.gitignore-test.yml\' instead.',
+    Util.wrap( () => {
+      const path = grunt.option( 'test' ) ? 'tests/.gitignore-test.yml' : '.gitignore';
+      Generator.generateFile( 'templates/gitignore-template.yml', path );
+    } ) );
 
-    Generator.generateFile( 'templates/readme-template.md', generatePath );
-  } ) );
+  /**
+   * Generates a deploy-heroku.yml Github Action file in the root directory that invoked this command based on the
+   * template in 'grunt-config/templates/deploy-heroku-template.yml'.
+   *
+   * Run with '--test' to output the file in 'tests/deploy-heroku-test.yml' instead (relative to the root directory).
+   */
+  grunt.registerTask( 'generate-deploy-heroku',
+    'Generates a deploy-heroku.yml Github Action file in the root directory that invoked this command. Run with ' +
+    '--test to output the file in \'tests/deploy-heroku-test.yml\' instead.',
+    Util.wrap( () => {
+      const path = grunt.option( 'test' ) ? 'tests/deploy-heroku-test.yml' : '.github/workflows/deploy-heroku.yml';
+      Generator.generateFile( 'templates/deploy-heroku-template.yml', path );
+    } ) );
 
   grunt.registerTask( 'hello',  Util.wrap( () => {
     // Copyright.updateAllCopyrights( './' );
