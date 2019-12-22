@@ -27,7 +27,7 @@ build:                              # Build definition
         echo "node version $(node -v) running"
         echo "npm version $(npm -v) running"
 
-    - script:                       # Run Continuous Testing commands
+    - script:                       # Run Continuouasdfasds Testing commands
       name: Continuous Testing
       code: |
         grunt eslint --no-cache     # ensure everything is linted
