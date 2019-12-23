@@ -12,8 +12,7 @@
  * support different file types in the future.
  *
  * The configuration for ESlint can be found ../eslint/.eslintrc.js (relative to this file). It uses some default rules
- * (see documentation: https://eslint.org/docs/rules/) but also implements custom rules (see ../eslint/rules). In
- * order to use the .eslintrc.js configuration, it must be specified in package.json.
+ * (see documentation: https://eslint.org/docs/rules/) but also implements custom rules (see ../eslint/rules).
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -37,11 +36,7 @@ module.exports = ( () => {
 
     /**
      * Lints the entire root directory that invoked the command, using the ESlint configuration defined in
-     * ../eslint/.eslintrc.js (relative to this file). Uses some custom rules (see ../eslint/rules). Will error if
-     * package.json doesn't contain something like:
-     *   "eslintConfig": {
-     *      "extends": "./node_modules/@brandonli8/grunt-config/eslint/.eslintrc.js"
-     *   }
+     * ../eslint/.eslintrc.js (relative to this file). Uses some custom rules (see ../eslint/rules).
      * @public
      *
      * @param {boolean} useCache - indicates if the ESlint cache should be used. Caching doesn't re-lint files that
@@ -51,9 +46,6 @@ module.exports = ( () => {
     static eslint( useCache ) {
       Util.assert( typeof useCache === 'boolean', `invalid useCache: ${ useCache }` );
 
-      // Check that package.json was implemented correctly as described above.
-      Util.assert( Generator.parseNestedPackageValue( [ 'eslintConfig', 'extends' ], 'ESLINTRC.JS' ) );
-
       // The path to grunt-config relative to the root directory of which the command was invoked.
       const gruntConfigPath = path.dirname( __dirname );
 
@@ -62,6 +54,11 @@ module.exports = ( () => {
 
       // Use the Node.js ESLint API. See https://eslint.org/docs/developer-guide/nodejs-api.
       const cli = new eslint.CLIEngine( {
+
+        // Use the ESlint configuration defined in ../eslint/.eslintrc.js
+        baseConfig: {
+          extends: [ `${ gruntConfigPath }/eslint/.eslintrc.js` ]
+        },
 
         // Current working directory - Lints the entire root directory that invoked the command
         cwd: currentWorkingDirectory,

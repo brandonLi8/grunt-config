@@ -28,8 +28,5 @@
     "url": "https://github.com/brandonLi8/grunt-config/issues",
     "email": "brandon.li820@gmail.com"
   },
-  "homepage": "https://github.com/brandonLi8/grunt-config#readme",
-  "eslintConfig": {
-    "extends": "./eslint/.eslintrc.js"
-  }
+  "homepage": "https://github.com/brandonLi8/grunt-config#readme"
 }
