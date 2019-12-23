@@ -12,10 +12,27 @@ module.exports = grunt => {
   // modules
   const Copyright = require( './src/Copyright' );
   const Generator = require( './src/Generator' );
+  const Linter = require( './src/Linter' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
 
   shell.config.silent = true;
+
+
+  /**
+   * ESlints the entire root directory that invoked the command, using the ESlint configuration defined in
+   * grunt-config/eslint/.eslintrc.js.
+   *
+   * Run with --no-cache to lint without using a ESLint cache.
+   */
+  grunt.registerTask( 'eslint',
+    'ESlints the entire root directory that invoked the command, using the ESlint configuration defined in ' +
+    'grunt-config/eslint/.eslintrc.js. Run with --no-cache to lint without using a ESLint cache.',
+    Util.wrap( () => {
+      Linter.eslint( !grunt.option( 'no-cache' ) );
+    } ) );
+
+
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.

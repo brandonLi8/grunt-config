@@ -20,7 +20,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const assert = require( '../../grunt-commands/helpers/assert' );
+  const assert = require( 'assert' );
   const grunt = require( 'grunt' );
 
   // constants

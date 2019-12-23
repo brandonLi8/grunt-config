@@ -74,7 +74,7 @@ module.exports = ( () => {
         // Indicates where to store the target-specific cache file. Use md5 to hash the file name. This path is relative
         // to the root directory of which the command was invoked, so we use the gruntConfigPath to find the correct
         // path inside of grunt-config.
-        cacheFile: `${ gruntConfigPath }/eslint/cache/${ md5( repo ) }.eslintcache`,
+        cacheFile: `${ gruntConfigPath }/eslint/cache/${ md5( path.basename( process.cwd() ) ) }.eslintcache`,
 
         // Indicates where the custom rules are. This path is relative to the root directory of which the command was
         // invoked, so we use the gruntConfigPath to find the correct rules path located inside of grunt-config
@@ -86,10 +86,10 @@ module.exports = ( () => {
 
       //----------------------------------------------------------------------------------------
       // Log results
-      grunt.log.writeln( `Linting ${ currentWorkingDirectory } ...` );
+      grunt.log.writeln( `Linting ${ process.cwd() }...` );
 
       // Run the ESlint step
-      const report = cli.executeOnFiles( currentWorkingDirectory );
+      const report = cli.executeOnFiles( path.basename( process.cwd() ) );
 
       // Pretty print results to console if any
       ( report.warningCount || report.errorCount ) && grunt.log.write( cli.getFormatter()( report.results ) );
