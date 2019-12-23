@@ -52,7 +52,7 @@ module.exports = ( () => {
       Util.assert( typeof useCache === 'boolean', `invalid useCache: ${ useCache }` );
 
       // Check that package.json was implemented correctly as described above.
-      Util.assert( Generator.parseNestedPackageValue( [ 'eslintConfig', 'extends' ] ), 'ESLINTRC.JS' );
+      Util.assert( Generator.parseNestedPackageValue( [ 'eslintConfig', 'extends' ], 'ESLINTRC.JS' ) );
 
       // The path to grunt-config relative to the root directory of which the command was invoked.
       const gruntConfigPath = path.dirname( __dirname );
