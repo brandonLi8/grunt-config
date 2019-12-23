@@ -94,7 +94,7 @@ module.exports = ( () => {
     static generateFile( templateFilePath, outputFilePath ) {
 
       // Retrieve the template file via the grunt file reader.
-      let template = grunt.file.read( path.dirname( path.dirname( __dirname ) ) + '/' + templateFilePath );
+      let template = grunt.file.read( path.dirname( __dirname ) + '/' + templateFilePath );
 
       // Create an object literal that maps replacement strings to their replacement values respectively.
       const replacementValuesMapping = this.getReplacementValuesMapping();
