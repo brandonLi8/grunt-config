@@ -10,7 +10,6 @@ module.exports = grunt => {
   'use strict';
 
   // modules
-  const Copyright = require( './src/Copyright' );
   const Generator = require( './src/Generator' );
   const Linter = require( './src/Linter' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match

@@ -76,7 +76,7 @@ module.exports = ( () => {
      * @returns {function} - the wrapper function to be passed as the grunt task
      */
     wrapAsync( asyncTask ) {
-      Util.assert( asyncTask.constructor.name == 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
+      Util.assert( asyncTask.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
       return Util.wrap( async ( ...args ) => {
         const done = grunt.task.current.async();

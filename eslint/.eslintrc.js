@@ -58,7 +58,11 @@ module.exports = {
     'func-call-spacing': [ 2, 'never' ],
     'key-spacing': 2,
     'object-curly-spacing': [ 2, 'always' ],
-    'space-before-function-paren': [ 2, 'never' ],
+    'space-before-function-paren': [ 2, {
+        asyncArrow: 'always',
+        named: 'never',
+        anonymous: 'never'
+    } ],
     'space-before-blocks': 2,
     'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=' ] } ],
 

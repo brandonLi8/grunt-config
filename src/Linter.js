@@ -95,7 +95,7 @@ module.exports = ( () => {
       ( report.warningCount || report.errorCount ) && grunt.log.write( cli.getFormatter()( report.results ) );
       report.warningCount && grunt.fail.warn( report.warningCount + ' Lint Warnings' );
       report.errorCount && grunt.fail.fatal( report.errorCount + ' Lint Errors' );
-    };
+    }
   }
 
   return Linter;

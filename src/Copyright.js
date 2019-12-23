@@ -22,6 +22,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
   const fs = require( 'fs' );
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
@@ -96,7 +97,7 @@ module.exports = ( () => {
 
       const endYear = Util.CURRENT_YEAR;
 
-      return this.getCopyrightString( Util.getExtension( filePath ), Number.parseInt( startYear ), endYear );
+      return this.getCopyrightString( Util.getExtension( filePath ), _.parseInt( startYear ), endYear );
     }
 
     /**
