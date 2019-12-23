@@ -1,45 +1,40 @@
 {
   "design:general": "FF2DA6",
   "design:polish": "F13AFA",
+  "design:artwork": "D4C5F9",
+  "design:feedback": "9F94FB",
+
   "dev:chip-away": "5C8EFF",
-  "dev:code-review": "312AFF",
-  "dev:enhancement": {
-    "color": "299BFF",
-    "aliases": [ "enhancement" ]
-  },
-  "dev:help-wanted": {
-    "color": "63D1F4",
-    "aliases": [ "help-wanted" ]
-  },
-  "dev:maintenance-release": "1467ba",
+  "dev:code-review": "104E8B",
+  "dev:enhancement": { "color": "299BFF", "aliases": [ "enhancement" ] },
+  "dev:help-wanted": { "color": "63D1F4", "aliases": [ "help-wanted" ] },
+  "dev:maintenance-release": "1467BA",
   "dev:model": "4876FF",
+  "dev:documentation": "1FFFFF",
+  "dev:branch": "008080",
 
   "priority:1-top": "FF007F",
-  "priority:2-high": "e11d21",
+  "priority:2-high": "E11D21",
   "priority:3-medium": "FFE600",
-  "priority:4-low": "c7def8",
+  "priority:4-low": "C7DEF8",
   "priority:5-deferred": "ACFAAE",
-  "project:master-checklist": "42426F",
 
   "status:blocks-publication": "FF2828",
   "status:ready-for-review": "3E766D",
+  "status:ready-for-testing": "00FF6E",
+  "status:breaking-api-change": "B60205",
 
+  "type:master-checklist": "42426F",
   "type:automated-testing": "FF00AA",
-  "type:bug": {
-    "color": "db434b",
-    "aliases": [ "bug" ]
-  },
-  "type:duplicate": {
-    "color": "EEEED1",
-    "aliases": [ "duplicate" ]
-  },
+  "type:bug": { "color": "DB434B", "aliases": [ "bug" ] },
+  "type:duplicate": { "color": "EEEED1", "aliases": [ "duplicate" ] },
   "type:licensing": "4B0082",
   "type:misc": "B87333",
   "type:responsive-design": "BA71FF",
   "type:performance": "8B1C62",
-  "type:question": {
-    "color": "EDCB62",
-    "aliases": [ "question" ]
-  },
+  "type:question": { "color": "EDCB62", "aliases": [ "question" ] },
   "type:user-feedback": "EDE162",
+  "type:maintenance": "BFDADC",
+  "type:documentation": "72587F",
+  "type:discussion": "FFFAFA"
 }
