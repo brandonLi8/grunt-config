@@ -24,10 +24,9 @@ module.exports = ( () => {
   //                      - a string array that contains aliases to other labels
   const LABELS_SCHEMA = grunt.file.readJSON( path.dirname( __dirname ) + '/github-labels-schema.json' );
 
-  // class Labeler {
+  class Labeler {
 
-  // }
+  }
 
-  console.log( LABELS_SCHEMA)
-  // return Labeler;
+  return Labeler;
 } )();
