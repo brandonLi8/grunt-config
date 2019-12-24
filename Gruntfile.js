@@ -11,6 +11,7 @@ module.exports = grunt => {
 
   // modules
   const Generator = require( './src/Generator' );
+  const Labeler = require( './src/Labeler' );
   const Linter = require( './src/Linter' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
@@ -32,6 +33,10 @@ module.exports = grunt => {
     } ) );
 
 
+
+  grunt.registerTask( 'generate-labels', 'Generates github labels', Util.wrap( () => {
+    console.log( 'eherh')
+  } ) );
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.

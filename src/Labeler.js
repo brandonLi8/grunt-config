@@ -8,8 +8,11 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const Util = require( './Util' );
   const Generator = require( './Generator' );
+  const githubLabelSync = require( 'github-label-sync' ); // eslint-disable-line require-statement-match
+  const grunt = require( 'grunt' );
+  const path = require( 'path' );
+  const Util = require( './Util' );
 
   // constants
 
@@ -19,12 +22,12 @@ module.exports = ( () => {
   // 2. Object Literal - an object literal with:
   //                      - a color key that correlates to a color string as described in 1.
   //                      - a string array that contains aliases to other labels
-  const LABELS_SCHEMA = grunt.file.readJSON( path.dirname( __dirname ) + '/github-labels-schema.json';
+  const LABELS_SCHEMA = grunt.file.readJSON( path.dirname( __dirname ) + '/github-labels-schema.json' );
 
+  // class Labeler {
 
-  class Labeler {
+  // }
 
-  }
-
-  return Labeler;
+  console.log( LABELS_SCHEMA)
+  // return Labeler;
 } )();
