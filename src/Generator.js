@@ -111,7 +111,7 @@ module.exports = ( () => {
       // circular dependency problems.
       require( './Copyright' ).updateFileCopyright( outputFilePath );
 
-      grunt.log.write( '\nSuccessfully generated!' );
+      Util.log( 'Successfully generated!' );
     }
 
     /**

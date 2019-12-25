@@ -65,7 +65,7 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
       // Get the repository in terms of user-name/repo or organization/repo
       const repo = gitRemote.replace( '.git', '' ).replace( GITHUB_URL, '' );
 
-      grunt.log.writeln( `Generating labels for ${ GITHUB_URL }${ repo } ...` );
+      Util.log( `Generating labels for ${ GITHUB_URL }${ repo } ...` );
 
       // githubLabelSync label schema format is slightly different from .../github-labels-schema.json, so convert over
       const labels = [];
@@ -89,22 +89,22 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
       const deletedLabels = results.filter( result => result.expected === null );
 
       if ( createdLabels.length ) {
-        !dryRun && grunt.log.writeln( '\nSuccess!' );
-        grunt.log.writeln( `${ dryRun ? '\nWould create' : 'Created' } ${ createdLabels.length } new label${ createdLabels.length > 1 ? 's': '' }:` );
+        !dryRun && Util.log( '\nSuccess!' );
+        Util.log( `${ dryRun ? '\nWould create' : 'Created' } ${ createdLabels.length } new label${ createdLabels.length > 1 ? 's': '' }:` );
         createdLabels.forEach( label => {
-          grunt.log.writeln( chalk.bgHex( label.expected.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.expected.color ) )( label.name ) );
+          Util.log( chalk.bgHex( label.expected.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.expected.color ) )( label.name ) );
         } );
       }
       if ( deletedLabels.length ) {
-        !dryRun && grunt.log.writeln( '\nSuccess!' );
-        grunt.log.writeln( `${ dryRun ? '\nWould delete' : 'deleted' } ${ deletedLabels.length } label${ deletedLabels.length > 1 ? 's': '' }:` );
+        !dryRun && Util.log( '\nSuccess!' );
+        Util.log( `${ dryRun ? '\nWould delete' : 'deleted' } ${ deletedLabels.length } label${ deletedLabels.length > 1 ? 's': '' }:` );
         deletedLabels.forEach( label => {
-          grunt.log.writeln( chalk.bgHex( label.actual.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.actual.color ) )( label.name ) );
+          Util.log( chalk.bgHex( label.actual.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.actual.color ) )( label.name ) );
         } );
       }
 
       if ( !createdLabels.length && !deletedLabels.length ) {
-        grunt.log.writeln( '\nIssues already up to date!' );
+        Util.log( '\nIssues already up to date!' );
       }
 
 

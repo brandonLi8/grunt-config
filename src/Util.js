@@ -29,7 +29,7 @@ module.exports = ( () => {
         // Use a default message if a message was not provided.
         message = message ? message : 'Assertion failed.';
 
-        grunt.log.writeln( '' ); // Add a line of padding before and after.
+        Util.log( '' ); // Add a line of padding before and after.
         grunt.fail.fatal( message );
       }
     },
