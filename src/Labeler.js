@@ -92,18 +92,16 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
         !dryRun && grunt.log.writeln( '\nSuccess!' );
         grunt.log.writeln( `${ dryRun ? '\nWould create' : 'Created' } ${ createdLabels.length } new label${ createdLabels.length > 1 ? 's': '' }:` );
         createdLabels.forEach( label => {
-          grunt.log.writeln( `  ${ label.name }: #${ label.expected.color }` );
+          grunt.log.writeln( chalk.bgHex( label.expected.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.expected.color ) )( label.name ) );
         } );
       }
       if ( deletedLabels.length ) {
         !dryRun && grunt.log.writeln( '\nSuccess!' );
         grunt.log.writeln( `${ dryRun ? '\nWould delete' : 'deleted' } ${ deletedLabels.length } label${ deletedLabels.length > 1 ? 's': '' }:` );
         deletedLabels.forEach( label => {
-          grunt.log.writeln( `  ${ label.name }: #${ label.actual.color }` );
+          grunt.log.writeln( chalk.bgHex( label.actual.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.actual.color ) )( label.name ) );
         } );
       }
-
-      grunt.log.writeln( chalk.hex( '#DEADED' )('asdfasdf'))
 
       if ( !createdLabels.length && !deletedLabels.length ) {
         grunt.log.writeln( '\nIssues already up to date!' );
@@ -113,5 +111,20 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
     }
   }
 
+function pickTextColorBasedOnBgColorAdvanced(bgColor) {
+  var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+  var r = parseInt(color.substring(0, 2), 16); // hexToR
+  var g = parseInt(color.substring(2, 4), 16); // hexToG
+  var b = parseInt(color.substring(4, 6), 16); // hexToB
+  var uicolors = [r / 255, g / 255, b / 255];
+  var c = uicolors.map((col) => {
+    if (col <= 0.03928) {
+      return col / 12.92;
+    }
+    return Math.pow((col + 0.055) / 1.055, 2.4);
+  });
+  var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
+  return (L > 0.179) ? 'black' : 'white' ;
+}
   return Labeler;
 } )();

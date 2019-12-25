@@ -162,6 +162,14 @@ module.exports = ( () => {
       return path.extname( filePath ).replace( '.', '' ); // remove the . from the extension
     },
 
+    /**
+     * Convenience alias to grunt.log.writeln()
+     * @public
+     *
+     * @param {...String} args
+     */
+    log( ...args ) { grunt.log.writeln( args ); },
+
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getFullYear()
   };
