@@ -171,7 +171,7 @@ module.exports = ( () => {
     /**
      * Convenience method to update the copyright of either a file or a directory, depending on what is passed in.
      * If no argument is provided, ALL copyrights in the root directory of the project will be updated
-     * (where the command was invoked), such that all files in the project will have update copyright dates.
+     * (where the command was invoked), such that all files in the project will have updated copyright dates.
      * See updateAllCopyrights() if passing a directory and updateFileCopyright() if passing a file path.
      * @public
      *
