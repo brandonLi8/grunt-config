@@ -48,7 +48,7 @@ $ git clone https://github.com/brandonLi8/grunt-config.git
 
 Contact me via <a href="mailto:brandon.li820@gmail.com" target="_blank"> email</a>.
 
-Help improve **@brandonli8/grunt-config** by creating a <a href="https://github.com/brandonLi8/grunt-config/issues" target="_blank">New Issue</a>.
+Help improve **@brandonli8/grunt-config** by creating a <a href="https://github.com/brandonLi8/truenit/issues" target="_blank">New Issue</a>.
 
 <!-- Copyright -->
 <sub>Copyright © Brandon Li. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="MIT" target="_blank">LICENSE</a></sub>
