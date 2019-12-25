@@ -181,7 +181,7 @@ module.exports = ( () => {
      *                                 not the first line is a copyright statement.
      */
     static updateCopyright( path, forceWrite = false ) {
-      Util.assert( typeof path === 'string' grunt.file.exists( path ), `invalid path: ${ path }` );
+      Util.assert( typeof path === 'string' && grunt.file.exists( path ), `invalid path: ${ path }` );
       Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
 
       if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path, forceWrite );
