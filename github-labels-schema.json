@@ -34,7 +34,7 @@
   "type:licensing": "4B0082",
   "type:maintenance": "BFDADC",
   "type:master-checklist": "42426F",
-  "type:misc": "B87333",
+  "type:miscellaneous": "B87333",
   "type:performance": "8B1C62",
   "type:question": { "color": "EDCB62", "aliases": [ "question" ] },
   "type:responsive-design": "BA71FF",
