@@ -1,10 +1,12 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * GitHub issue label generator that synchronizes labels with the schema defined in .../github-labels-schema.json.
+ * GitHub issue/pull request label generator that synchronizes labels with the schema defined in
+ * .../github-labels-schema.json.
  *
  * Determines the GitHub repository from the package.json in the root directory that invoked the command.
- * (parsed from the git-remote by Generator)
+ * The url is parsed from the git-remote in packageObj.repository.url by Generator. If the url isn't a GitHub url,
+ * an error is thrown.
  *
  * Currently uses https://www.npmjs.com/package/github-label-sync as a dependency to synchronize GitHub labels to
  * the repository. Github-Label-Sync has a Node.js API. However, their label schema format is slightly different
