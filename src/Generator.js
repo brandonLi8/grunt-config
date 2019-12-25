@@ -112,7 +112,7 @@ module.exports = ( () => {
       // circular dependency problems.
       require( './Copyright' ).updateFileCopyright( outputFilePath );
 
-      Util.log( chalk.hex( '046200' )( `Successfully generated ${ chalk.underline( outputFilePath ) }` ) );
+      Util.log( chalk.hex( '046200' )( `\nSuccessfully generated ${ chalk.underline( outputFilePath ) }` ) );
     }
 
     /**

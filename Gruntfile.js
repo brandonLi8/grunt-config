@@ -28,7 +28,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'eslint',
     'ESlints the entire root directory that invoked the command, using the ESlint configuration defined in ' +
-    'grunt-config/eslint/.eslintrc.js. Run with --no-cache to lint without using a ESLint cache.',
+    'grunt-config/eslint/.eslintrc.js. Run with --no-cache to lint without using a ESLint cache.\n',
     Util.wrap( () => {
       Linter.eslint( !grunt.option( 'no-cache' ) );
     } ) );
@@ -78,7 +78,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-readme',
     'Generates a README.md file in the root directory that invoked this command. Run with --test to output ' +
-    'the file in \'tests/README-test.md\' instead.',
+    'the file in \'tests/README-test.md\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/README-test.md' : 'README.md';
       Generator.generateFile( 'templates/readme-template.md', path );
@@ -92,7 +92,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-travis',
     'Generates a .travis.yml file in the root directory that invoked this command. Run with --test to ' +
-    'output the file in \'tests/.travis-test.yml\' instead.',
+    'output the file in \'tests/.travis-test.yml\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/.travis-test.yml' : '.travis.yml';
       Generator.generateFile( 'templates/travis-template.yml', path );
@@ -106,7 +106,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-gitignore',
     'Generates a .gitignore file in the root directory that invoked this command. Run with --test to ' +
-    'output the file in \'tests/.gitignore-test.gitignore\' instead.',
+    'output the file in \'tests/.gitignore-test.gitignore\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/.gitignore-test.gitignore' : '.gitignore';
       Generator.generateFile( 'templates/gitignore-template.gitignore', path );
@@ -120,7 +120,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-deploy-heroku',
     'Generates a deploy-heroku.yml Github Action file in the root directory that invoked this command. Run with ' +
-    '--test to output the file in \'tests/deploy-heroku-test.yml\' instead.',
+    '--test to output the file in \'tests/deploy-heroku-test.yml\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/deploy-heroku-test.yml' : '.github/workflows/deploy-heroku.yml';
       Generator.generateFile( 'templates/deploy-heroku-template.yml', path );
@@ -134,7 +134,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-wercker',
     'Generates a .wercker.yml file in the root directory that invoked this command. Run with --test to ' +
-    'output the file in \'tests/.wercker-test.yml\' instead.',
+    'output the file in \'tests/.wercker-test.yml\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/.wercker-test.yml' : '.wercker.yml';
       Generator.generateFile( 'templates/wercker-template.yml', path );
@@ -148,7 +148,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'generate-index-html',
     'Generates a index.html file in the root directory that invoked this command. Run with --test to ' +
-    'output the file in \'tests/index-test.html\' instead.',
+    'output the file in \'tests/index-test.html\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ? 'tests/index-test.html' : 'index.html';
       Generator.generateFile( 'templates/index-template.html', path );

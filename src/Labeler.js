@@ -92,14 +92,14 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
         !dryRun && Util.log( '\nSuccess!' );
         Util.log( `${ dryRun ? '\nWould create' : 'Created' } ${ createdLabels.length } new label${ createdLabels.length > 1 ? 's': '' }:` );
         createdLabels.forEach( label => {
-          Util.log( chalk.bgHex( label.expected.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.expected.color ) )( label.name ) );
+          Util.log( chalk.bgHex( label.expected.color ).keyword( getInverseFgColor( label.expected.color ) )( label.name ) );
         } );
       }
       if ( deletedLabels.length ) {
         !dryRun && Util.log( '\nSuccess!' );
         Util.log( `${ dryRun ? '\nWould delete' : 'deleted' } ${ deletedLabels.length } label${ deletedLabels.length > 1 ? 's': '' }:` );
         deletedLabels.forEach( label => {
-          Util.log( chalk.bgHex( label.actual.color ).keyword( pickTextColorBasedOnBgColorAdvanced( label.actual.color ) )( label.name ) );
+          Util.log( chalk.bgHex( label.actual.color ).keyword( getInverseFgColor( label.actual.color ) )( label.name ) );
         } );
       }
 
@@ -111,7 +111,7 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
     }
   }
 
-function pickTextColorBasedOnBgColorAdvanced(bgColor) {
+function getInverseFgColor(bgColor) {
   var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
   var r = parseInt(color.substring(0, 2), 16); // hexToR
   var g = parseInt(color.substring(2, 4), 16); // hexToG
@@ -126,5 +126,6 @@ function pickTextColorBasedOnBgColorAdvanced(bgColor) {
   var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
   return (L > 0.179) ? 'black' : 'white' ;
 }
+
   return Labeler;
 } )();

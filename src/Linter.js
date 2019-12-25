@@ -83,7 +83,7 @@ module.exports = ( () => {
 
       //----------------------------------------------------------------------------------------
       // Log results
-      Util.log( `Linting ${ process.cwd() }...` );
+      Util.log( `Linting ${ process.cwd() }...\n` );
 
       // Run the ESlint step
       const report = cli.executeOnFiles( path.basename( process.cwd() ) );

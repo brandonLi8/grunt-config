@@ -163,12 +163,12 @@ module.exports = ( () => {
     },
 
     /**
-     * Convenience alias to grunt.log.write() but prepends a new line in front of each string.
+     * Convenience alias to grunt.log.write()
      * @public
      *
      * @param {...String} args
      */
-    log( ...args ) { grunt.log.write( args.map( str => `\n${ str }` ) ); },
+    log( ...args ) { grunt.log.write( args ); },
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getFullYear()
