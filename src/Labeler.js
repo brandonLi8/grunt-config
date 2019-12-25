@@ -29,10 +29,9 @@ module.exports = ( () => {
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const Util = require( './Util' );
-  const util = require( 'util' );
 
   // constants
-
+  const GITHUB_URL = 'https://github.com/';
   // Object literal that describes the GitHub issue labels that should be added. Each key is the name of the GitHub
   // issue label and correlates to one of the two values stated below:
   // 1. String - The color of the GitHub label as it appears in the issue. The label is assumed to have no aliases.
@@ -46,18 +45,42 @@ module.exports = ( () => {
     /**
      *
      */
-    static generateLabels() {
+    static async generateLabels() {
 
-      // assert that the GITHUB_ACCESS_TOKEN node environment variable exists
-      Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable. Labeler requires a GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels. The token must have permission to write to the repository. See https://github.com/settings/tokens on how to create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line:
-
-$ GITHUB_ACCESS_TOKEN=xxxxxxxx grunt generate-labels
-
+      // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists
+      Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
+Labeler requires a GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels.
+The token must have permission to write to the repository. See https://github.com/settings/tokens
+on how to create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line:\n
+$ GITHUB_ACCESS_TOKEN=xxxxxxxx grunt generate-labels\n
 or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVariables#A.2BAH4-.2F.profile).` );
 
+      // Parse the GitHub repository url. The url is parsed from the git-remote in package.json by Generator.
+      const gitRemote = Generator.getReplacementValuesMapping().GIT_REMOTE;
 
+      // If the url isn't a GitHub url an error is thrown.
+      Util.assert( gitRemote.includes( GITHUB_URL ), `Cannot generate labels with non GitHub remote: ${ gitRemote }` );
 
+      // Get the repository in terms of user-name/repo or organization/repo
+      const repo = gitRemote.replace( '.git', '' ).replace( GITHUB_URL, '' );
 
+      grunt.log.writeln( 'Generating labels...\n' );
+
+      // githubLabelSync label schema format is slightly different from .../github-labels-schema.json, so convert over
+      const labels = [];
+      Util.iterate( LABELS_SCHEMA, ( labelName, schema ) => {
+        labels.push( {
+          name: labelName,
+          color: typeof schema === 'string' ? schema : schema.color,
+          aliases: typeof schema === 'string' ? null : schema.aliases
+        } );
+      } );
+
+      await githubLabelSync( {
+        repo: repo,
+        labels: labels,
+        accessToken: process.env.GITHUB_ACCESS_TOKEN
+      } );
     }
   }
 

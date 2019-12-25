@@ -34,8 +34,8 @@ module.exports = grunt => {
 
 
 
-  grunt.registerTask( 'generate-labels', 'Generates github labels', Util.wrap( () => {
-    Labeler.generateLabels();
+  grunt.registerTask( 'generate-labels', 'Generates github labels', Util.wrapAsync( async () => {
+    await Labeler.generateLabels();
   } ) );
 
   //----------------------------------------------------------------------------------------
