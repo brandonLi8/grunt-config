@@ -10,6 +10,7 @@ module.exports = grunt => {
   'use strict';
 
   // modules
+  const Copyright = require( './src/Copyright' );
   const Generator = require( './src/Generator' );
   const Labeler = require( './src/Labeler' );
   const Linter = require( './src/Linter' );
@@ -60,7 +61,7 @@ module.exports = grunt => {
     'provided, ALL copyrights in the root directory of the repository that invoked this command will be updated.\n\n' +
     '@param {String} [path] - either a file or directory to update copyrights in. If not provided, all files in the ' +
     'project will be updated.\n\nWill only replace the first line of each file if it contains the word ' +
-    '\"copyright\".\n\nRun with `--force-write` to replace the first line with a correct copyright statement no ' +
+    '"copyright".\n\nRun with `--force-write` to replace the first line with a correct copyright statement no ' +
     'regardless of its content.\n',
     Util.wrap( path => { Copyright.updateCopyright( path || './', grunt.option( 'force-write' ) ); }
   ) );
