@@ -24,6 +24,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const chalk = require( 'chalk' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const Util = require( './Util' );
@@ -164,19 +165,19 @@ module.exports = ( () => {
     Util.assert( subpaths.every( path => typeof path === 'string' ) );
 
     // First, get the error message by recursively creating the error message.
-    const getPackageErrorMessage = paths => {
+    const getErrorMessage = paths => {
       // Base case - one path left is the value
       if ( paths.length === 1 ) {
         return `  "${ paths[ 0 ] }": {{${ valueName }}}`;
       }
       else {
         return `  "${ paths[ 0 ] }": {\n` +
-               `  ${ Util.replaceAll( getPackageErrorMessage( paths.slice( 1 ) ), '\n', '\n  ' ) }\n` +
+               `  ${ Util.replaceAll( getErrorMessage( paths.slice( 1 ) ), '\n', '\n  ' ) }\n` +
                `  }${ paths.length === subpaths.length ? '' : ',' }`;
       }
     };
     // Throw the package error.
-    Util.throw( `package.json should have something like: \n{\n${ getPackageErrorMessage( subpaths ) }\n  ...\n}` );
+    Util.throw( chalk.underline( 'package.json' ) +' should have: \n{\n' + getErrorMessage( subpaths ) + '\n  ...\n}' );
   }
 
   return Generator;
