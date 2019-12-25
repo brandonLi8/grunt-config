@@ -45,7 +45,7 @@ module.exports = ( () => {
     /**
      *
      */
-    static async generateLabels() {
+    static async generateLabels( dryRun = true ) {
 
       // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists
       Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
@@ -64,7 +64,7 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
       // Get the repository in terms of user-name/repo or organization/repo
       const repo = gitRemote.replace( '.git', '' ).replace( GITHUB_URL, '' );
 
-      grunt.log.writeln( 'Generating labels...\n' );
+      grunt.log.writeln( `Generating labels for ${ GITHUB_URL }${ repo } ...`  );
 
       // githubLabelSync label schema format is slightly different from .../github-labels-schema.json, so convert over
       const labels = [];
@@ -76,11 +76,35 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
         } );
       } );
 
-      await githubLabelSync( {
+      const results = await githubLabelSync( {
         repo: repo,
         labels: labels,
+        dryRun: dryRun,
         accessToken: process.env.GITHUB_ACCESS_TOKEN
       } );
+
+      const createdLabels = results.filter( result => result.actual === null );
+      const deletedLabels = results.filter( result => result.expected === null );
+
+      if ( createdLabels.length ) {
+        !dryRun && grunt.log.writeln( '\nSuccess!' );
+        grunt.log.writeln( `${ dryRun ? '\nWould create' : 'Created' } ${ createdLabels.length } new label${ createdLabels.length > 1 ? 's': '' }:` );
+        createdLabels.forEach( label => {
+          grunt.log.writeln( `  ${ label.name }: #${ label.expected.color }` );
+        } );
+      }
+      if ( deletedLabels.length ) {
+        !dryRun && grunt.log.writeln( '\nSuccess!' );
+        grunt.log.writeln( `${ dryRun ? '\nWould delete' : 'deleted' } ${ deletedLabels.length } label${ deletedLabels.length > 1 ? 's': '' }:` );
+        deletedLabels.forEach( label => {
+          grunt.log.writeln( `  ${ label.name }: #${ label.actual.color }` );
+        } );
+      }
+
+      if ( !createdLabels.length && !deletedLabels.length ) {
+        grunt.log.writeln( '\nIssues already up to date!' );
+      }
+
     }
   }
 
