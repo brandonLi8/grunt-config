@@ -24,6 +24,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const chalk = require( 'chalk' );
   const Generator = require( './Generator' );
   const githubLabelSync = require( 'github-label-sync' ); // eslint-disable-line require-statement-match
   const grunt = require( 'grunt' );
@@ -45,7 +46,7 @@ module.exports = ( () => {
     /**
      *
      */
-    static async generateLabels( dryRun = true ) {
+    static async generateLabels( dryRun = true, rewrite = true ) {
 
       // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists
       Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
@@ -64,7 +65,7 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
       // Get the repository in terms of user-name/repo or organization/repo
       const repo = gitRemote.replace( '.git', '' ).replace( GITHUB_URL, '' );
 
-      grunt.log.writeln( `Generating labels for ${ GITHUB_URL }${ repo } ...`  );
+      grunt.log.writeln( `Generating labels for ${ GITHUB_URL }${ repo } ...` );
 
       // githubLabelSync label schema format is slightly different from .../github-labels-schema.json, so convert over
       const labels = [];
@@ -77,9 +78,10 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
       } );
 
       const results = await githubLabelSync( {
-        repo: repo,
-        labels: labels,
-        dryRun: dryRun,
+        repo,
+        labels,
+        dryRun,
+        allowAddedLabels: !rewrite,
         accessToken: process.env.GITHUB_ACCESS_TOKEN
       } );
 
@@ -101,9 +103,12 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
         } );
       }
 
+      grunt.log.writeln( chalk.hex( '#DEADED' )('asdfasdf'))
+
       if ( !createdLabels.length && !deletedLabels.length ) {
         grunt.log.writeln( '\nIssues already up to date!' );
       }
+
 
     }
   }
