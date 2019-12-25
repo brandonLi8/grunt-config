@@ -35,7 +35,7 @@ module.exports = grunt => {
 
 
   grunt.registerTask( 'generate-labels', 'Generates github labels', Util.wrap( () => {
-    console.log( 'eherh')
+    Labeler.generateLabels();
   } ) );
 
   //----------------------------------------------------------------------------------------

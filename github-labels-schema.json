@@ -24,8 +24,10 @@
   "status:ready-for-review": "3E766D",
   "status:ready-for-testing": "00FF6E",
 
+  "type:accessibility": "FA2AC6",
   "type:automated-testing": "FF00AA",
   "type:bug": { "color": "DB434B", "aliases": [ "bug" ] },
+  "type:dependency": "CF6981",
   "type:discussion": "FFFAFA",
   "type:documentation": "72587F",
   "type:duplicate": { "color": "EEEED1", "aliases": [ "duplicate" ] },

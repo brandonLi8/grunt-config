@@ -27,6 +27,7 @@ module.exports = ( () => {
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const Util = require( './Util' );
+  const util = require( 'util' );
 
   // constants
 
@@ -40,6 +41,22 @@ module.exports = ( () => {
 
   class Labeler {
 
+    /**
+     *
+     */
+    static generateLabels() {
+
+      // assert that the GITHUB_ACCESS_TOKEN node environment variable exists
+      Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable. Labeler requires a GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels. The token must have permission to write to the repository. See https://github.com/settings/tokens on how to create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line:
+
+$ GITHUB_ACCESS_TOKEN=xxxxxxxx grunt generate-labels
+
+or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVariables#A.2BAH4-.2F.profile).` );
+
+
+
+
+    }
   }
 
   return Labeler;
