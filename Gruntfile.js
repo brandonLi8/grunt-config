@@ -2,6 +2,7 @@
 
 /**
  * Grunt configuration file. For background, see https://gruntjs.com/getting-started.
+ * Run `grunt --help` to see an overview of the tasks defined below.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -29,10 +30,8 @@ module.exports = grunt => {
   grunt.registerTask( 'eslint',
     'ESlints the entire root directory that invoked the command, using the ESlint configuration defined in ' +
     'grunt-config/eslint/.eslintrc.js. Run with --no-cache to lint without using a ESLint cache.\n',
-    Util.wrap( () => {
-      Linter.eslint( !grunt.option( 'no-cache' ) );
-    } ) );
-
+    Util.wrap( () => { Linter.eslint( !grunt.option( 'no-cache' ) ); } )
+  );
 
   /**
    * Synchronizes GitHub issue/pull request labels with the schema defined in grunt-config/github-labels-schema.json.

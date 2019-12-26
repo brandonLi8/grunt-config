@@ -13,7 +13,7 @@
 #
 # @author {{AUTHOR}} <{{AUTHOR_EMAIL}}>
 #!————————————————————————————————————————————————————————————————————————————*!
-name: deploy-heroku                 # tentative workflow name
+name: deploy                        # tentative workflow name
 
 on:
   push:                             # activate on the push action
@@ -22,7 +22,7 @@ on:
 
 jobs:
   build:
-    name: deploy-heroku             # tentative workflow name
+    name: deploy                    # tentative workflow name
     runs-on: ubuntu-latest
 
     steps:                          # checkout and set up node
