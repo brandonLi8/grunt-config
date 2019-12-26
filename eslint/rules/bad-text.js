@@ -2,7 +2,7 @@
 /* eslint bad-text: 0 */
 
 /**
- * Custom eslint rule that checks for raw strings in the source code. These strings pertain to:
+ * Custom ESlint rule that checks for raw strings in the source code. These strings pertain to:
  *  - bad practices
  *  - IE support
  *  - common wrong annotations
@@ -69,7 +69,7 @@ module.exports = ( () => {
      *                           https://eslint.org/docs/developer-guide/working-with-rules
      * @returns {Object} - Object literal with methods that ESlint calls to visit nodes while traversing the AST
      */
-    create: context => {
+    create( context ) {
 
       return {
         /**
