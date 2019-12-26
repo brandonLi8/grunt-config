@@ -29,7 +29,7 @@ module.exports = ( () => {
         // Use a default message if a message was not provided.
         message = message ? message : 'Assertion failed.';
 
-        Util.log( '' ); // Add a line of padding before and after.
+        Util.logln( '' ); // Add a line of padding before and after.
         grunt.fail.fatal( message );
       }
     },
@@ -162,6 +162,18 @@ module.exports = ( () => {
       return path.extname( filePath ).replace( '.', '' ); // remove the . from the extension
     },
 
+
+    /**
+     * Convenience method to pluralize a word, adding the number in front. For example,
+     * Util.pluralize( 'dog', 2 ) -> '2 dogs'.
+     * Util.pluralize( 'dog', 1 ) => '1 dog'.
+     * @public
+     *
+     * @param {String} word - the word to pluralize
+     * @param {number} number - the number that exists of the word
+     */
+    pluralize( word, number ) { return number === 1 ? `${ number } ${ word }` : `${ number } ${ word }s`; },
+
     /**
      * Convenience alias to grunt.log.write()
      * @public
@@ -169,6 +181,15 @@ module.exports = ( () => {
      * @param {...String} args
      */
     log( ...args ) { grunt.log.write( args ); },
+
+    /**
+     * Convenience alias to grunt.log.writeln()
+     * @public
+     *
+     * @param {...String} args
+     */
+    logln( ...args ) { grunt.log.writeln( args ); },
+
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getFullYear()

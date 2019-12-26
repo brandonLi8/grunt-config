@@ -33,45 +33,64 @@ module.exports = ( () => {
 
   // constants
   const GITHUB_URL = 'https://github.com/';
-  // Object literal that describes the GitHub issue labels that should be added. Each key is the name of the GitHub
-  // issue label and correlates to one of the two values stated below:
-  // 1. String - The color of the GitHub label as it appears in the issue. The label is assumed to have no aliases.
+
+  // Object literal that describes the GitHub labels that should be added. Each key is the name of the GitHub
+  // label and correlates to one of the two values stated below:
+  // 1. String - The color of the GitHub label as it appears in the issue/pr. The label is assumed to have no aliases.
   // 2. Object Literal - an object literal with:
   //                      - a color key that correlates to a color string as described in 1.
-  //                      - a string array that contains aliases to other labels
+  //                      - a string array that contains aliases to other labels.
   const LABELS_SCHEMA = grunt.file.readJSON( path.dirname( __dirname ) + '/github-labels-schema.json' );
+
+  //----------------------------------------------------------------------------------------
 
   class Labeler {
 
     /**
+     * GitHub issue/pull request label generator that synchronizes labels with LABELS_SCHEMA.
+     * Requires GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels (see top of file).
+     * @public
      *
+     * @param {boolean} dryRun - indicates if Labeler should write to the GitHub issues. If true, the results that
+     *                           would happen if it weren't true will be logged as output.
+     * @param {boolean} removeOldLabels - indicates if Labeler should remove the previous GitHub labels that aren't
+     *                                    apart of LABELS_SCHEMA.
      */
-    static async generateLabels( dryRun = true, rewrite = true ) {
+    static async generateLabels( dryRun, removeOldLabels ) {
 
-      // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists
+      // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists (see top of file for more documentation).
       Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
 Labeler requires a GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels.
 The token must have permission to write to the repository. See https://github.com/settings/tokens
 on how to create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line:\n
 $ GITHUB_ACCESS_TOKEN=xxxxxxxx grunt generate-labels\n
-or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVariables#A.2BAH4-.2F.profile).` );
+or defined in ~/.profile for permanent use (see https://help.ubuntu.com/community/EnvironmentVariables#profile).` );
 
       // Parse the GitHub repository url. The url is parsed from the git-remote in package.json by Generator.
+      // It should be of the form https://github.com/organization/repository_name.git
       const gitRemote = Generator.getReplacementValuesMapping().GIT_REMOTE;
 
       // If the url isn't a GitHub url an error is thrown.
-      Util.assert( gitRemote.includes( GITHUB_URL ), `Cannot generate labels with non GitHub remote: ${ gitRemote }` );
+      Util.assert( gitRemote.includes( GITHUB_URL ), `Cannot generate labels with non-github remote: ${ gitRemote }` );
 
       // Get the repository in terms of user-name/repo or organization/repo
       const repo = gitRemote.replace( '.git', '' ).replace( GITHUB_URL, '' );
 
       Util.log( `Generating labels for ${ GITHUB_URL }${ repo } ...` );
 
-      // githubLabelSync label schema format is slightly different from .../github-labels-schema.json, so convert over
+      // GithubLabelSync label schema format is slightly different from .../github-labels-schema.json.
+      // Convert over to an array of Object literals that look like:
+      // {
+      //    name: 'example',
+      //    color: '333333',
+      //    aliases: [ 'label' ]
+      // }
       const labels = [];
       Util.iterate( LABELS_SCHEMA, ( labelName, schema ) => {
         labels.push( {
           name: labelName,
+
+          // Two different types of schema. See LABELS_SCHEMA for documentation.
           color: typeof schema === 'string' ? schema : schema.color,
           aliases: typeof schema === 'string' ? null : schema.aliases
         } );
@@ -81,51 +100,30 @@ or defined in ~/.profile (see https://help.ubuntu.com/community/EnvironmentVaria
         repo,
         labels,
         dryRun,
-        allowAddedLabels: !rewrite,
+        allowAddedLabels: false,
         accessToken: process.env.GITHUB_ACCESS_TOKEN
       } );
 
+      //----------------------------------------------------------------------------------------
+      // Log the results to the terminal. GithubLabelSync outputs an array of Object literals. See
+      // https://www.npmjs.com/package/github-label-sync for documentation.
+
+      // If the length of the results is 0, then no issues were changed. Return to stop further execution.
+      if ( !results.length ) return Util.log( chalk.white( '\n\nIssues already up to date!' ) );
+
+      // Log Success if it isn't a dry run.
+      Util.logln( chalk.hex( '046200' )( dryRun ? '\n' : '\n\nSuccess!\n' ) );
+
+      // Reference the newly created labels and the previous deleted labels.
       const createdLabels = results.filter( result => result.actual === null );
       const deletedLabels = results.filter( result => result.expected === null );
 
-      if ( createdLabels.length ) {
-        !dryRun && Util.log( '\nSuccess!' );
-        Util.log( `${ dryRun ? '\nWould create' : 'Created' } ${ createdLabels.length } new label${ createdLabels.length > 1 ? 's': '' }:` );
-        createdLabels.forEach( label => {
-          Util.log( chalk.bgHex( label.expected.color ).keyword( getInverseFgColor( label.expected.color ) )( label.name ) );
-        } );
-      }
-      if ( deletedLabels.length ) {
-        !dryRun && Util.log( '\nSuccess!' );
-        Util.log( `${ dryRun ? '\nWould delete' : 'deleted' } ${ deletedLabels.length } label${ deletedLabels.length > 1 ? 's': '' }:` );
-        deletedLabels.forEach( label => {
-          Util.log( chalk.bgHex( label.actual.color ).keyword( getInverseFgColor( label.actual.color ) )( label.name ) );
-        } );
-      }
+      Util.logln( `${ dryRun ? 'Would create' : 'Created' } ${ Util.pluralize( 'label', createdLabels.length ) }.` );
+      Util.logln( `${ dryRun ? 'Would delete' : 'Deleted' } ${ Util.pluralize( 'label', deletedLabels.length ) }.` );
 
-      if ( !createdLabels.length && !deletedLabels.length ) {
-        Util.log( '\nIssues already up to date!' );
-      }
-
-
+      !dryRun && Util.log( `\nSee ${ chalk.underline( gitRemote.replace( '.git', '/labels' ) ) } for results.` );
     }
   }
-
-function getInverseFgColor(bgColor) {
-  var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
-  var r = parseInt(color.substring(0, 2), 16); // hexToR
-  var g = parseInt(color.substring(2, 4), 16); // hexToG
-  var b = parseInt(color.substring(4, 6), 16); // hexToB
-  var uicolors = [r / 255, g / 255, b / 255];
-  var c = uicolors.map((col) => {
-    if (col <= 0.03928) {
-      return col / 12.92;
-    }
-    return Math.pow((col + 0.055) / 1.055, 2.4);
-  });
-  var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
-  return (L > 0.179) ? 'black' : 'white' ;
-}
 
   return Labeler;
 } )();
