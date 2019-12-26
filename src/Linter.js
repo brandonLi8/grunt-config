@@ -22,7 +22,6 @@ module.exports = ( () => {
 
   // modules
   const eslint = require( 'eslint' );
-  const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
   const md5 = require( 'md5' );
   const path = require( 'path' );

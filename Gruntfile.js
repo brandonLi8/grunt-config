@@ -17,7 +17,6 @@ module.exports = grunt => {
   const Linter = require( './src/Linter' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
-
   shell.config.silent = true;
 
 
@@ -163,6 +162,4 @@ module.exports = grunt => {
       const path = grunt.option( 'test' ) ? 'tests/index-test.html' : 'index.html';
       Generator.generateFile( 'templates/index-template.html', path );
     } ) );
-
-
 };
