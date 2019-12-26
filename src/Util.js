@@ -41,7 +41,7 @@ module.exports = ( () => {
      * @param {string} [message] - message to throw
      */
     throw( message ) {
-      Util.assert( false, `${ message }\n` );
+      Util.assert( false, message );
     },
 
     /**
