@@ -100,7 +100,7 @@ or defined in ~/.profile for permanent use (see https://help.ubuntu.com/communit
         repo,
         labels,
         dryRun,
-        allowAddedLabels: false,
+        allowAddedLabels: !removeOldLabels,
         accessToken: process.env.GITHUB_ACCESS_TOKEN
       } );
 
