@@ -53,10 +53,12 @@ module.exports = ( () => {
      *
      * @param {boolean} dryRun - indicates if Labeler should write to the GitHub issues. If true, the results that
      *                           would happen if it weren't true will be logged as output.
-     * @param {boolean} removeOldLabels - indicates if Labeler should remove the previous GitHub labels that aren't
-     *                                    apart of LABELS_SCHEMA.
+     * @param {boolean} allowAddedLabels - indicates if Labeler should keep the previous GitHub labels that aren't
+     *                                     apart of LABELS_SCHEMA or remove them.
      */
-    static async generateLabels( dryRun, removeOldLabels ) {
+    static async generate( dryRun, allowAddedLabels ) {
+      Util.assert( typeof dryRun === 'boolean', `invalid dryRun: ${ dryRun }` );
+      Util.assert( typeof allowAddedLabels === 'boolean', `invalid allowAddedLabels: ${ allowAddedLabels }` );
 
       // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists (see top of file for more documentation).
       Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
@@ -100,7 +102,7 @@ or defined in ~/.profile for permanent use (see https://help.ubuntu.com/communit
         repo,
         labels,
         dryRun,
-        allowAddedLabels: !removeOldLabels,
+        allowAddedLabels,
         accessToken: process.env.GITHUB_ACCESS_TOKEN
       } );
 

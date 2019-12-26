@@ -34,13 +34,26 @@ module.exports = grunt => {
     } ) );
 
 
-
-  grunt.registerTask( 'generate-labels', 'Generates github labels', Util.wrapAsync( async () => {
-    await Labeler.generateLabels();
-  } ) );
-
-
-
+  /**
+   * Synchronizes GitHub issue/pull request labels with the schema defined in grunt-config/github-labels-schema.json.
+   * See grunt-config/src/Labeler for more information.
+   *
+   * Requires the GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels.
+   * The token must have permission to write to the repository. See https://github.com/settings/tokens on how to
+   * create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line or defined in
+   * ~/.profile (see https://help.ubuntu.com/community/EnvironmentVariables#A.2BAH4-.2F.profile).
+   *
+   * Run with '--dry-run' to not actually write to the labels but simulate results.
+   * Run with '--extend' to keep the current GitHub labels that aren't apart of the schema. With this flag, no labels
+   * will be deleted.
+   */
+  grunt.registerTask( 'generate-labels',
+    'Synchronizes GitHub issue/pull request labels with the schema defined in github-labels-schema.json. See ' +
+    'grunt-config/src/Labeler for more information.\nRequires the GITHUB_ACCESS_TOKEN node environment variable.\n\n' +
+    'Run with `--dry-run` to not actually write to the labels and simulate results.\n\nRun with `--extend` to keep ' +
+    'the current GitHub labels that aren\'t apart of the schema. With this flag, no labels will be deleted.\n',
+    Util.wrapAsync( async () => { await Labeler.generate( !!grunt.option( 'dry-run' ), !!grunt.option( 'extend' ) ); } )
+  );
 
   /**
    * Updates the copyright of either a file or a directory, depending on what is passed in. If no argument is provided,
@@ -59,12 +72,10 @@ module.exports = grunt => {
   grunt.registerTask( 'update-copyright',
     'Updates the copyright of either a file or a directory, depending on what is passed in. If no argument is ' +
     'provided, ALL copyrights in the root directory of the repository that invoked this command will be updated.\n\n' +
-    '@param {String} [path] - either a file or directory to update copyrights in. If not provided, all files in the ' +
-    'project will be updated.\n\nWill only replace the first line of each file if it contains the word ' +
-    '"copyright".\n\nRun with `--force-write` to replace the first line with a correct copyright statement no ' +
-    'regardless of its content.\n',
-    Util.wrap( path => { Copyright.updateCopyright( path || './', grunt.option( 'force-write' ) ); }
-  ) );
+    'Will only replace the first line of each file if it contains the word "copyright".\n\nRun with `--force-write` ' +
+    ' to replace the first line with a correct copyright statement no regardless of its content.\n',
+    Util.wrap( path => { Copyright.updateCopyright( path || './', grunt.option( 'force-write' ) ); } )
+  );
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.
