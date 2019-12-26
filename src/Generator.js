@@ -168,7 +168,7 @@ module.exports = ( () => {
     const getErrorMessage = paths => {
       // Base case - one path left is the value
       if ( paths.length === 1 ) {
-        return `  "${ paths[ 0 ] }": {{${ valueName }}}`;
+        return `  "${ paths[ 0 ] }": ${ chalk.bold( `{{${ valueName }}}` ) }`;
       }
       else {
         return `  "${ paths[ 0 ] }": {\n` +
