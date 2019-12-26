@@ -78,7 +78,7 @@ or defined in ~/.profile for permanent use (see https://help.ubuntu.com/communit
       // Get the repository in terms of user-name/repo or organization/repo
       const repo = gitRemote.replace( '.git', '' ).replace( GITHUB_URL, '' );
 
-      Util.log( `Generating labels for ${ GITHUB_URL }${ repo } ...` );
+      Util.logln( `Generating labels for ${ GITHUB_URL }${ repo } ...` );
 
       // GithubLabelSync label schema format is slightly different from .../github-labels-schema.json.
       // Convert over to an array of Object literals that look like:
@@ -98,23 +98,30 @@ or defined in ~/.profile for permanent use (see https://help.ubuntu.com/communit
         } );
       } );
 
-      const results = await githubLabelSync( {
-        repo,
-        labels,
-        dryRun,
-        allowAddedLabels,
-        accessToken: process.env.GITHUB_ACCESS_TOKEN
-      } );
+      let results; // reference the ending results
+      try {
+        results = await githubLabelSync( {
+          repo,
+          labels,
+          dryRun,
+          allowAddedLabels,
+          accessToken: process.env.GITHUB_ACCESS_TOKEN
+        } );
+      }
+      catch( error ) {
+        // Inform user of bad credentials.
+        Util.throw( `${ error.message } with GITHUB_ACCESS_TOKEN: ${ process.env.GITHUB_ACCESS_TOKEN }` );
+      }
 
       //----------------------------------------------------------------------------------------
       // Log the results to the terminal. GithubLabelSync outputs an array of Object literals. See
       // https://www.npmjs.com/package/github-label-sync for documentation.
 
       // If the length of the results is 0, then no issues were changed. Return to stop further execution.
-      if ( !results.length ) return Util.log( chalk.white( '\n\nIssues already up to date!' ) );
+      if ( !results.length ) return Util.log( chalk.white( '\nIssues already up to date!' ) );
 
       // Log Success if it isn't a dry run.
-      Util.logln( chalk.hex( '046200' )( dryRun ? '\n' : '\n\nSuccess!\n' ) );
+      Util.logln( chalk.hex( '046200' )( dryRun ? '' : '\nSuccess!\n' ) );
 
       // Reference the newly created labels and the previous deleted labels.
       const createdLabels = results.filter( result => result.actual === null );
