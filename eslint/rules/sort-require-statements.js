@@ -1,17 +1,23 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * A custom rule that requires all "Require" statements to be sorted when using RequireJs (https://requirejs.org/).
+ * Custom ESlint rule that checks that the RequireJS statements of a file are alphabetically sorted (case insensitive).
  *
- * ## Documentation:
- *  - It is convention to sort require statements (via ../../docs/code-style-guidline.md) and is required for this
- *    configuration of eslint.
- *  - Sorting is *non-case-sensitive*
+ * For instance, the following modules are alphabetically sorted case insensitive:
+ * ```
+ *  // modules
+ *  const Apple = require( 'Apple' );
+ *  const art = require( 'art' );
+ *  const Bar = require( 'Bar' );
+ *  const Zap = require( 'Zap' );
+ * ```
  *
- * ## Implementation:
- *  - Create an array to track each require declaration, At each require declaration in each file,
- *    add the declaration line to the array.
- *  - At the end of each file, check that the array and make sure it is sorted. If not, report it.
+ * See https://eslint.org/docs/developer-guide/working-with-rules for documentation of implementing ESlint custom rules.
+ *
+ * This rule works by first traversing down the AST, searching for require variable statements that are in a group
+ * (1 line apart from each other). Each group is recorded. Then, traverse back up the AST at the end of the file,
+ * checking that each group of require statements are alphabetically sorted. Sorting is done by the variable name,
+ * not the require module name.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
