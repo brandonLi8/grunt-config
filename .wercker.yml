@@ -36,7 +36,7 @@ build:                              # Build definition
       name: Continuous Testing
       code: |
         grunt eslint --no-cache     # ensure everything is linted
-        npm test                    # run tests
+        npm test --if-present       # run tests
 
     - script:
       name: Goodbye

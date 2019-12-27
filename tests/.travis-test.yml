@@ -31,7 +31,7 @@ before_script:
 
 script:
   - grunt eslint --no-cache       # ensure everything is linted
-  - npm test                      # run tests
+  - npm test --if-present         # run tests
 
 after_script:
   - echo Bye!
