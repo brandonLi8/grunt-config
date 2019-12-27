@@ -150,9 +150,9 @@ module.exports = {
     copyright: 2,
 
     // Rule to disallow 'bad text'
-    'bad-text': 2
+    'bad-text': 2,
 
-    // 'sort-require-statements': 2
+    'sort-require-statements': 2
 
 
   },

@@ -15,8 +15,8 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const Copyright = require( '../../src/Copyright' );
   const grunt = require( 'grunt' );
+  const Copyright = require( '../../src/Copyright' );
 
   return {
 
