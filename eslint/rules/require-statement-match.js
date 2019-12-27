@@ -29,7 +29,7 @@ module.exports = ( () => {
     meta: {
       type: 'problem',
       docs: {
-        description: 'Require variable names and module names of require statements to match.',
+        description: 'Enforces variable names and module names of require statements to match.',
         category: 'Best Practices',
         recommended: true
       },

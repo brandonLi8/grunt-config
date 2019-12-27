@@ -24,7 +24,7 @@ module.exports = ( () => {
     meta: {
       type: 'problem',
       docs: {
-        description: 'Require correct copyright statements. See grunt-config/src/Copyright.js for documentation.',
+        description: 'Enforces correct copyright statements. See grunt-config/src/Copyright.js for documentation.',
         category: 'Best Practices',
         recommended: true
       },
