@@ -1,9 +1,9 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * Custom ESlint rule that checks that the RequireJS statements of groups are alphabetically sorted (case insensitive).
+ * Custom ESlint rule that checks that the RequireJS statements of groups are alphabetically sorted (case-insensitive).
  *
- * For instance, the following group is correctly alphabetically sorted (case insensitive):
+ * For instance, the following group is correctly alphabetically sorted (case-insensitive):
  * ```
  *  const Apple = require( 'Apple' );
  *  const art = require( 'art' );
@@ -34,8 +34,7 @@ module.exports = ( () => {
         url: 'https://github.com/brandonLi8/grunt-config/blob/master/eslint/rules/sort-require-statements.js',
         category: 'Stylistic Issues',
         recommended: true
-      },
-      schema: [] // no options
+      }
     },
 
     /**
@@ -44,11 +43,9 @@ module.exports = ( () => {
      *
      * @param {Object} context - Object literal that contains information relevant to the rule. See
      *                           https://eslint.org/docs/developer-guide/working-with-rules
-     * @returns {Object} - Object literal with methods that ESlint calls to visit nodes while traversing the AST
+     * @returns {Object} - Object literal with methods that ESlint calls to visit nodes while traversing through the AST
      */
-    create: context => {
-      // Reference the source code object.
-      const sourceCode = context.getSourceCode();
+    create( context ) {
 
       // Array of an array of require statement nodes. Each sub-array represents a grouping of require
       // statements such that they are 1 line apart from each other.
@@ -58,76 +55,83 @@ module.exports = ( () => {
       let currentGroup = [];
 
       // Flag reference to the last added node to a group to compare to new nodes while traversing down the AST.
-      // This flag is used to determine if a node is part of currentGroup or apart of a new group.
+      // This flag is used to determine if a node is part of currentGroup or a part of a new group.
       let lastNodeAdded;
 
       return {
 
         /**
-         * Called when traversing down the AST at a variable declaration. If the variable declaration is a require
-         * statement, determine if its a new group or apart of the current group and record it.
+         * Called when traversing down the AST at each variable declaration. If the variable declaration is a require
+         * statement, this determines if it's a member of currentGroup or a member of a new group and records it.
+         * No-op for non require statement variable declarations.
          * @public
          *
          * @param {ASTNode} node - the current node (a variable declaration)
          */
         VariableDeclaration( node ) {
 
-          // First check if the variable declaration is a require statement. A typical require statement node has the
-          // following properties that we care about:
-          // *|   id: {
-          // *|     name: 'VariableName'
-          // *|   },
-          // *|   init: {
-          // *|     callee: { name: 'require' },
-          // *|     arguments: [ {
-          // *|       value: 'ModuleName'
-          // *|     } ]
-          // *|   }
-          // This corresponds with `const VariableName = require( 'ModuleName' );`
-          // A node with the name property and the argument callee as 'require' is a require statement.
-          if ( node.declarations[ 0 ].init &&
-               node.declarations[ 0 ].id &&
-               node.declarations[ 0 ].init.callee &&
-               node.declarations[ 0 ].init.arguments &&
-               node.declarations[ 0 ].init.callee.name === 'require' ) {
+          // Check every variable declaration to allow multiple variable declarations.
+          node.declarations.forEach( declarationNode => {
 
-            // Determine if it's a new group, which occurs when the currentGroup flag doesn't exist, the lastNodeAdded
-            // flag doesn't exist, or the node and the lastNodeAdded aren't 1 line apart.
-            if ( lastNodeAdded && (
-                  node.parent !== lastNodeAdded.parent ||
-                  sourceCode.getFirstToken( node ).loc.start.line -
-                  sourceCode.getLastToken( lastNodeAdded ).loc.start.line !== 1 ) ) {
+            // First check if the variable declaration is a require statement. A typical require statement node for
+            // `const VariableName = require( 'ModuleName' );` has the following properties that we care about:
+            //   *|  id: { name: 'VariableName' },
+            //   *|  init: {
+            //   *|    callee: { name: 'require' },
+            //   *|    arguments: [ {
+            //   *|      value: 'ModuleName'
+            //   *|    } ]
+            //   *|  }
+            if ( declarationNode.init &&
+                 declarationNode.id &&
+                 declarationNode.init.callee &&
+                 declarationNode.init.arguments &&
+                 declarationNode.init.callee.name === 'require' ) {
 
-              // If it is a new group, push the current group and re reference it to a new group array.
-              requireStatementGroups.push( currentGroup );
-              currentGroup = [];
+              // Determine if the current declarationNode is a member of a new group, which occurs when the
+              // lastNodeAdded exists and either the declarationNode and the lastNodeAdded aren't in the same scope or
+              // are more than 1 line apart.
+              if ( lastNodeAdded && (
+                     declarationNode.parent.parent !== lastNodeAdded.parent.parent ||
+                     declarationNode.loc.start.line - lastNodeAdded.loc.start.line > 1 ) ) {  // member of new group
+
+                // Before creating the new group push the current group and then re-reference it to a new array.
+                requireStatementGroups.push( currentGroup );
+                currentGroup = [];
+              }
+
+              // Always push the require statement declarationNode. Then re-reference the lastNodeAdded.
+              currentGroup.push( declarationNode );
+              lastNodeAdded = declarationNode;
             }
-
-            // Always push new require statement nodes re-reference the lastNodeAdded.
-            currentGroup.push( node );
-            lastNodeAdded = node;
-          }
+          } );
         },
 
         /**
-         * When ESLint traverses back up the AST, at the end of the file, check that each group of require statements
-         * are alphabetically (case insensitive) sorted.
+         * Called when ESLint traverses back up the AST at the end of the file. Checks that each group of require
+         * statements are alphabetically (case-insensitive) sorted.
          * @public
          *
-         * @param {ASTNode} node - the current node (of the file)
+         * @param {ASTNode} node - the current node (the file)
          */
         'Program:exit'( node ) {
+
           // Push the final group if it hasn't been pushed yet.
           if ( currentGroup.length ) requireStatementGroups.push( currentGroup );
 
-          // Check that each array of nodes in requireStatementGroups is sorted. If not, report the lint error.
+          // Iterate through the require statement groups and check that each group array of nodes is alphabetically
+          // sorted. If not, report the lint error.
           requireStatementGroups.forEach( group => {
-            // Convert from nodes to variable names (what to sort by)
-            const variableNames = group.map( node => node.declarations[ 0 ].id.name );
 
+            // First convert the nodes to the variable names, which determines if the require statements are merged.
+            const variableNames = group.map( node => node.id.name );
+
+            // Iterate through the variable names and check that each variable name is 'greater' than the previous,
+            // or in other words, sorted.
             variableNames.forEach( ( variableName, index ) => {
-              if ( index !== 0 && variableName.toLowerCase() < variableNames[ index - 1 ].toLowerCase() ) {
 
+              // Use toLowerCase for case-insensitive sorting. Use comparison operators to check ordering.
+              if ( index !== 0 && variableName.toLowerCase() < variableNames[ index - 1 ].toLowerCase() ) {
                 context.report( {
                   loc: { start: group[ 0 ].loc.start, end: group[ group.length - 1 ].loc.end },
                   message: 'Require statements not alphabetically sorted.'
