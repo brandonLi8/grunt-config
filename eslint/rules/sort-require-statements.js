@@ -127,7 +127,7 @@ module.exports = ( () => {
 
             variableNames.forEach( ( variableName, index ) => {
               if ( index !== 0 && variableName.toLowerCase() < variableNames[ index - 1 ].toLowerCase() ) {
-                console.log( variableNames )
+
                 context.report( {
                   loc: { start: group[ 0 ].loc.start, end: group[ group.length - 1 ].loc.end },
                   message: 'Require statements not alphabetically sorted.'
