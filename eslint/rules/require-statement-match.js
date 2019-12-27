@@ -1,85 +1,102 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * A custom rule that checks that RequireJS statements match the variable name.
+ * Custom ESlint rule that checks that the module name (case sensitive) of a RequireJS statement matches the variable.
  *
  * For instance:
  * ```
  *  // correct
- *  const CustomModule = Require( 'CustomModule' );
+ *  const ModuleName = require( 'path/foo/bar/ModuleName' );
+ *  const Foo = require( 'Foo' );
  *
  *  // incorrect
- *  const WrongName = Require( 'CustomModule' ); // variable name should be `CustomModule`
+ *  const WrongName = require( 'path/foo/bar/ModuleName' );
+ *  const Bar = require( 'Foo' );
+ *  const Bar = require( 'bar' ); // case sensitive
  * ```
+ *
+ * See https://eslint.org/docs/developer-guide/working-with-rules for documentation of implementing ESlint custom rules.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
 
-module.exports = function( context ) {
+module.exports = ( () => {
   'use strict';
 
   return {
 
-    VariableDeclaration: function requireStatementMatch( node ) {
+    // Meta-data
+    meta: {
+      type: 'problem',
+      docs: {
+        description: 'Require variable names and module names of require statements to match.',
+        category: 'Best Practices',
+        recommended: true
+      },
+      fixable: 'code', // not fixable
+      schema: [] // no options
+    },
 
-      // Here is the AST of a typical require statement node, for reference
-      //var exemplar = {
-      //  'type': 'VariableDeclaration',
-      //  'declarations': [
-      //    {
-      //      'type': 'VariableDeclarator',
-      //      'id': {
-      //        'type': 'Identifier',
-      //        'name': 'EquationsScreen'
-      //      },
-      //      'init': {
-      //        'type': 'CallExpression',
-      //        'callee': {
-      //          'type': 'Identifier',
-      //          'name': 'require'
-      //        },
-      //        'arguments': [
-      //          {
-      //            'type': 'Literal',
-      //            'value': 'FUNCTION_BUILDER/equations/EquationsScreen',
-      //            'raw': "'FUNCTION_BUILDER/equations/EquationsScreen'"//eslint-disable-line
-      //          }
-      //        ]
-      //      }
-      //    }
-      //  ],
-      //  'kind': 'var'
-      //};
+    /**
+     * Creates the Rule Definition.
+     * @public
+     *
+     * @param {Object} context - Object literal that contains information relevant to the rule. See
+     *                           https://eslint.org/docs/developer-guide/working-with-rules
+     * @returns {Object} - Object literal with methods that ESlint calls to visit nodes while traversing the AST
+     */
+    create: context => {
 
-      if ( node.declarations &&
-           node.declarations.length > 0 &&
-           node.declarations[ 0 ].init &&
-           node.declarations[ 0 ].init.arguments &&
-           node.declarations[ 0 ].init.arguments.length > 0 ) {
-        if ( node.declarations[ 0 ].init &&
-             node.declarations[ 0 ].init.callee.name === 'require' ) {
-          var lhs = node.declarations[ 0 ].id.name;
-          var rhs = node.declarations[ 0 ].init.arguments[ 0 ].value;
+      return {
 
-          if ( rhs && rhs.indexOf( '!' ) < 0 ) {
-            var lastSlash = rhs.lastIndexOf( '/' );
-            var tail = rhs.substring( lastSlash + 1 );
+        /**
+         * Checks that variable names and module names of require statements to match. No-op if the variable declaration
+         * isn't a require statement.
+         * @public
+         *
+         * @param {ASTNode} node - the current node (a variable declaration)
+         */
+        VariableDeclaration( node ) {
 
-            if ( tail !== lhs ) {
+          // Check every variable declaration.
+          node.declarations.forEach( declarationNode => {
 
-              context.report( {
-                node: node,
-                loc: node.loc.start,
-                message: 'Mismatched require statement values, ' + lhs + ' !== ' + tail
-              } );
+            // First check if the variable declaration is a require statement. A typical require statement node has the
+            // following properties that we care about:
+            // *|   id: {
+            // *|     name: 'VariableName'
+            // *|   },
+            // *|   init: {
+            // *|     callee: { name: 'require' },
+            // *|     arguments: [ {
+            // *|       value: 'ModuleName'
+            // *|     } ]
+            // *|   }
+            // This corresponds with `const VariableName = require( 'ModuleName' );`
+            // A node with the name property and the argument callee as 'require' is a require statement.
+            if ( declarationNode.init &&
+                 declarationNode.id &&
+                 declarationNode.init.callee &&
+                 declarationNode.init.arguments &&
+                 declarationNode.init.callee.name === 'require' ) {
+
+              const variableName = declarationNode.id.name;
+              const requireStatementPath = declarationNode.init.arguments[ 0 ].value;
+
+              // Get the module name from the requireStatementPath. For instance, turn foo/bar/ModuleName to ModuleName.
+              const moduleName = requireStatementPath.substring( requireStatementPath.lastIndexOf( '/' ) + 1 );
+
+              if ( variableName !== moduleName ) {
+                context.report( {
+                  node,
+                  loc: node.loc.start,
+                  message: `Mismatched require statement values, ${ variableName } !== ${ moduleName }`
+                } );
+              }
             }
-          }
+          } );
         }
-      }
+      };
     }
   };
-};
-
-module.exports.schema = [
-  // JSON Schema for rule options goes here
-];
+} )();
