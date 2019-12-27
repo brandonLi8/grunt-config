@@ -55,31 +55,34 @@ module.exports = ( () => {
     meta: {
       type: 'problem',
       docs: {
-        description: 'disallow bad-text',
+        description: 'Disallows bad text.',
+        url: 'https://github.com/brandonLi8/grunt-config/blob/master/eslint/rules/bad-text.js',
         category: 'Possible Errors',
         recommended: true
-      },
-      fixable: 'code', // not fixable
-      schema: [] // no options
+      }
     },
 
     /**
      * Creates the Rule Definition.
+     * @public
+     *
      * @param {Object} context - Object literal that contains information relevant to the rule. See
      *                           https://eslint.org/docs/developer-guide/working-with-rules
-     * @returns {Object} - Object literal with methods that ESlint calls to visit nodes while traversing the AST
+     * @returns {Object} - Object literal with methods that ESlint calls to visit nodes while traversing through the AST
      */
     create( context ) {
 
       return {
+
         /**
-         * Checks to make sure no bad texts exist. Called at the start of every file.
+         * Checks to make sure no bad texts exist. Called at the start of every file when traversing down the AST.
+         * @public
          *
          * @param {ASTNode} node - the current node (of the file)
          */
         Program( node ) {
 
-          // get the source code text
+          // Reference the source code text
           const sourceCodeText = context.getSourceCode().text;
 
           BAD_TEXTS.forEach( badText => {
