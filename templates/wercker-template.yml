@@ -27,6 +27,11 @@ build:                              # Build definition
         echo "node version $(node -v) running"
         echo "npm version $(npm -v) running"
 
+    - script:                       # Install global grunt for testing.
+        name: Install Grunt
+        code: |
+          npm install -g grunt-cli
+
     - script:                       # Run Continuous Testing commands
       name: Continuous Testing
       code: |
