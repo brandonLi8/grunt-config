@@ -3,7 +3,7 @@
 /**
  * Custom ESlint rule that checks that the RequireJS statements of groups are alphabetically sorted (case insensitive).
  *
- * For instance, the following group is alphabetically sorted (case insensitive):
+ * For instance, the following group is correctly alphabetically sorted (case insensitive):
  * ```
  *  const Apple = require( 'Apple' );
  *  const art = require( 'art' );
@@ -28,13 +28,13 @@ module.exports = ( () => {
 
     // Meta-data
     meta: {
-      type: 'problem',
+      type: 'suggestion',
       docs: {
         description: 'Enforces require statements to be sorted in groups.',
-        category: 'Best Practices',
+        url: 'https://github.com/brandonLi8/grunt-config/blob/master/eslint/rules/sort-require-statements.js',
+        category: 'Stylistic Issues',
         recommended: true
       },
-      fixable: 'code', // not fixable
       schema: [] // no options
     },
 
