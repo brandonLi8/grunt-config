@@ -15,8 +15,8 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const grunt = require( 'grunt' );
   const Copyright = require( '../../src/Copyright' );
+  const grunt = require( 'grunt' );
 
   return {
 
@@ -67,6 +67,9 @@ module.exports = ( () => {
               message: 'Incorrect copyright statement on first line.'
             } );
           }
+
+          const fs = require( 'fs' );
+          const Linter = require( '../../src/Linter' );
         }
       };
     }

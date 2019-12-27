@@ -91,9 +91,6 @@ module.exports = ( () => {
                node.declarations[ 0 ].init.arguments &&
                node.declarations[ 0 ].init.callee.name === 'require' ) {
 
-            // Always push new require statement nodes.
-            currentGroup.push( node );
-
             // Determine if it's a new group, which occurs when the currentGroup flag doesn't exist, the lastNodeAdded
             // flag doesn't exist, or the node and the lastNodeAdded aren't 1 line apart.
             if ( lastNodeAdded && (
@@ -105,7 +102,9 @@ module.exports = ( () => {
               requireStatementGroups.push( currentGroup );
               currentGroup = [];
             }
-            // re-reference the lastNodeAdded.
+
+            // Always push new require statement nodes re-reference the lastNodeAdded.
+            currentGroup.push( node );
             lastNodeAdded = node;
           }
         },
@@ -128,6 +127,7 @@ module.exports = ( () => {
 
             variableNames.forEach( ( variableName, index ) => {
               if ( index !== 0 && variableName.toLowerCase() < variableNames[ index - 1 ].toLowerCase() ) {
+                console.log( variableNames )
                 context.report( {
                   loc: { start: group[ 0 ].loc.start, end: group[ group.length - 1 ].loc.end },
                   message: 'Require statements not alphabetically sorted.'
