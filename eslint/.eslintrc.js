@@ -1,20 +1,15 @@
 // Copyright © 2019 Brandon Li. All rights reserved.
 
 /**
- * es-lint configuration file
+ * ESlint configuration file. See https://eslint.org/docs/user-guide/configuring for documentation of implementing
+ * the .eslintrc file.
  *
- * ## Context
+ * Values for the rules:
  * 0 - no error
  * 1 - warn
  * 2 - error
  *
  * See https://eslint.org/docs/rules for documentation on rules.
- *
- * //----------------------------------------------------------------------------------------
- * This is free to change to your preferences! Feel free to modify/add rules on a fork!
- *
- * Some of the rules are custom (found in ./rules). Keep this file organized by putting custom rules at the bottom
- * of the file.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -23,56 +18,50 @@
 
 module.exports = {
 
-  // Extend the default configuration
+  // Extend the default configuration.
   extends: 'eslint:recommended',
   root: true,
 
-  // Override the default configuration
+  // Override the default configuration.
   rules: {
 
-    // Code styling lint: arrays should have spacing within the brackets (like the declaration of this key-object)
-    'array-bracket-spacing': [ 2, 'always' ],
+    //----------------------------------------------------------------------------------------
+    // Enforce correct spacing. See https://eslint.org/docs/rules/#stylistic-issues for documentation.
+    //----------------------------------------------------------------------------------------
+    'array-bracket-spacing': [ 2, 'always' ],                            // use [ 5, 6 ] instead of [5, 6]
+    'block-spacing': [ 2, 'always' ],                                    // use { bar(); } instead of {bar();}
+    'comma-spacing': [ 2, { 'before': false, 'after': true } ],          // use [ 5, 6, 7 ] instead of [ 5 ,6,7 ]
+    'computed-property-spacing': [ 2, 'always' ],                        // use obj[ foo ] instead of obj[foo]
+    'func-call-spacing': [ 2, 'never' ],                                 // use bar() instead of bar () when calling.
+    'key-spacing': 2,                                                    // use { foo: 5 } instead of { foo:5 }
+    'keyword-spacing': [ 2, { overrides: { catch: { after: !!0 } } } ],  // use while ( foo ) instead of while( foo )
+    'no-multi-spaces': [ 2, { 'ignoreEOLComments': true } ],
+    'object-curly-spacing': [ 2, 'always' ],
+    'space-before-blocks': 2,
+    'space-before-function-paren': [ 2, { asyncArrow: 'always', named: 'never', anonymous: 'never' } ],
+    'space-in-parens': [ 2, 'always' ],
+    'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=' ] } ],
+    'func-call-spacing': [ 2, 'never' ], // Should never have a space (e.g. foo ( args ) should be foo( args ))
+    'template-curly-spacing': [ 2, 'always' ],
 
-    // Code styling lint: blocks should have spacing within the brackets
-    'block-spacing': [ 2, 'always' ],
 
-    // Code styling lint: see https://eslint.org/docs/rules/brace-style (stroustrup method)
-    'brace-style': [ 2, 'stroustrup',  { 'allowSingleLine': true } ],
+    'brace-style': [ 2, 'stroustrup',  { 'allowSingleLine': true } ], // See https://eslint.org/docs/rules/brace-style
 
-    // Enforces a max line length
+    // enforce a max line length of 120 characters, ignoring require statements, urls, and regular expression literals.
     'max-len': [ 2, {
       code: 120,
       tabWidth: 2,
       ignoreUrls: true,
       ignoreRegExpLiterals: true,
-      ignorePattern: '^\\s*var\\s.+=\\s*require\\s*\\('
+      ignorePattern: '^\\s*const\\s.+=\\s*require\\s*\\('
     } ],
-
-    // via code style guidline, always add parens
-    'space-in-parens': [ 2, 'always' ],
-    'array-bracket-spacing': [ 2, 'always' ],
-    'no-multi-spaces': [ 2, { 'ignoreEOLComments': true } ],
-    'block-spacing': 2,
-    'comma-spacing': [ 2, { 'before': false, 'after': true } ],
-    'computed-property-spacing': [ 2, 'always' ],
-    'func-call-spacing': [ 2, 'never' ],
-    'key-spacing': 2,
-    'object-curly-spacing': [ 2, 'always' ],
-    'space-before-function-paren': [ 2, {
-        asyncArrow: 'always',
-        named: 'never',
-        anonymous: 'never'
-    } ],
-    'space-before-blocks': 2,
-    'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=' ] } ],
 
 
     'no-trailing-spaces': 2,
     'no-unused-vars': [ 2, { args: 'none' } ],
     'require-statement-match': 2,
 
-    // Should never have a space (e.g. foo ( args ) should be foo( args ))
-    'func-call-spacing': [ 2, 'never' ],
+
 
     // Error on 'console.log'. Should be removed when pushing (when you should lint), but can be used in development.
     'no-console': 2,
@@ -86,7 +75,7 @@ module.exports = {
     // Always require a semi-colon. Avoid javascript ASI.
     semi: [ 2, 'always' ],
 
-    'template-curly-spacing': [ 2, 'always' ],
+
 
     // Variables that don't change should always use a const declaration
     'prefer-const': [ 2, {
