@@ -15,6 +15,7 @@
 *.sublime-project
 *.sublime-workspace
 .idea
+.vscode
 
 ## Node
 *.lcov
