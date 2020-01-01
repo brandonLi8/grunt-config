@@ -118,8 +118,7 @@ module.exports = ( () => {
       // Read the file first
       const fileContent = grunt.file.read( filePath );
 
-      // Parse by line separator
-      const fileLines = fileContent.split( /\r?\n/ ); // splits for both unix and windows newlines
+      const fileLines = fileContent.split( '\n' );
 
       // Reference the correct copyright statement,
       const copyrightStatement = this.getFileCopyright( filePath );
@@ -130,7 +129,7 @@ module.exports = ( () => {
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
       // the first line or if forceWrite is true
       if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
-        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\r\n' );
+        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\n' );
         fs.writeFileSync( filePath, newFileContents );
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
