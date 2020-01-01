@@ -1,4 +1,4 @@
-<!-- Copyright © 2019 Brandon Li. All rights reserved. -->
+<!-- Copyright © 2019-2020 Brandon Li. All rights reserved. -->
 # grunt-config
 
 [![wercker status](https://app.wercker.com/status/60307013102cc6d5ab0c4268bb705be8/m/master "wercker status")](https://app.wercker.com/project/byKey/60307013102cc6d5ab0c4268bb705be8)
