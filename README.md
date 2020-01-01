@@ -2,7 +2,7 @@
 # grunt-config
 
 [![wercker status](https://app.wercker.com/status/60307013102cc6d5ab0c4268bb705be8/m/master "wercker status")](https://app.wercker.com/project/byKey/60307013102cc6d5ab0c4268bb705be8)
-[![build status](https://api.travis-ci.org/brandonLi8/grunt-config.svg?branch=master)](https://travis-ci.org/brandonLi8/grunt-config)
+[![Build Status](https://travis-ci.org/brandonLi8/grunt-config.svg?branch=master)](https://travis-ci.org/brandonLi8/grunt-config)
 <br>
 
 Preconfigured/customizable grunt tools for linting, compiling, and various other development tasks. <br>
