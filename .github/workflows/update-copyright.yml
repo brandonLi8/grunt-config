@@ -25,7 +25,7 @@ on:
             # │ │ │ │ │
             # │ │ │ │ │
             # * * * * *
-    - cron:  '3 22 2 1 *'            # activate on every new year's day.
+    - cron:  '5 23 2 1 *'            # activate on every new year's day.
                                     #
 
 jobs:
