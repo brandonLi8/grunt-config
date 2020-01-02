@@ -10,8 +10,7 @@
 #            https://github.com/brandonLi8/grunt-config/.
 #
 # Your badge url should look like:
-# [![Actions Status]({{GITHUB_URL}}/workflows/build/badge.svg)]
-#   ({{GITHUB_URL}}actions?query=workflow%3Abuild)
+# [![Actions Status]({{GITHUB_URL}}/workflows/build/badge.svg)]{{GITHUB_URL}}/actions?query=workflow%3Abuild)
 #
 # @author {{AUTHOR}} <{{AUTHOR_EMAIL}}>
 #!————————————————————————————————————————————————————————————————————————————*!
