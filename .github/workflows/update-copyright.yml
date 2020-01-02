@@ -13,20 +13,20 @@
 # @author Brandon Li <brandon.li820@gmail.com>
 #!————————————————————————————————————————————————————————————————————————————*!
 name: Update All Copyrights        # tentative workflow name
-on:
-  schedule:
+on: [ push ]
+  # schedule:
 
-            # ┌───────────── minute (0 - 59)
-            # │ ┌───────────── hour (0 - 23)
-            # │ │ ┌───────────── day of the month (1 - 31)
-            # │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
-            # │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-            # │ │ │ │ │
-            # │ │ │ │ │
-            # │ │ │ │ │
-            # * * * * *
-    - cron:  '17 23 2 1 *'            # activate on every new year's day.
-                                    #
+  #           # ┌───────────── minute (0 - 59)
+  #           # │ ┌───────────── hour (0 - 23)
+  #           # │ │ ┌───────────── day of the month (1 - 31)
+  #           # │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+  #           # │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+  #           # │ │ │ │ │
+  #           # │ │ │ │ │
+  #           # │ │ │ │ │
+  #           # * * * * *
+  #   - cron:  '17 23 2 1 *'            # activate on every new year's day.
+  #                                   #
 
 jobs:
   build:
