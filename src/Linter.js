@@ -29,7 +29,7 @@ module.exports = ( () => {
 
   // constants
   // Files and directories to ignore when linting.
-  const IGNORE_PATTERN = [ '**/.git','**/node_modules', '**/third-party', '**/dist', '**/build' ];
+  const IGNORE_PATTERN = [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build' ];
 
   class Linter {
 
