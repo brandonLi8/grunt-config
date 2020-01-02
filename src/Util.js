@@ -192,7 +192,7 @@ module.exports = ( () => {
 
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
-    CURRENT_YEAR: new Date().getFullYear()
+    CURRENT_YEAR: new Date().getUTCFullYear()
   };
 
   return Util;
