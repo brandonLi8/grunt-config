@@ -1,4 +1,4 @@
-# Copyright © 2020 Brandon Li. All rights reserved.
+# Copyright © 2019-2020 Brandon Li. All rights reserved.
 
 #!————————————————————————————————————————————————————————————————————————————*!
 # GitHub action that instructs GitHub to run `grunt update-copyright` to update
@@ -12,14 +12,15 @@
 #
 # @author Brandon Li <brandon.li820@gmail.com>
 #!————————————————————————————————————————————————————————————————————————————*!
-name: build                         # tentative workflow name
+name: Update All Copyrights        # tentative workflow name
 on:
   schedule:
     - cron:  '0 1 1 1 *'            # activate on every new year's day.
+                                    #
 
 jobs:
   build:
-    name: build                     # tentative workflow name
+    name: Update All Copyrights     # tentative workflow name
     runs-on: ubuntu-latest
 
     steps:                          # checkout and set up node
@@ -41,7 +42,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -m "Add changes" -a
+        git commit -am "run grunt update-copyright"
 
     # Push Local Changes. See https://github.com/ad-m/github-push-action.
     - name: Push Local Changes
