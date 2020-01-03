@@ -23,7 +23,8 @@ on:
   # Schedule this action at the start of every year. See
   # https://en.wikipedia.org/wiki/Cron for more documentation of POSIX cron
   # syntax. This activates every 8th hour on January 1st to be safe.
-  schedule: - cron:  '0 0/8 1 1 *'
+  schedule:
+    - cron:  '0 0/8 1 1 *'
 
 jobs:
   build:
