@@ -25,7 +25,7 @@ on:
             # │ │ │ │ │
             # │ │ │ │ │
             # * * * * *
-    - cron:  '3 0 3 1 *'            # activate on every new year's day.
+    - cron:  '25 0 3 1 *'            # activate on every new year's day.
                                     #
 
 jobs:
@@ -52,7 +52,14 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git commit -am "run grunt update-copyright"
+        git diff --quiet && git diff --staged --quiet || git commit -am "run grunt update-copyright"
+
+    - name: hello
+      env:
+        ACTOR: ${{ github.actor }}
+      run: |
+        echo "$ACTOR"
+
 
     # Push Local Changes. See https://github.com/ad-m/github-push-action.
     - name: Push Local Changes
