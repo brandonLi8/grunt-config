@@ -19,12 +19,11 @@
 
 name: update-copyright-yearly        # tentative workflow name
 on:
-  schedule:
 
-    # Schedule this action at the start of every year. See
-    # https://en.wikipedia.org/wiki/Cron for more documentation of POSIX cron
-    # syntax. This activates every 8th hour on January 1st to be safe.
-    - cron:  '0 0/8 1 1 *'
+  # Schedule this action at the start of every year. See
+  # https://en.wikipedia.org/wiki/Cron for more documentation of POSIX cron
+  # syntax. This activates every 8th hour on January 1st to be safe.
+  schedule: - cron:  '0 0/8 1 1 *'
 
 jobs:
   build:
@@ -49,18 +48,23 @@ jobs:
       # See `grunt-config/src/Copyright` for more documentation.
       run: grunt update-copyright
 
-    - name: Commit Local Changes
-      run: |
+    - name: configure git           # configure git
+
         # Configure git using references from the github object. See
         # https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+      run: |
         git config user.email "${{ github.actor }}@users.noreply.github.com"
         git config user.name "${{ github.actor }}"
 
-        git diff --quiet && git diff --staged --quiet ||
-        git commit -am "run grunt update-copyright-yearly"
+    - name: commit changes          # commit local changes from updating copyrights
 
-    # Push Local Changes. See https://github.com/ad-m/github-push-action.
+        # Commit changes only if there are local changes. Otherwise, do nothing.
+        git diff --quiet && git diff --staged --quiet ||
+        git commit -am "Run \`grunt update-copyright\`"
+
     - name: Push Local Changes
+
+      # Push Local Changes. See https://github.com/ad-m/github-push-action.
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
