@@ -51,15 +51,16 @@ jobs:
 
     - name: configure git           # configure git
 
-        # Configure git using references from the github object. See
-        # https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
+      # Configure git using references from the github object. See
+      # https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup
       run: |
         git config user.email "${{ github.actor }}@users.noreply.github.com"
         git config user.name "${{ github.actor }}"
 
-    - name: commit changes          # commit local changes from updating copyrights
+    - name: commit changes          # commit local changes
 
-        # Commit changes only if there are local changes. Otherwise, do nothing.
+      # Commit changes only if there are local changes. Otherwise, do nothing.
+      run: |
         git diff --quiet && git diff --staged --quiet ||
         git commit -am "Run \`grunt update-copyright\`"
 
