@@ -25,7 +25,7 @@ on:
             # │ │ │ │ │
             # │ │ │ │ │
             # * * * * *
-    - cron:  '35 0 3 1 *'            # activate on every new year's day.
+    - cron:  '23 2 3 1 *'            # activate on every new year's day.
                                     #
 
 jobs:
@@ -57,8 +57,14 @@ jobs:
     - name: hello
       env:
         ACTOR: ${{ github.actor }}
+        ID: ${{ github.event.comment.id }}
+        AUTHOR: ${{ github.event.comment.user.login }}
+        DATE: ${{ github.event.comment.created_at }}
       run: |
         echo "$ACTOR"
+        echo "$ID"
+        echo "$AUTHOR"
+        echo "$DATE"
 
 
     # Push Local Changes. See https://github.com/ad-m/github-push-action.
