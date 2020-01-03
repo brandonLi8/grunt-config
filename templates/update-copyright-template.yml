@@ -56,7 +56,8 @@ jobs:
         git config user.email "${{ github.actor }}@users.noreply.github.com"
         git config user.name "${{ github.actor }}"
 
-        git diff --quiet && git diff --staged --quiet || git commit -am "run grunt update-copyright-yearly"
+        git diff --quiet && git diff --staged --quiet ||
+        git commit -am "run grunt update-copyright-yearly"
 
     # Push Local Changes. See https://github.com/ad-m/github-push-action.
     - name: Push Local Changes
