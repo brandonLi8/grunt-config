@@ -124,9 +124,6 @@ module.exports = ( () => {
       // Reference the correct copyright statement,
       const copyrightStatement = this.getFileCopyright( filePath );
 
-      // no-op if the first line is already correct.
-      if ( fileLines[ 0 ] === copyrightStatement ) return;
-
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
       // the first line or if forceWrite is true
       if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
