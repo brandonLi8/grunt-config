@@ -39,3 +39,14 @@ jobs:
 
     - name: test                    # ensure that all tests pass
       run: npm test --if-present
+
+    - name: Check Copyrights
+      run: |
+        grunt update-copyright
+        if ! git diff-index --quiet HEAD --; then
+          tput setaf 1 && tput bold;
+          echo Error. Changes detected when running \`grunt update-copyright\`:;
+          tput sgr0;
+          git status --short;
+          exit 1;
+        fi
