@@ -26,6 +26,7 @@ module.exports = ( () => {
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
   const ignore = require( 'ignore' );
+  const os = require( 'os' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
 
@@ -118,7 +119,7 @@ module.exports = ( () => {
       // Read the file first
       const fileContent = grunt.file.read( filePath );
 
-      const fileLines = fileContent.split( '\n' );
+      const fileLines = fileContent.split( /\r?\n/ ); // splits using both unix and windows newlines
 
       // Reference the correct copyright statement,
       const copyrightStatement = this.getFileCopyright( filePath );
@@ -129,7 +130,7 @@ module.exports = ( () => {
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
       // the first line or if forceWrite is true
       if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
-        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( '\n' );
+        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( os.EOL );
         fs.writeFileSync( filePath, newFileContents );
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
