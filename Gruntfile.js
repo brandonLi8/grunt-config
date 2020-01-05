@@ -16,17 +16,15 @@ module.exports = grunt => {
   const Generator = require( './src/Generator' );
   const Labeler = require( './src/Labeler' );
   const Linter = require( './src/Linter' );
-  const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
-  shell.config.silent = true;
 
   //----------------------------------------------------------------------------------------
   /**
-   * Default grunt task.
+   * Default grunt task. Logs the running version of grunt and prompts the user to run `grunt --help`.
    */
   grunt.registerTask( 'default', 'Logs the running version of grunt.', Util.wrap( () => {
     Util.logln( `\nRunning grunt ${ chalk.yellow( `v${ grunt.version }` ) }` );
-    Util.logln( `Run ${ chalk.yellow( '\`grunt --help\`' ) } to see an overview of all tasks.` );
+    Util.logln( `Run \`${ chalk.yellow( 'grunt --help' ) }\` to see an overview of all tasks.` );
   } ) );
 
   /**

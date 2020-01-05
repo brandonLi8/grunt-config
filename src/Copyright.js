@@ -29,6 +29,7 @@ module.exports = ( () => {
   const os = require( 'os' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
+  shell.config.silent = true;
 
   // constants
   // Reference to the validated and parsed generator replacement values (see Generator.js for more documentation).
