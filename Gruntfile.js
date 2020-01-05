@@ -2,7 +2,7 @@
 
 /**
  * Grunt configuration file. For background, see https://gruntjs.com/getting-started.
- * Run `grunt --help` to see an overview of the tasks defined below.
+ * Run `grunt --help` to see an overview of all the tasks defined below.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -11,6 +11,7 @@ module.exports = grunt => {
   'use strict';
 
   // modules
+  const chalk = require( 'chalk' );
   const Copyright = require( './src/Copyright' );
   const Generator = require( './src/Generator' );
   const Labeler = require( './src/Labeler' );
@@ -19,6 +20,14 @@ module.exports = grunt => {
   const Util = require( './src/Util' );
   shell.config.silent = true;
 
+  //----------------------------------------------------------------------------------------
+  /**
+   * Default grunt task.
+   */
+  grunt.registerTask( 'default', 'Logs the running version of grunt.', Util.wrap( () => {
+    Util.logln( `\nRunning grunt ${ chalk.yellow( `v${ grunt.version }` ) }` );
+    Util.logln( `Run ${ chalk.yellow( '\`grunt --help\`' ) } to see an overview of all tasks.` );
+  } ) );
 
   /**
    * ESlints the entire root directory that invoked the command, using the ESlint configuration defined in
