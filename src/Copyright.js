@@ -29,7 +29,6 @@ module.exports = ( () => {
   const os = require( 'os' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
-  shell.config.silent = true;
 
   // constants
   // Reference to the validated and parsed generator replacement values (see Generator.js for more documentation).
@@ -94,7 +93,7 @@ module.exports = ( () => {
       // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
       // start year is current year. Solution from:
       // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
-      const startYear = shell.exec( `git log --diff-filter=A --follow --date=short --format=%cd -1 -- ${ filePath }` )
+      const startYear = shell.exec( `git log --follow --format=%aI -- ${ filePath } | tail -1`, { silent: true } )
         .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
 
       const endYear = Util.CURRENT_YEAR;
