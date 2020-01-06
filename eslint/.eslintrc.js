@@ -43,7 +43,7 @@ module.exports = {
     'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=' ] } ],
     'func-call-spacing': [ 2, 'never' ], // Should never have a space (e.g. foo ( args ) should be foo( args ))
     'template-curly-spacing': [ 2, 'always' ],
-
+    'semi-spacing': 2,
 
     'brace-style': [ 2, 'stroustrup',  { 'allowSingleLine': true } ], // See https://eslint.org/docs/rules/brace-style
 
