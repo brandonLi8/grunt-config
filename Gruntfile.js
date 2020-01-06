@@ -16,7 +16,16 @@ module.exports = grunt => {
   const Generator = require( './src/Generator' );
   const Labeler = require( './src/Labeler' );
   const Linter = require( './src/Linter' );
+  const updateNotifier = require( 'update-notifier' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
+
+  // constants
+  const GRUNT_CONFIG_PACKAGE = grunt.file.readJSON( `${ __dirname }/package.json` );
+
+  //----------------------------------------------------------------------------------------
+  // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.
+  const notifier = updateNotifier( { pkg: Util.GRUNT_CONFIG_PACKAGE, updateCheckInterval: 0 } );
+  if ( notifier.update && notifier.update.latest !== Util.GRUNT_CONFIG_VERSION ) notifier.notify( { defer: false } );
 
   /**
    * Default grunt task. Logs the running version of grunt and prompts the user to run `grunt --help`.
