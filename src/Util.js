@@ -12,9 +12,22 @@ module.exports = ( () => {
   // modules
   const grunt = require( 'grunt' );
   const path = require( 'path' );
+  const updateNotifier = require( 'update-notifier' ); // eslint-disable-line require-statement-match
 
   const Util = {
 
+    //----------------------------------------------------------------------------------------
+    // Static references
+    //----------------------------------------------------------------------------------------
+
+    // @public {number} CURRENT_YEAR - Static reference to the current full year.
+    CURRENT_YEAR: new Date().getUTCFullYear(),
+    GRUNT_CONFIG_PACKAGE: grunt.file.readJSON( `${ path.dirname( __dirname ) }/package.json` ),
+    GRUNT_CONFIG_VERSION: grunt.file.readJSON( `${ path.dirname( __dirname ) }/package.json` ).version,
+
+    //----------------------------------------------------------------------------------------
+    // Utility methods
+    //----------------------------------------------------------------------------------------
     /**
      * A basic grunt-specific assertion function, which uses `grunt.fail.fatal` to throw errors.
      * See https://gruntjs.com/api/grunt.fail for documentation.
@@ -59,6 +72,9 @@ module.exports = ( () => {
       return ( ...args ) => {
         try {
           task( ...args ); // When the wrapper is called, execute the task and transfer the args.
+          // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.
+          const notifier = updateNotifier( { pkg: Util.GRUNT_CONFIG_PACKAGE, updateCheckInterval: 0 } );
+          if ( notifier.update && notifier.update.latest !== Util.GRUNT_CONFIG_VERSION ) notifier.notify( { defer: false } );
         }
         catch( error ) {
           Util.throw( `Task failed:\n${ error.stack || error }` );
@@ -188,11 +204,7 @@ module.exports = ( () => {
      *
      * @param {...String} args
      */
-    logln( ...args ) { grunt.log.writeln( args ); },
-
-
-    // @public {number} CURRENT_YEAR - Static reference to the current full year.
-    CURRENT_YEAR: new Date().getUTCFullYear()
+    logln( ...args ) { grunt.log.writeln( args ); }
   };
 
   return Util;

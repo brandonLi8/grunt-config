@@ -16,23 +16,14 @@ module.exports = grunt => {
   const Generator = require( './src/Generator' );
   const Labeler = require( './src/Labeler' );
   const Linter = require( './src/Linter' );
-  const updateNotifier = require( 'update-notifier' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
-
-  // constants
-  const GRUNT_CONFIG_PACKAGE = grunt.file.readJSON( `${ __dirname }/package.json` ); // package.json of grunt-config
-
-  // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.
-  const notifier = updateNotifier( { pkg: GRUNT_CONFIG_PACKAGE } );
-  if ( notifier.update && notifier.update.latest !== GRUNT_CONFIG_PACKAGE.version ) notifier.notify();
-
-  //----------------------------------------------------------------------------------------
 
   /**
    * Default grunt task. Logs the running version of grunt and prompts the user to run `grunt --help`.
    */
-  grunt.registerTask( 'default', 'Logs the running version of grunt.', Util.wrap( () => {
+  grunt.registerTask( 'default', 'Logs the running version of grunt and grunt-config.', Util.wrap( () => {
     Util.logln( chalk`\nRunning grunt {yellow v${ grunt.version }}` );
+    Util.logln( chalk`\nCurrently on grunt-config {yellow v${ Util.GRUNT_CONFIG_VERSION }}` );
     Util.logln( chalk`Run {cyan grunt --help} to see an overview of all tasks.` );
   } ) );
 
