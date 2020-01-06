@@ -52,7 +52,7 @@ module.exports = ( () => {
       const currentWorkingDirectory = path.dirname( process.cwd() );
 
       // Use the Node.js ESLint API. See https://eslint.org/docs/developer-guide/nodejs-api.
-      const cli = new eslint.CLIEngine( {
+      const linter = new eslint.CLIEngine( {
 
         // Use the ESlint configuration defined in ../eslint/.eslintrc.js
         baseConfig: {
@@ -85,10 +85,10 @@ module.exports = ( () => {
       Util.logln( `Linting ${ process.cwd() } ...` );
 
       // Run the ESlint step
-      const report = cli.executeOnFiles( path.basename( process.cwd() ) );
+      const report = linter.executeOnFiles( path.basename( process.cwd() ) );
 
       // Pretty print results to console if any
-      ( report.warningCount || report.errorCount ) && grunt.log.write( cli.getFormatter()( report.results ) );
+      ( report.warningCount || report.errorCount ) && grunt.log.write( linter.getFormatter()( report.results ) );
       report.warningCount && grunt.fail.warn( report.warningCount + ' Lint Warnings' );
       report.errorCount && grunt.fail.fatal( report.errorCount + ' Lint Errors' );
     }
