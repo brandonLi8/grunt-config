@@ -25,14 +25,14 @@ module.exports = grunt => {
   //----------------------------------------------------------------------------------------
   // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.
   const notifier = updateNotifier( { pkg: Util.GRUNT_CONFIG_PACKAGE, updateCheckInterval: 0 } );
-  if ( notifier.update && notifier.update.latest !== Util.GRUNT_CONFIG_VERSION ) notifier.notify( { defer: false } );
+  if ( notifier.update && notifier.update.latest !== GRUNT_CONFIG_PACKAGE.version ) notifier.notify( { defer: false } );
 
   /**
    * Default grunt task. Logs the running version of grunt and prompts the user to run `grunt --help`.
    */
   grunt.registerTask( 'default', 'Logs the running version of grunt and grunt-config.', Util.wrap( () => {
     Util.logln( chalk`\nRunning grunt {yellow v${ grunt.version }}` );
-    Util.logln( chalk`\nCurrently on grunt-config {yellow v${ Util.GRUNT_CONFIG_VERSION }}` );
+    Util.logln( chalk`\nCurrently on grunt-config {yellow v${ GRUNT_CONFIG_PACKAGE.version }}` );
     Util.logln( chalk`Run {cyan grunt --help} to see an overview of all tasks.` );
   } ) );
 
