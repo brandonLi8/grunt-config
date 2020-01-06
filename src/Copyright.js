@@ -9,8 +9,8 @@
  *   2, `{{START_COMMENT}} Copyright © {{YEAR1-YEAR2}} {{AUTHOR}}. All rights reserved. {{END_COMMENT}}`
  *
  * The START_COMMENT and END_COMMENT are placeholders comment delimiters that depend on the language the file is in.
- * For instance, in javascript, a copyright statement might be: `// Copyright © 2019 Brandon Li. All rights reserved.`
- * While in a .html file, it would look like: `<!-- Copyright © 2019 Brandon Li. All rights reserved. -->`.
+ * For instance, in javascript, a copyright statement might be: `// Copyright © 2019 John Doe. All rights reserved.`
+ * While in a .html file, it would look like: `<!-- Copyright © 2019 John Doe. All rights reserved. -->`.
  *
  * See EXTENSION_COMMENT_PARSER_MAP for full documentation of supported extensions and their correlated one-line
  * comment parsers (which insert the comment delimiters).
