@@ -50,22 +50,20 @@ module.exports = ( () => {
 
   class Copyright {
 
-
     /**
-     * Utility method to get a copyright string from a file. The start year is computed from when the file was checked
+     * Utility method to create a copyright string for a file. The start year is computed from when the file was checked
      * into git and the end year is assumed to be the current year.
      * @public
      *
      * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
      * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
      */
-    static getFileCopyright( filePath ) {
-      Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
+    static createFileCopyright( filePath ) {
       Util.assert( shell.which( 'git' ), 'git must be installed.' );
-      Util.assert( grunt.file.isFile( filePath ), `filePath ${ filePath } is not a real file.` );
+      Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
 
       // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
-      // start year is current year. Solution from:
+      // start year is the current year. Solution from:
       // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
       const startYear = shell.exec( `git log --follow --format=%aI -- ${ filePath } | tail -1`, { silent: true } )
         .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
@@ -96,7 +94,7 @@ module.exports = ( () => {
       const fileLines = fileContent.split( /\r?\n/ ); // splits using both unix and windows newlines
 
       // Reference the correct copyright statement,
-      const copyrightStatement = this.getFileCopyright( filePath );
+      const copyrightStatement = this.createFileCopyright( filePath );
 
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
       // the first line or if forceWrite is true

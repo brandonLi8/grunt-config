@@ -60,7 +60,7 @@ module.exports = ( () => {
           const fileLines = fileContent.split( /\r?\n/ ); // splits for both unix and windows newlines
 
           // If the first line doesn't equate to a correct copyright statement, report the lint error.
-          if ( fileLines[ 0 ] !== Copyright.getFileCopyright( context.getFilename() ) ) {
+          if ( fileLines[ 0 ] !== Copyright.createFileCopyright( context.getFilename() ) ) {
             context.report( {
               node,
               loc: 1,
