@@ -58,9 +58,10 @@ module.exports = ( () => {
      * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
      * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
      */
-    static createFileCopyright( filePath ) {
+    static generateCopyrightStatement( filePath ) {
       Util.assert( shell.which( 'git' ), 'git must be installed.' );
       Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
+      Util.assert( Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP, `invalid filePath: ${ filePath }` );
 
       // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
       // start year is the current year. Solution from:
@@ -69,7 +70,13 @@ module.exports = ( () => {
         .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
 
       const endYear = Util.CURRENT_YEAR;
-      return createCopyrightStatement( Util.getExtension( filePath ), parseInt( startYear, 10 ), endYear );
+
+      // Create the single year string or the year range string to use in the copyright statement.
+      const yearsString = ( parseInt( startYear, 10 ) === endYear ) ? startYear : `${ startYear }-${ endYear }`;
+
+      // Create the copyright line without the commend delimiters first. Then return the parsed value.
+      const copyrightContent = `Copyright © ${ yearsString } ${ GENERATOR_VALUES.AUTHOR }. All rights reserved.`;
+      return EXTENSION_COMMENT_PARSER_MAP[ Util.getExtension( filePath ) ]( copyrightContent );
     }
 
     /**
@@ -94,7 +101,7 @@ module.exports = ( () => {
       const fileLines = fileContent.split( /\r?\n/ ); // splits using both unix and windows newlines
 
       // Reference the correct copyright statement,
-      const copyrightStatement = this.createFileCopyright( filePath );
+      const copyrightStatement = this.generateCopyrightStatement( filePath );
 
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
       // the first line or if forceWrite is true
@@ -156,33 +163,6 @@ module.exports = ( () => {
       if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path, forceWrite );
       if ( grunt.file.isDir( path ) ) this.updateAllCopyrights( path, forceWrite );
     }
-  }
-
-  //----------------------------------------------------------------------------------------
-  // Helpers
-  //----------------------------------------------------------------------------------------
-  /**
-   * Utility function to create a formatted copyright string, including the comment delimiters described at the top of
-   * this file. If the endYear isn't provided, the copyright is assumed to have one year (as described at the top).
-   *
-   * @param {String} fileExtension - file extension of the file the copyright statement belongs in, without the '.'
-   * @param {number} startYear - the starting year of the copyright.
-   * @param {number} [endYear] - the ending year of the copyright. If not provided, it is assumed to be the same as
-   *                             the startYear (which will format correctly as described at the top of the file).
-   * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
-   */
-  function createCopyrightStatement( fileExtension, startYear, endYear ) {
-    Util.assert( typeof fileExtension === 'string', `invalid fileExtension: ${ fileExtension }` );
-    Util.assert( typeof startYear === 'number', `invalid startYear: ${ startYear }` );
-    Util.assert( !endYear || typeof endYear === 'number', `invalid endYear: ${ endYear }` );
-    Util.assert( fileExtension in EXTENSION_COMMENT_PARSER_MAP, `invalid fileExtension: ${ fileExtension }` );
-
-    // Create the single year string or the year range string to use in the copyright statement.
-    const yearsString = ( !endYear || startYear === endYear ) ? startYear : `${ startYear }-${ endYear }`;
-
-    // Create the copyright line without the commend delimiters first. Then return the parsed value.
-    const copyrightContent = `Copyright © ${ yearsString } ${ GENERATOR_VALUES.AUTHOR }. All rights reserved.`;
-    return EXTENSION_COMMENT_PARSER_MAP[ fileExtension ]( copyrightContent );
   }
 
   return Copyright;
