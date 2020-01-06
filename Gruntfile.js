@@ -16,15 +16,24 @@ module.exports = grunt => {
   const Generator = require( './src/Generator' );
   const Labeler = require( './src/Labeler' );
   const Linter = require( './src/Linter' );
+  const updateNotifier = require( 'update-notifier' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
 
+  // constants
+  const GRUNT_CONFIG_PACKAGE = grunt.file.readJSON( `${ __dirname }/package.json` ); // package.json of grunt-config
+
+  // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.
+  const notifier = updateNotifier( { pkg: GRUNT_CONFIG_PACKAGE } );
+  if ( notifier.update && notifier.update.latest !== GRUNT_CONFIG_PACKAGE.version ) notifier.notify();
+
   //----------------------------------------------------------------------------------------
+
   /**
    * Default grunt task. Logs the running version of grunt and prompts the user to run `grunt --help`.
    */
   grunt.registerTask( 'default', 'Logs the running version of grunt.', Util.wrap( () => {
-    Util.logln( `\nRunning grunt ${ chalk.yellow( `v${ grunt.version }` ) }` );
-    Util.logln( `Run \`${ chalk.yellow( 'grunt --help' ) }\` to see an overview of all tasks.` );
+    Util.logln( chalk`\nRunning grunt {yellow v${ grunt.version }}` );
+    Util.logln( chalk`Run {cyan grunt --help} to see an overview of all tasks.` );
   } ) );
 
   /**
@@ -35,7 +44,7 @@ module.exports = grunt => {
    */
   grunt.registerTask( 'eslint',
     'ESlints the entire root directory that invoked the command, using the ESlint configuration defined in ' +
-    'grunt-config/eslint/.eslintrc.js. Run with --no-cache to lint without using a ESLint cache.\n',
+    chalk`grunt-config/eslint/.eslintrc.js.\n\nRun with {yellow --no-cache} to lint without using a ESLint cache.\n`,
     Util.wrap( () => { Linter.eslint( !grunt.option( 'no-cache' ) ); } )
   );
 
@@ -48,22 +57,22 @@ module.exports = grunt => {
    * create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line or defined in
    * ~/.profile (see https://help.ubuntu.com/community/EnvironmentVariables#A.2BAH4-.2F.profile).
    *
-   * Run with '--dry-run' to not actually write to the labels but simulate results.
-   * Run with '--extend' to keep the current GitHub labels that aren't apart of the schema. With this flag, no labels
+   * Run with --dry-run to not actually write to the labels but simulate results.
+   * Run with --extend to keep the current GitHub labels that aren't apart of the schema. With this flag, no labels
    * will be deleted.
    */
   grunt.registerTask( 'generate-labels',
-    'Synchronizes GitHub issue/pull request labels with the schema defined in github-labels-schema.json. See ' +
-    'grunt-config/src/Labeler for more information.\nRequires the GITHUB_ACCESS_TOKEN node environment variable.\n\n' +
-    'Run with `--dry-run` to not actually write to the labels and simulate results.\n\nRun with `--extend` to keep ' +
-    'the current GitHub labels that aren\'t apart of the schema. With this flag, no labels will be deleted.\n',
+    'Synchronizes GitHub issue/pull request labels with grunt-config/github-labels-schema.json. Requires the ' +
+    chalk`{bold GITHUB_ACCESS_TOKEN} node environment variable.\n\nRun with {yellow --dry-run} to not actually write ` +
+    chalk`to the labels and simulate results.\n\nRun with {yellow --extend} to keep the current GitHub labels that ` +
+    chalk`aren\'t apart of the schema, meaning no labels will be deleted.\n`,
     Util.wrapAsync( async () => { await Labeler.generate( !!grunt.option( 'dry-run' ), !!grunt.option( 'extend' ) ); } )
   );
 
   /**
    * Updates the copyright of either a file or a directory, depending on what is passed in. If no argument is provided,
    * ALL copyrights in the root directory of the project will be updated (where the command was invoked), such that all
-   * files in the project will have update copyright dates. If the given path doesn't exist, an error is thrown.
+   * files in the project will have updated copyright dates. If the given path doesn't exist, an error is thrown.
    *
    * @param {String} [path] - either a file or directory to update copyrights in. If not provided, all files in
    *                          the project will be updated.
@@ -71,14 +80,13 @@ module.exports = grunt => {
    * The copyright statement is assumed to be at the start of the file.
    * If it isn't there (checked by checking if the word "copyright" is in the first line), this will error out.
    *
-   * Run with '--force-write' to replace the first line with a correct copyright statement no regardless
-   * of its content.
+   * Run with --force-write to replace the first line with a correct copyright statement regardless of its content.
    */
   grunt.registerTask( 'update-copyright',
-    'Updates the copyright of either a file or a directory, depending on what is passed in. If no argument is ' +
-    'provided, ALL copyrights in the root directory of the repository that invoked this command will be updated.\n\n' +
-    'Will only replace the first line of each file if it contains the word "copyright".\n\nRun with `--force-write` ' +
-    ' to replace the first line with a correct copyright statement no regardless of its content.\n',
+    'Updates the copyright of either a file or a directory, depending on what is passed in (defaults to the root ' +
+    'directory of the repository that invoked this command). Will only replace the first line of each file if it ' +
+    chalk`is already a copyright statement.\n\nRun with {yellow --force-write} to replace the first line with a ` +
+    'correct copyright statement regardless of its content.\n',
     Util.wrap( path => { Copyright.updateCopyright( path || './', grunt.option( 'force-write' ) ); } )
   );
 
