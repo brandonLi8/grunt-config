@@ -51,11 +51,12 @@ module.exports = ( () => {
   class Copyright {
 
     /**
-     * Utility method to create a copyright string for a file. The start year is computed from when the file was checked
-     * into git and the end year is assumed to be the current year.
+     * Utility method to generate a copyright statement for a file. The start year is computed from when the file was
+     * checked into git (the current year if it hasn't yet) and the end year is assumed to be the current year.
+     * Result includes the comment delimiters and is correctly formated as described at the top of this file.
      * @public
      *
-     * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command
      * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
      */
     static generateCopyrightStatement( filePath ) {
