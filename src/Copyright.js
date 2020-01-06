@@ -22,6 +22,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const chalk = require( 'chalk' );
   const fs = require( 'fs' );
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
@@ -83,11 +84,11 @@ module.exports = ( () => {
     /**
      * Updates the copyright statement of a file. The copyright statement is assumed to be at the start of the file.
      * If it isn't there (checked by checking if the word "copyright" is in the first line), this will error out.
-     * However, passing forceWrite = true will replace the first line with a correct copyright statement no regardless
+     * However, passing forceWrite = true will replace the first line with a correct copyright statement regardless
      * of its content.
      * @public
      *
-     * @param {String} filePath - path of the file, relative to the root of the project (where the command was invoked)
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command
      * @param {boolean} [forceWrite] - if true, this will rewrite the first line regardless of whether or not the first
      *                                 line is a copyright statement.
      */
@@ -96,12 +97,10 @@ module.exports = ( () => {
       Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
       Util.assert( grunt.file.isFile( filePath ), `filePath ${ filePath } is not a file.` );
 
-      // Read the file first
-      const fileContent = grunt.file.read( filePath );
+      // Get the lines of the file in an array.
+      const fileLines = Util.getFileLines( filePath );
 
-      const fileLines = fileContent.split( /\r?\n/ ); // splits using both unix and windows newlines
-
-      // Reference the correct copyright statement,
+      // Generate a correct copyright statement.
       const copyrightStatement = this.generateCopyrightStatement( filePath );
 
       // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
@@ -112,7 +111,11 @@ module.exports = ( () => {
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
       else {
-        Util.throw( `${ filePath } did not have a valid copyright statement on the first line: \n${ fileLines[ 0 ] }` );
+        // Error out if the the first line wasn't a copyright statement.
+        Util.throw( chalk.red( `${ filePath } did not have a copyright statement on the first line to update: \n` +
+          `${ chalk.reset.dim( fileLines[ 0 ] ) }\n\nRun with ${ chalk.yellow( '--force-write' ) } if you want to ` +
+          `replace this line with a correct copyright statement.`
+        ) );
       }
     }
 
