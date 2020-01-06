@@ -162,6 +162,23 @@ module.exports = ( () => {
       return path.extname( filePath ).replace( '.', '' ) || filePath.replace( '.', '' ); // remove the '.'
     },
 
+    /**
+     * Convenience method to get the lines of the file, outputted an array. Splits using both unix and windows newlines.
+     * @public
+     *
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command
+     * @returns {String[]} - the lines of the file
+     */
+    getFileLines( filePath ) {
+      Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
+
+      // Read the file first
+      const fileContent = grunt.file.read( filePath );
+
+      // Split the lines into an array and output it. Splits using both unix and windows newlines
+      return fileContent.split( /\r?\n/ );
+    },
+
 
     /**
      * Convenience method to pluralize a word, adding the number in front. For example,
