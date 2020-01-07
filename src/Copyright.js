@@ -1,4 +1,4 @@
-// Copyright © 2019-2020 Brandon Li. All rights reserved.
+// Copyright © 2019-2022 Brandon Li. All rights reserved.
 
 /**
  * Copyright utility encapsulation for retrieving, validating, and/or modifying copyright statements correctly.
@@ -229,8 +229,14 @@ module.exports = ( () => {
     static checkCopyright( path ) {
       Util.assert( typeof path === 'string' && grunt.file.exists( path ), `invalid path: ${ path }` );
 
-      if ( grunt.file.isFile( path ) ) this.checkFileCopyright( path );
-      if ( grunt.file.isDir( path ) ) this.checkAllCopyrights( path );
+      if ( grunt.file.isFile( path ) ) {
+        this.checkFileCopyright( path );
+        Util.log( chalk.green( `\nCopyright statement in ${ chalk.white.dim( path ) } was correct!` ) );
+      }
+      if ( grunt.file.isDir( path ) ) {
+        this.checkAllCopyrights( path );
+        Util.log( chalk.green( `\nAll copyright statements in ${ chalk.white.dim( path ) } were correct!` ) );
+      }
     }
   }
 
