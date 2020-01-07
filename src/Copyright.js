@@ -63,7 +63,8 @@ module.exports = ( () => {
     static generateCopyrightStatement( filePath ) {
       Util.assert( shell.which( 'git' ), 'git must be installed.' );
       Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
-      Util.assert( Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP, `invalid filePath: ${ filePath }` );
+      Util.assert( Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP,
+        `${ filePath } is not supported for copyright statements.` );
 
       // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
       // start year is the current year. Solution from:
