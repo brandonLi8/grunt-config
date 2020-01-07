@@ -131,11 +131,13 @@ module.exports = ( () => {
       Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
 
       // Get the first line of the file.
-      const firstLine = Util.getFileLines( filePath );
+      const firstLine = Util.getFileLines( filePath )[ 0 ];
+
+      grunt.verbose.writeln( `Verbose: checking copyright statement of ${ filePath }.` );
 
       // Compare the first line with a correctly generated file.
       Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( `invalid copyright statement` +
-        ` in ${ filePath }:\n${ chalk.reset.dim( firstLine ) }\n\nA correct copyright statement would be:` +
+        ` in ${ filePath }:\n${ chalk.reset.dim( firstLine ) }\n\nA correct copyright statement would be:\n` +
         chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) ) );
     }
 

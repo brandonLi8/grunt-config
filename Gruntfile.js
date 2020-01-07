@@ -101,7 +101,7 @@ module.exports = grunt => {
   grunt.registerTask( 'check-copyright',
     'Checks the copyright statement(s) of either a file or a directory, depending on what is passed in (defaults to ' +
     'the root directory of the repository that invoked this command). Will throw an error if any of the copyright ' +
-    'statements are incorrect.', Util.wrap( path => { Copyright.checkCopyright( path || './' ); } ) );
+    'statements are incorrect.\n', Util.wrap( path => { Copyright.checkCopyright( path || './' ); } ) );
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.
