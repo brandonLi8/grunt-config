@@ -193,6 +193,7 @@ module.exports = ( () => {
         }
       } );
     }
+
     /**
      * Convenience method to update the copyright of either a file or a directory, depending on what is passed in.
      * If no argument is provided, ALL copyrights in the root directory of the project will be updated
@@ -211,6 +212,23 @@ module.exports = ( () => {
 
       if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path, forceWrite );
       if ( grunt.file.isDir( path ) ) this.updateAllCopyrights( path, forceWrite );
+    }
+
+    /**
+     * Convenience method to check the copyright statement(s) of either a file or a directory, depending on what is
+     * passed in. If no argument is provided, ALL copyrights in the root directory of the project will be checked
+     * (where the command was invoked), such that all files in the project will have checked copyright dates.
+     * See checkAllCopyrights() if passing a directory and checkFileCopyright() if passing a file path.
+     * @public
+     *
+     * @param {String} [path] - either a file or directory to check copyrights in. If not provided, all files in
+     *                          the project will be checked.
+     */
+    static checkCopyright( path ) {
+      Util.assert( typeof path === 'string' && grunt.file.exists( path ), `invalid path: ${ path }` );
+
+      if ( grunt.file.isFile( path ) ) this.checkFileCopyright( path );
+      if ( grunt.file.isDir( path ) ) this.checkAllCopyrights( path );
     }
   }
 
