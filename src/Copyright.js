@@ -112,10 +112,10 @@ module.exports = ( () => {
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
       else {
-        // Error out if the the first line wasn't a copyright statement.
+        // Error out if the first line wasn't a copyright statement.
         Util.throw( chalk.red( `${ filePath } did not have a copyright statement on the first line to update: \n` +
           `${ chalk.reset.dim( fileLines[ 0 ] ) }\n\nRun with ${ chalk.yellow( '--force-write' ) } if you want to ` +
-          `replace this line with a correct copyright statement.`
+          'replace this line with a correct copyright statement.'
         ) );
       }
     }
@@ -127,7 +127,7 @@ module.exports = ( () => {
      *
      * @param {String} filePath - path of the file, relative to the root directory that invoked the command
      */
-    static checkFileCopyright( filePath) {
+    static checkFileCopyright( filePath ) {
       Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
 
       // Get the first line of the file.
@@ -136,7 +136,7 @@ module.exports = ( () => {
       grunt.verbose.writeln( `Verbose: checking copyright statement of ${ filePath }.` );
 
       // Compare the first line with a correctly generated file.
-      Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( `invalid copyright statement` +
+      Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( 'invalid copyright statement' +
         ` in ${ filePath }:\n${ chalk.reset.dim( firstLine ) }\n\nA correct copyright statement would be:\n` +
         chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) ) );
     }
