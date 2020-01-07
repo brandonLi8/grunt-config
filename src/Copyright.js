@@ -169,6 +169,31 @@ module.exports = ( () => {
     }
 
     /**
+     * Checks the copyright statements of ALL supported files in a given directory (uses checkFileCopyright()).
+     * If the given directory (relative to the root directory that invoked the command) isn't a real directory,
+     * an error will be thrown. Throws an error if any of the copyright statements aren't correct.
+     * Will not error for files in EXTENSION_COMMENT_PARSER_MAP or for files that fall into the IGNORE_PATTERN.
+     * @public
+     *
+     * @param {String} directory - directory to check all copyright statements in, relative to the root directory
+     *                             that invoked the command.
+     */
+    static checkAllCopyrights( directory ) {
+      Util.assert( typeof directory === 'string', `invalid directory: ${ directory }` );
+      Util.assert( grunt.file.isDir( directory ), `directory ${ directory } is not a real directory.` );
+
+      // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
+      grunt.file.recurse( directory, ( abspath, rootdir, subdir, filename ) => {
+
+        // Only check the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+        if ( !IGNORE_PATTERN.ignores( abspath ) && Util.getExtension( filename ) in EXTENSION_COMMENT_PARSER_MAP ) {
+
+          // check the copyright statement
+          this.checkFileCopyright( abspath );
+        }
+      } );
+    }
+    /**
      * Convenience method to update the copyright of either a file or a directory, depending on what is passed in.
      * If no argument is provided, ALL copyrights in the root directory of the project will be updated
      * (where the command was invoked), such that all files in the project will have updated copyright dates.
