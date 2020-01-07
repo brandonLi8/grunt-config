@@ -121,6 +121,25 @@ module.exports = ( () => {
     }
 
     /**
+     * Checks that the copyright statement of a file is correct. The copyright statement is assumed to be at the start
+     * of the file. Throws an error if the copyright statement of the file is incorrect.
+     * @public
+     *
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command
+     */
+    static checkFileCopyright( filePath) {
+      Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
+
+      // Get the first line of the file.
+      const firstLine = Util.getFileLines( filePath );
+
+      // Compare the first line with a correctly generated file.
+      Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( `invalid copyright statement` +
+        ` in ${ filePath }:\n${ chalk.reset.dim( firstLine ) }\n\nA correct copyright statement would be:` +
+        chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) ) );
+    }
+
+    /**
      * Updates the copyright statements of ALL supported files in a given directory (uses updateFileCopyright()).
      * If the given directory (relative to the root directory that invoked the command) isn't a real directory,
      * an error will be thrown. See EXTENSION_COMMENT_PARSER_MAP for documentation of supported files. No-op for
