@@ -122,23 +122,32 @@ module.exports = ( () => {
 
     /**
      * Checks that the copyright statement of a file is correct. The copyright statement is assumed to be at the start
-     * of the file. Throws an error if the copyright statement of the file is incorrect.
+     * of the file. If shouldThrow is true, this will throw an error if the copyright statement of the file is
+     * incorrect. Otherwise, this will return a boolean indicating if the copyright was correct.
      * @public
      *
      * @param {String} filePath - path of the file, relative to the root directory that invoked the command
+     * @param {boolean} shouldThrow - indicates if an error should be thrown if the copyright statement is incorrect.
+     * @returns {null|boolean} - if shouldThrow = false, will return a boolean indicating if the copyright was correct.
      */
-    static checkFileCopyright( filePath ) {
+    static checkFileCopyright( filePath, shouldThrow = true ) {
       Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
+      Util.assert( typeof shouldThrow === 'boolean', `invalid shouldThrow: ${ shouldThrow }` );
 
       // Get the first line of the file.
       const firstLine = Util.getFileLines( filePath )[ 0 ];
 
       grunt.verbose.writeln( `Verbose: checking copyright statement of ${ filePath }.` );
 
-      // Compare the first line with a correctly generated file.
-      Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( 'invalid copyright statement' +
-        ` in ${ filePath }:\n${ chalk.reset.dim( firstLine ) }\n\nA correct copyright statement would be:\n` +
-        chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) ) );
+      if ( shouldThrow ) {
+        // Compare the first line with a correctly generated file.
+        Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( 'invalid copyright ' +
+          `statement in ${ filePath }:\n${ chalk.reset.dim( firstLine ) }\n\nA correct copyright statement would be:` +
+          `\n${ chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) }` ) );
+      }
+      else {
+        return firstLine === this.generateCopyrightStatement( filePath );
+      }
     }
 
     /**

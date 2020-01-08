@@ -17,7 +17,6 @@ module.exports = ( () => {
 
   // modules
   const Copyright = require( '../../src/Copyright' );
-  const grunt = require( 'grunt' );
 
   return {
 
@@ -53,14 +52,10 @@ module.exports = ( () => {
          */
         Program( node ) {
 
-          // Read the file first
-          const fileContent = grunt.file.read( context.getFilename() );
-
-          // Parse by line separator
-          const fileLines = fileContent.split( /\r?\n/ ); // splits for both unix and windows newlines
-
-          // If the first line doesn't equate to a correct copyright statement, report the lint error.
-          if ( fileLines[ 0 ] !== Copyright.generateCopyrightStatement( context.getFilename() ) ) {
+          // Check the file copyright from Copyright. Will return a boolean indicating if the copyright statement was
+          // correct.
+          if ( !Copyright.checkFileCopyright( context.getFilename(), false ) ) {
+            // If the copyright statement was incorrect, report it.
             context.report( {
               node,
               loc: 1,
