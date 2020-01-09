@@ -72,12 +72,12 @@ module.exports = ( () => {
       const startYear = shell.exec( `git log --follow --format=%aI -- ${ filePath } | tail -1`, { silent: true } )
         .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
 
-      const endYear = Util.CURRENT_YEAR;
+      const endYear = Util.CURRENT_YEAR; // The end year is assumed to be the current year.
 
-      // Create the single year string or the year range string to use in the copyright statement.
+      // Create the year string or the year range string to use in the copyright statement.
       const yearsString = ( parseInt( startYear, 10 ) === endYear ) ? startYear : `${ startYear }-${ endYear }`;
 
-      // Create the copyright line without the commend delimiters first. Then return the parsed value.
+      // Create the copyright line without the comment delimiters first. Then return the parsed value.
       const copyrightContent = `Copyright © ${ yearsString } ${ GENERATOR_VALUES.AUTHOR }. All rights reserved.`;
       return EXTENSION_COMMENT_PARSER_MAP[ Util.getExtension( filePath ) ]( copyrightContent );
     }
