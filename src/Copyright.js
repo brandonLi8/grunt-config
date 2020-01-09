@@ -133,46 +133,17 @@ module.exports = ( () => {
 
       // Get the first line of the file.
       const firstLine = Util.getFileLines( filePath )[ 0 ];
-      grunt.verbose.writeln( `Verbose: checking copyright statement of ${ path.join( process.cwd(), filePath ) }.` );
+      grunt.verbose.writeln( `Verbose: checking copyright statement of ${ Util.absolutePath( filePath ) }.` );
 
       if ( shouldThrow ) {
         // Assert (will throw an error if false) by comparing the first line with a correctly generated file.
         Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( 'incorrect copyright ' +
-          `statement in ${ path.join( process.cwd(), filePath ) }:\n${ firstLine }\n\nA correct ` +
+          `statement in ${ Util.absolutePath( filePath ) }:\n${ firstLine }\n\nA correct ` +
           `copyright statement would be:\n${ chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) }` ) );
       }
       else {
         return firstLine === this.generateCopyrightStatement( filePath );
       }
-    }
-
-    /**
-     * Updates the copyright statements of ALL supported files in a given directory (uses updateFileCopyright()).
-     * If the given directory (relative to the root directory that invoked the command) isn't a real directory,
-     * an error will be thrown. See EXTENSION_COMMENT_PARSER_MAP for documentation of supported files. No-op for
-     * files that fall into the IGNORE_PATTERN.
-     * @public
-     *
-     * @param {String} directory - directory to update all copyright statements in, relative to the root directory
-     *                             that invoked the command.
-     * @param {boolean} [forceWrite] - if true, this will rewrite the first line of each file regardless of whether or
-     *                                 not the first line is a copyright statement.
-     */
-    static updateAllCopyrights( directory, forceWrite = false ) {
-      Util.assert( typeof directory === 'string', `invalid directory: ${ directory }` );
-      Util.assert( grunt.file.isDir( directory ), `directory ${ directory } is not a directory.` );
-      Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
-
-      // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
-      grunt.file.recurse( directory, ( abspath, rootdir, subdir, filename ) => {
-
-        // Only update the copyright statement if it's a supported file type and if it's not in the ignore pattern.
-        if ( !IGNORE_PATTERN.ignores( abspath ) && Util.getExtension( filename ) in EXTENSION_COMMENT_PARSER_MAP ) {
-
-          // update the copyright statement
-          this.updateFileCopyright( abspath, forceWrite );
-        }
-      } );
     }
 
     /**
@@ -202,23 +173,33 @@ module.exports = ( () => {
     }
 
     /**
-     * Convenience method to update the copyright statement(s) of either a file or a directory, depending on what is.
-     * passed in If no argument is provided, ALL copyrights in the root directory of the project will be updated
-     * (where the command was invoked), such that all files in the project will have updated copyright dates.
-     * See updateAllCopyrights() if passing a directory and updateFileCopyright() if passing a file path.
+     * Updates the copyright statement(s) of either a file or all files of directory, depending on what is passed in. If
+     * the given path isn't a real file or directory, and error will be thrown. If the path is a directory, only files
+     * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be updated.
      * @public
      *
-     * @param {String} [path] - either a file or directory to update copyrights in. If not provided, all files in
-     *                          the project will be updated.
-     * @param {boolean} [forceWrite] - if true, this will rewrite the first line of each file regardless of whether or
-     *                                 not the first line is a copyright statement.
+     * @param {String} path - either a file or directory to update copyright statement(s).
      */
-    static updateCopyright( path, forceWrite = false ) {
-      Util.assert( typeof path === 'string' && grunt.file.exists( path ), `invalid path: ${ path }` );
-      Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
+    static updateCopyright( path ) {
+      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.absolutePath( path ) }` );
 
-      if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path, forceWrite );
-      if ( grunt.file.isDir( path ) ) this.updateAllCopyrights( path, forceWrite );
+      // If the given path is a file, use updateFileCopyright to update the file.
+      if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path );
+
+      // If the given path is a directory, update the copyright statement of all files.
+      if ( grunt.file.isDir( path ) ) {
+
+        // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
+        grunt.file.recurse( directory, filePath => {
+
+          // Only check the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+          if ( !IGNORE_PATTERN.ignores( filePath ) && Util.getExtension( filename ) in EXTENSION_COMMENT_PARSER_MAP ) {
+
+            // check the copyright statement
+            this.checkFileCopyright( filePath );
+          }
+        } );
+      }
     }
 
     /**
