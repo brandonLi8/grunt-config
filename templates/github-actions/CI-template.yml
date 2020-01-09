@@ -25,20 +25,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v1    # Checkout the source code of the project.
+  steps:
+  - uses: actions/checkout@v1    # Retrieve a fresh checkout of the source code.
 
-    - name: setup node             # Setup Node.js
-      uses: actions/setup-node@v1
+  - name: setup node             # Setup Node.js
+    uses: actions/setup-node@v1
 
-    - run: npm cache clean --f     # Clear the npm cache if it exists.
-    - run: npm install             # Install dependencies.
+  - run: npm cache clean --f     # Clear the npm cache if it exists.
+  - run: npm install             # Install dependencies.
 
-    - name: lint                   # Ensure all source code is lint-free.
-      run: grunt eslint --no-cache
+  - name: lint                   # Ensure all source code is lint-free.
+    run: grunt eslint --no-cache
 
-    - name: copyright              # Ensure that all source code copyright
-      run: grunt check-copyright   # statements are correct.
+  - name: copyright              # Ensure that all source code copyright
+    run: grunt check-copyright   # statements are correct.
 
-    - name: test                   # Ensure that project-defined tests pass.
-      run: npm test --if-present
+  - name: test                   # Ensure that project-defined tests pass.
+    run: npm test --if-present
