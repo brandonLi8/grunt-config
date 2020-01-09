@@ -207,6 +207,14 @@ module.exports = ( () => {
      */
     logln( ...args ) { grunt.log.writeln( args ); },
 
+    /**
+     * Converts a relative path to the full absolute Linux/Unix path (relative to the root directory '/').
+     * @public
+     *
+     * @param {String} relativePath - relative path to convert (relative to the root directory of the project)
+     */
+    absolutePath( relativePath ) { return path.join( process.cwd(), relativePath ); },
+
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getUTCFullYear()
   };
