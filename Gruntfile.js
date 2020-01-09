@@ -189,17 +189,17 @@ module.exports = grunt => {
     } ) );
 
   /**
-   * Generates a build-check.yml Github Action file in the root directory that invoked this command based on the
-   * template in 'grunt-config/templates/build-check-template.yml'.
+   * Generates a CI.yml Github Action file in the root directory that invoked this command based on the
+   * template in 'grunt-config/templates/CI-template.yml'.
    *
-   * Run with '--test' to output the file in 'tests/build-check-test.yml' instead (relative to the root directory).
+   * Run with '--test' to output the file in 'tests/CI.yml' instead (relative to the root directory).
    */
-  grunt.registerTask( 'generate-build-check',
-    'Generates a build-check.yml Github Action file in the root directory that invoked this command. Run with ' +
-    '--test to output the file in \'tests/build-check-test.yml\' instead.\n',
+  grunt.registerTask( 'generate-CI-action',
+    'Generates a CI.yml Github Action file in the root directory that invoked this command. Run with ' +
+    '--test to output the file in \'tests/CI-test.yml\' instead.\n',
     Util.wrap( () => {
-      const path = grunt.option( 'test' ) ? 'tests/build-check-test.yml' : '.github/workflows/build-check.yml';
-      Generator.generateFile( 'templates/build-check-template.yml', path );
+      const path = grunt.option( 'test' ) ? 'tests/CI-test.yml' : '.github/workflows/CI.yml';
+      Generator.generateFile( 'templates/CI-template.yml', path );
     } ) );
 
   /**
