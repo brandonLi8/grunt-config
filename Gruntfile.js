@@ -31,9 +31,9 @@ module.exports = grunt => {
    * Default grunt task. Logs the running version of grunt and prompts the user to run `grunt --help`.
    */
   grunt.registerTask( 'default', 'Logs the running version of grunt and grunt-config.', Util.wrap( () => {
-    Util.logln( chalk`\nRunning grunt {yellow v${ grunt.version }}` );
-    Util.logln( chalk`\nCurrently on grunt-config {yellow v${ GRUNT_CONFIG_PACKAGE.version }}` );
-    Util.logln( chalk`Run {cyan grunt --help} to see an overview of all tasks.` );
+    Util.logln( chalk`\ngrunt-config {yellow v${ GRUNT_CONFIG_PACKAGE.version }}` );
+    Util.logln( chalk`grunt {yellow v${ grunt.version }}` );
+    Util.logln( chalk`\nRun {cyan grunt --help} to see an overview of all tasks.` );
   } ) );
 
   /**
