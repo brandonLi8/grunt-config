@@ -82,9 +82,9 @@ module.exports = ( () => {
 
       //----------------------------------------------------------------------------------------
       // Log results
-      Util.logln( `Linting ${ process.cwd() } ...` );
+      Util.logln( `Linting ${ Util.toRepoPath( './' ) } ...` );
 
-      // Run the ESlint step
+      // Run the ESlint step the the as
       const report = linter.executeOnFiles( path.basename( process.cwd() ) );
 
       // Pretty print results to console if any
