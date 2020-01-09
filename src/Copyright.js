@@ -100,8 +100,11 @@ module.exports = ( () => {
       // Generate a correct copyright statement.
       const copyrightStatement = this.generateCopyrightStatement( filePath );
 
-      // If the first line of the file was already a copyright statement (checked by checking if the word "copyright"
-      // is in the first line), replace the copyright statement with a correct copyright statement.
+      // If the first line is already a correct copyright statement, do nothing.
+      if ( fileLines[ 0 ] === copyrightStatement ) return;
+
+      // If the first line of the file was a copyright statement (checked by checking if the word "copyright"
+      // is in the first line), replace it with a correct copyright statement.
       if ( fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
         fs.writeFileSync( filePath, [ copyrightStatement, ...fileLines.slice( 1 ) ].join( os.EOL ) );
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
