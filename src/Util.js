@@ -208,12 +208,13 @@ module.exports = ( () => {
     logln( ...args ) { grunt.log.writeln( args ); },
 
     /**
-     * Converts a relative path to the full absolute Linux/Unix path (relative to the root directory '/').
+     * Converts a relative path to the full absolute repository path, including the repository name.
+     * For instance, Util.toRepoPath( 'src/Util.js' ) => 'grunt-config/src/Util.js'.
      * @public
      *
      * @param {String} relativePath - relative path to convert (relative to the root directory of the project)
      */
-    absolutePath( relativePath ) { return path.join( process.cwd(), relativePath ); },
+    toRepoPath( relativePath ) { return path.join( path.basename( process.cwd() ), relativePath ); },
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getUTCFullYear()
