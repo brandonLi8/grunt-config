@@ -53,12 +53,12 @@ module.exports = ( () => {
 
     /**
      * Utility method to generate a copyright statement for a file. The start year is computed from when the file was
-     * checked into git (the current year if it hasn't yet) and the end year is assumed to be the current year.
-     * Result includes the comment delimiters and is correctly formated as described at the top of this file.
+     * checked into git or the current year if it hasn't been checked-in yet. The end year is assumed to be the current
+     * year. Result includes the correct comment delimiters and follows the format described at the top of this file.
      * @public
      *
-     * @param {String} filePath - path of the file, relative to the root directory that invoked the command
-     * @returns {String} - the full copyright string, including the comment delimiters described at the top of this file
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command.
+     * @returns {String} - a correct copyright string as described at the top of this file.
      */
     static generateCopyrightStatement( filePath ) {
       Util.assert( shell.which( 'git' ), 'git must be installed.' );
