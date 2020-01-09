@@ -1,4 +1,4 @@
-# Copyright © 2020 Brandon Li. All rights reserved.
+# Copyright © 2019-2020 Brandon Li. All rights reserved.
 
 #!————————————————————————————————————————————————————————————————————————————*!
 # GitHub action that checks that every branch passes linting and testing. This
@@ -23,7 +23,7 @@ on:
                                  # more documentation of POSIX cron syntax.
 jobs:
   build:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
   steps:
   - uses: actions/checkout@v1    # Retrieve a fresh checkout of the source code.
