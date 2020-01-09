@@ -30,6 +30,7 @@ module.exports = ( () => {
   const os = require( 'os' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
+  const path = require( 'path' );
 
   // constants
   // Reference to the validated and parsed generator replacement values (see ./Generator.js for more documentation).
@@ -83,40 +84,33 @@ module.exports = ( () => {
     }
 
     /**
-     * Updates the copyright statement of a file. The copyright statement is assumed to be at the start of the file.
-     * If it isn't there (checked by checking if the word "copyright" is in the first line), this will error out.
-     * However, passing forceWrite = true will replace the first line with a correct copyright statement regardless
-     * of its content.
+     * Updates the copyright statement of a file with a freshly generated copyright statement. The copyright statement
+     * is assumed to be the first line of the file. If it isn't there (checked by checking if the word "copyright" is in
+     * the first line), this will instead prepend a new correct copyright statement at the start of the file.
      * @public
      *
-     * @param {String} filePath - path of the file, relative to the root directory that invoked the command
-     * @param {boolean} [forceWrite] - if true, this will rewrite the first line regardless of whether or not the first
-     *                                 line is a copyright statement.
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command.
      */
-    static updateFileCopyright( filePath, forceWrite = false ) {
-      Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
-      Util.assert( typeof forceWrite === 'boolean', `invalid forceWrite: ${ forceWrite }` );
-      Util.assert( grunt.file.isFile( filePath ), `filePath ${ filePath } is not a file.` );
+    static updateFileCopyright( filePath ) {
+      Util.assert( typeof filePath === 'string' && grunt.file.isFile( filePath ), `invalid filePath: ${ filePath }` );
 
-      // Get the lines of the file in an array.
+      // Get the lines of the file in an array representation.
       const fileLines = Util.getFileLines( filePath );
 
       // Generate a correct copyright statement.
       const copyrightStatement = this.generateCopyrightStatement( filePath );
 
-      // Only replace the first line if it was already a copyright statement by checking if the word "copyright" is in
-      // the first line or if forceWrite is true
-      if ( forceWrite || fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
-        const newFileContents = [ copyrightStatement, ...fileLines.slice( 1 ) ].join( os.EOL );
-        fs.writeFileSync( filePath, newFileContents );
+      // If the first line of the file was already a copyright statement (checked by checking if the word "copyright"
+      // is in the first line), replace the copyright statement with a correct copyright statement.
+      if ( fileLines[ 0 ].toLowerCase().indexOf( 'copyright' ) >= 0 ) {
+        fs.writeFileSync( filePath, [ copyrightStatement, ...fileLines.slice( 1 ) ].join( os.EOL ) );
         grunt.verbose.writeln( `Verbose: ${ filePath } updated with ${ copyrightStatement }` );
       }
       else {
-        // Error out if the first line wasn't a copyright statement.
-        Util.throw( chalk.red( `${ filePath } did not have a copyright statement on the first line to update: \n` +
-          `${ chalk.reset.dim( fileLines[ 0 ] ) }\n\nRun with ${ chalk.yellow( '--force-write' ) } if you want to ` +
-          'replace this line with a correct copyright statement.'
-        ) );
+        // If the file did not contain a copyright statement to update, prepend a correct copyright statement at the
+        // start of the file.
+        fs.writeFileSync( filePath, [ copyrightStatement, ...fileLines ].join( os.EOL ) );
+        grunt.verbose.writeln( `Verbose: ${ filePath } prepended with ${ copyrightStatement }` );
       }
     }
 
