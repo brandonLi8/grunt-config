@@ -16,12 +16,12 @@ module.exports = ( () => {
   const Util = {
 
     /**
-     * A basic grunt-specific assertion function, which uses `grunt.fail.fatal` to throw errors.
-     * See https://gruntjs.com/api/grunt.fail for documentation.
+     * A basic grunt-specific assertion function, which uses grunt.fail.fatal() to throw errors. Errors will not be
+     * catchable as grunt.fail.fatal calls process.exit. See https://gruntjs.com/api/grunt.fail for documentation.
      * @public
      *
      * @param {boolean} predicate - throws an error if not truthy.
-     * @param {string} [message] - message to throw
+     * @param {string} [message] - message to throw.
      */
     assert( predicate, message ) {
       if ( !predicate ) {
@@ -32,16 +32,6 @@ module.exports = ( () => {
         Util.logln( '' ); // Add a line of padding before and after.
         grunt.fail.fatal( message );
       }
-    },
-
-    /**
-     * A grunt-config specific convenience method to throw an error (assert a false value).
-     * @public
-     *
-     * @param {string} [message] - message to throw
-     */
-    throw( message ) {
-      Util.assert( false, message );
     },
 
     /**
@@ -179,7 +169,6 @@ module.exports = ( () => {
       return fileContent.split( /\r?\n/ );
     },
 
-
     /**
      * Convenience method to pluralize a word, adding the number in front. For example,
      * Util.pluralize( 'dog', 2 ) -> '2 dogs'.
@@ -215,6 +204,14 @@ module.exports = ( () => {
      * @param {String} relativePath - relative path to convert (relative to the root directory of the project)
      */
     toRepoPath( relativePath ) { return path.join( path.basename( process.cwd() ), relativePath ); },
+
+    /**
+     * A grunt-config specific convenience method to throw an error (assert a false value).
+     * @public
+     *
+     * @param {string} [message] - message to throw
+     */
+    throw( message ) { Util.assert( false, message ); },
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getUTCFullYear()
