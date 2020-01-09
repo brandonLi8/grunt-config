@@ -30,7 +30,6 @@ module.exports = ( () => {
   const os = require( 'os' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const Util = require( './Util' );
-  const path = require( 'path' );
 
   // constants
   // Reference to the validated and parsed generator replacement values (see ./Generator.js for more documentation).
@@ -174,7 +173,7 @@ module.exports = ( () => {
 
     /**
      * Updates the copyright statement(s) of either a file or all files of directory, depending on what is passed in. If
-     * the given path isn't a real file or directory, and error will be thrown. If the path is a directory, only files
+     * the given path isn't a real file or directory, ang error will be thrown. If the path is a directory, only files
      * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be updated.
      * @public
      *
@@ -190,10 +189,10 @@ module.exports = ( () => {
       if ( grunt.file.isDir( path ) ) {
 
         // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
-        grunt.file.recurse( directory, filePath => {
+        grunt.file.recurse( path, filePath => {
 
           // Only check the copyright statement if it's a supported file type and if it's not in the ignore pattern.
-          if ( !IGNORE_PATTERN.ignores( filePath ) && Util.getExtension( filename ) in EXTENSION_COMMENT_PARSER_MAP ) {
+          if ( !IGNORE_PATTERN.ignores( filePath ) && Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP ) {
 
             // check the copyright statement
             this.checkFileCopyright( filePath );
