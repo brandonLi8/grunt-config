@@ -70,38 +70,35 @@ module.exports = grunt => {
   );
 
   /**
-   * Updates the copyright statement(s) of either a file or a directory, depending on what is passed in. If no argument
-   * is provided, ALL copyrights in the root directory of the project will be updated (where the command was invoked),
-   * such that all files in the project will have updated copyright dates.
+   * Updates the copyright statement(s) of either a file or all files of a directory, depending on what is passed in.
+   * If the given path isn't a real file or directory, an error will be thrown. If the path is a directory, only files
+   * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be updated.
+   * If no argument is provided, ALL copyrights in the root directory of the project will be updated.
    *
    * @param {String} [path] - either a file or directory to update copyrights in. If not provided, all files in
    *                          the project will be updated.
-   *
-   * The copyright statement is assumed to be at the start of the file.
-   * If it isn't there (checked by checking if the word "copyright" is in the first line), this will error out.
-   *
-   * Run with --force-write to replace the first line with a correct copyright statement regardless of its content.
    */
   grunt.registerTask( 'update-copyright',
     'Updates the copyright statement(s) of either a file or a directory, depending on what is passed in (defaults to ' +
-    'the root directory of the repository that invoked this command). Will only replace the first line of each file ' +
-    chalk`if it is already a copyright statement.\n\nRun with {yellow --force-write} to replace the first line with ` +
-    'a correct copyright statement regardless of its content.\n',
+    'the root directory of the repository that invoked this command). See grunt-config/src/Copyright for more doc.\n',
     Util.wrap( path => { Copyright.updateCopyright( path || './', grunt.option( 'force-write' ) ); } )
   );
 
   /**
-   * Checks the copyright statement(s) of either a file or a directory, depending on what is passed in (defaults to the
-   * root directory of the repository that invoked this command. Will throw an error if any of the copyright statements
-   * are incorrect (which are the checks). The copyright statement is assumed to be at the start of the file.
+   * Checks the copyright statement(s) of either a file or all files of a directory, depending on what is passed in.
+   * If the given path isn't a real file or directory, an error will be thrown. If the path is a directory, only files
+   * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be checked.
+   * If no argument is provided, ALL copyrights in the root directory of the project will be checked. If any of the
+   * checks fail, an error will be thrown.
    *
    * @param {String} [path] - either a file or directory to check copyrights in. If not provided, all files in
-   *                          the project will be updated.
+   *                          the project will be checked.
    */
   grunt.registerTask( 'check-copyright',
     'Checks the copyright statement(s) of either a file or a directory, depending on what is passed in (defaults to ' +
     'the root directory of the repository that invoked this command). Will throw an error if any of the copyright ' +
-    'statements are incorrect.\n', Util.wrap( path => { Copyright.checkCopyright( path || './' ); } ) );
+    'statements are incorrect. See grunt-config/src/Copyright for more doc.\n',
+    Util.wrap( path => { Copyright.checkCopyright( path || './' ); } ) );
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.
