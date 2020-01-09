@@ -132,12 +132,12 @@ module.exports = ( () => {
 
       // Get the first line of the file.
       const firstLine = Util.getFileLines( filePath )[ 0 ];
-      grunt.verbose.writeln( `Verbose: checking copyright statement of ${ Util.absolutePath( filePath ) }.` );
+      grunt.verbose.writeln( `Verbose: checking copyright statement of ${ Util.toRepoPath( filePath ) }.` );
 
       if ( shouldThrow ) {
         // Assert (will throw an error if false) by comparing the first line with a correctly generated file.
         Util.assert( firstLine === this.generateCopyrightStatement( filePath ), chalk.red( 'incorrect copyright ' +
-          `statement in ${ Util.absolutePath( filePath ) }:\n${ firstLine }\n\nA correct ` +
+          `statement in ${ Util.toRepoPath( filePath ) }:\n${ firstLine }\n\nA correct ` +
           `copyright statement would be:\n${ chalk.reset.dim( this.generateCopyrightStatement( filePath ) ) }` ) );
       }
       else {
@@ -154,7 +154,7 @@ module.exports = ( () => {
      * @param {String} path - either a file or directory to update copyright statement(s).
      */
     static updateCopyright( path ) {
-      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.absolutePath( path ) }` );
+      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.toRepoPath( path ) }` );
 
       // If the given path is a file, use updateFileCopyright to update the file.
       if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path );
@@ -185,7 +185,7 @@ module.exports = ( () => {
      * @param {String} path - either a file or directory to check copyright statement(s).
      */
     static checkCopyright( path ) {
-      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.absolutePath( path ) }` );
+      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.toRepoPath( path ) }` );
 
       // If the given path is a file, use checkFileCopyright to check the file.
       if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path );
