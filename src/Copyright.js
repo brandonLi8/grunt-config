@@ -146,34 +146,8 @@ module.exports = ( () => {
     }
 
     /**
-     * Checks the copyright statements of ALL supported files in a given directory (uses checkFileCopyright()).
-     * If the given directory (relative to the root directory that invoked the command) isn't a real directory,
-     * an error will be thrown. Throws an error if any of the copyright statements aren't correct.
-     * Will not error for files in EXTENSION_COMMENT_PARSER_MAP or for files that fall into the IGNORE_PATTERN.
-     * @public
-     *
-     * @param {String} directory - directory to check all copyright statements in, relative to the root directory
-     *                             that invoked the command.
-     */
-    static checkAllCopyrights( directory ) {
-      Util.assert( typeof directory === 'string', `invalid directory: ${ directory }` );
-      Util.assert( grunt.file.isDir( directory ), `directory ${ directory } is not a real directory.` );
-
-      // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
-      grunt.file.recurse( directory, ( abspath, rootdir, subdir, filename ) => {
-
-        // Only check the copyright statement if it's a supported file type and if it's not in the ignore pattern.
-        if ( !IGNORE_PATTERN.ignores( abspath ) && Util.getExtension( filename ) in EXTENSION_COMMENT_PARSER_MAP ) {
-
-          // check the copyright statement
-          this.checkFileCopyright( abspath );
-        }
-      } );
-    }
-
-    /**
-     * Updates the copyright statement(s) of either a file or all files of directory, depending on what is passed in. If
-     * the given path isn't a real file or directory, ang error will be thrown. If the path is a directory, only files
+     * Updates the copyright statement(s) of either a file or all files of a directory, depending on what is passed in.
+     * If the given path isn't a real file or directory, an error will be thrown. If the path is a directory, only files
      * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be updated.
      * @public
      *
@@ -191,36 +165,44 @@ module.exports = ( () => {
         // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
         grunt.file.recurse( path, filePath => {
 
-          // Only check the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+          // Only update the copyright statement if it's a supported file type and if it's not in the ignore pattern.
           if ( !IGNORE_PATTERN.ignores( filePath ) && Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP ) {
 
-            // check the copyright statement
-            this.checkFileCopyright( filePath );
+            // update the copyright statement
+            this.updateFileCopyright( filePath );
           }
         } );
       }
     }
 
     /**
-     * Convenience method to check the copyright statement(s) of either a file or a directory, depending on what is
-     * passed in. If no argument is provided, ALL copyrights in the root directory of the project will be checked
-     * (where the command was invoked), such that all files in the project will have checked copyright dates.
-     * See checkAllCopyrights() if passing a directory and checkFileCopyright() if passing a file path.
+     * Checks the copyright statement(s) of either a file or all files of a directory, depending on what is passed in.
+     * If the given path isn't a real file or directory, an error will be thrown. If the path is a directory, only files
+     * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be checked.
+     * If any of the checks fail, an error will be thrown.
      * @public
      *
-     * @param {String} [path] - either a file or directory to check copyrights in. If not provided, all files in
-     *                          the project will be checked.
+     * @param {String} path - either a file or directory to check copyright statement(s).
      */
     static checkCopyright( path ) {
-      Util.assert( typeof path === 'string' && grunt.file.exists( path ), `invalid path: ${ path }` );
+      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.absolutePath( path ) }` );
 
-      if ( grunt.file.isFile( path ) ) {
-        this.checkFileCopyright( path );
-        Util.log( chalk.green( `\nCopyright statement in ${ chalk.white.dim( path ) } was correct!` ) );
-      }
+      // If the given path is a file, use checkFileCopyright to check the file.
+      if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path );
+
+      // If the given path is a directory, check the copyright statement of all files.
       if ( grunt.file.isDir( path ) ) {
-        this.checkAllCopyrights( path );
-        Util.log( chalk.green( `\nAll copyright statements in ${ chalk.white.dim( path ) } were correct!` ) );
+
+        // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
+        grunt.file.recurse( path, filePath => {
+
+          // Only check the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+          if ( !IGNORE_PATTERN.ignores( filePath ) && Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP ) {
+
+            // Check the copyright statement
+            this.checkFileCopyright( filePath );
+          }
+        } );
       }
     }
   }
