@@ -3,7 +3,7 @@
 
 [![wercker status](https://app.wercker.com/status/60307013102cc6d5ab0c4268bb705be8/m/master "wercker status")](https://app.wercker.com/project/byKey/60307013102cc6d5ab0c4268bb705be8)
 [![Build Status](https://travis-ci.org/brandonLi8/grunt-config.svg?branch=master)](https://travis-ci.org/brandonLi8/grunt-config)
-[![Actions Status](https://github.com/brandonLi8/grunt-config/workflows/build/badge.svg)](https://github.com/brandonLi8/grunt-config/actions?query=workflow%3Abuild)
+[![Actions Status](https://github.com/brandonLi8/grunt-config/workflows/CI/badge.svg)](https://github.com/brandonLi8/grunt-config/actions?query=workflow%3ACI)
 
 <br>
 
