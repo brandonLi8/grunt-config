@@ -1,4 +1,4 @@
-# Copyright © 2020 Brandon Li. All rights reserved.
+# Copyright © 2019-2020 Brandon Li. All rights reserved.
 
 #!————————————————————————————————————————————————————————————————————————————*!
 # GitHub action that runs `grunt update-copyright` to update every file's
@@ -22,7 +22,7 @@ on:
   # https://en.wikipedia.org/wiki/Cron for more documentation of POSIX cron
   # syntax. This activates every 8th hour (UTC) on January 1st to be safe.
   schedule:
-    - cron:  '5 1 1 10 *'
+    - cron:  '5 2 10 1 *'
 
 jobs:
   build:
