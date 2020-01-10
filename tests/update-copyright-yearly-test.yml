@@ -20,7 +20,7 @@ name: update-copyright-yearly    # workflow name
 on:
   # Schedule this action run at the start of every year. See
   # https://en.wikipedia.org/wiki/Cron for more documentation of POSIX cron
-  # syntax. This activates every 8th hour (UTF) on January 1st to be safe.
+  # syntax. This activates every 8th hour (UTC) on January 1st to be safe.
   schedule:
     - cron:  '0 0/8 1 1 *'
 
