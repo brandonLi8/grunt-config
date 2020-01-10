@@ -24,7 +24,7 @@ module.exports = grunt => {
 
   //----------------------------------------------------------------------------------------
   // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.
-  const notifier = updateNotifier( { pkg: GRUNT_CONFIG_PACKAGE, updateCheckInterval: 0 } );
+  const notifier = updateNotifier( { pkg: GRUNT_CONFIG_PACKAGE, updateCheckInterval: 1000 * 60 * 60 } );
   if ( notifier.update && notifier.update.latest !== GRUNT_CONFIG_PACKAGE.version ) notifier.notify( { defer: false } );
 
   /**
