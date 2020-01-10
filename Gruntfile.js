@@ -203,18 +203,18 @@ module.exports = grunt => {
     } ) );
 
   /**
-   * Generates a update-copyright.yml Github Action file in the root directory that invoked this command based on the
-   * template in 'grunt-config/templates/update-copyright-template.yml'.
+   * Generates a update-copyright-yearly.yml Github Action file in the root directory that invoked this command based
+   * on the template in 'grunt-config/templates/update-copyright-template.yml'.
    *
-   * Run with '--test' to output the file in 'tests/update-copyright-test.yml' instead (relative to the root directory).
+   * Run with '--test' to output the file in 'tests/update-copyright-yearly-test.yml' instead.
    */
-  grunt.registerTask( 'generate-update-copyright',
-    'Generates a update-copyright.yml Github Action file in the root directory that invoked this command. Run with ' +
-    '--test to output the file in \'tests/update-copyright-test.yml\' instead.\n',
+  grunt.registerTask( 'generate-update-copyright-yearly',
+    'Generates a update-copyright-yearly.yml Github Action file in the root directory that invoked this command. ' +
+    'Run with --test to output the file in \'tests/update-copyright-yearly-test.yml\' instead.\n',
     Util.wrap( () => {
       const path = grunt.option( 'test' ) ?
-        'tests/update-copyright-test.yml' :
-        '.github/workflows/update-copyright.yml';
+        'tests/update-copyright-yearly-test.yml' :
+        '.github/workflows/update-copyright-yearly.yml';
       Generator.generateFile( 'templates/update-copyright-template.yml', path );
     } ) );
 };
