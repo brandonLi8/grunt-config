@@ -47,7 +47,7 @@ jobs:
     - name: deploy to heroku       # Finally deploy to heroku.
       env:
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
-        HEROKU_REMOTE: "git.heroku.com/${{REPO_NAME}}.git"
+        HEROKU_REMOTE: "git.heroku.com/{{REPO_NAME}}.git"
       if: github.ref == 'refs/heads/production' && job.status == 'success'
       run: |
         git push \
