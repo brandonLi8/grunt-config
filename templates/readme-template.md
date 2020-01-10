@@ -52,4 +52,4 @@ Contact me via <a href="mailto:{{AUTHOR_EMAIL}}" target="_blank"> email</a>.
 Help improve **{{REPO_NAME}}** by creating a <a href="{{ISSUES_URL}}" target="_blank">New Issue</a>.
 
 <!-- Copyright -->
-<sub>Copyright © {{AUTHOR}}. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="{{GITHUB_URL}}/blob/master/LICENSE" target="_blank">LICENSE</a></sub>
+<sub>Copyright © {{AUTHOR}}. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="{{GITHUB_URL}}/blob/master/LICENSE" target="_blank">LICENSE</a>.</sub>
