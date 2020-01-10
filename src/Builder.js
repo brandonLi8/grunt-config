@@ -15,7 +15,55 @@ module.exports = ( () => {
   const terser = require( 'terser' );
   const Util = require( './Util' );
 
+  // constants
+  const MINIFY_DEFAULTS = {
+    babelTranspile: true,
+    mangle: true,
+    beautify: false
+  };
+
   class Builder {
+
+    /**
+     * Minifies the given JS code using Terser.
+     * See https://terser.org/docs/api-reference for more documentation.
+     * @public
+     *
+     * @param {string} code - code to minify
+     * @returns {string} - the minified code
+     */
+    static minify( code, options ) {
+
+      options = {
+        ...MINIFY_DEFAULTS,
+
+        // override the defaults with the passed in options
+        ...options
+      };
+
+      // Do transpilation before minifying.
+      if ( options.babelTranspile ) code = Builder.transpile( code );
+
+      // Create the terser minify options. See https://terser.org/docs/api-reference#minify-options.
+      const terserOptions = {
+        mangle: options.mangle ? {
+          safari10: true
+        } : false,
+        compress: {
+          dead_code: true, // remove unreachable code
+
+          // To define globals, use global_defs inside compress options, see https://github.com/jrburke/r.js/issues/377
+          global_defs: {}
+        },
+        output: {
+          beautify: options.beautify
+        }
+      };
+
+      const minify = terser.minify( code, terserOptions );
+      if ( minify.error ) { Util.throw( minify.error ); }
+      return minify.code;
+    }
 
     /**
      * Transpiles code from ES6+ to browser-compatible JavaScript for older browsers or environments (ES5) using Babel.

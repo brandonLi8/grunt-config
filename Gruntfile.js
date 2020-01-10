@@ -11,6 +11,7 @@ module.exports = grunt => {
   'use strict';
 
   // modules
+  const Builder = require( './src/Builder' );
   const chalk = require( 'chalk' );
   const Copyright = require( './src/Copyright' );
   const Generator = require( './src/Generator' );
@@ -99,6 +100,13 @@ module.exports = grunt => {
     'the root directory of the repository that invoked this command). Will throw an error if any of the copyright ' +
     'statements are incorrect. See grunt-config/src/Copyright for more doc.\n',
     Util.wrap( path => { Copyright.checkCopyright( path || './' ); } ) );
+
+
+  grunt.registerTask( 'build', Util.wrap( () => {
+    const code = grunt.file.read( 'src/Generator.js');
+
+    grunt.file.write( 'hi.js', Builder.minify( code ) );
+  } ) );
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.
