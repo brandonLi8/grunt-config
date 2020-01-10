@@ -15,6 +15,7 @@
 # {{REPO_TITLE}}
 
 <!-- Badges go here. -->
+[![Actions Status]({{GITHUB_URL}}/workflows/CI/badge.svg)]({{GITHUB_URL}}/actions?query=workflow%3ACI)
 
 <!-- Description -->
 <blockquote align="left">
@@ -27,18 +28,18 @@
 <a href="{{HOMEPAGE}}" target="_blank">Visit the app.</a>
 
 <!-- Uncomment to add a screen shot:  -->
-<!-- <img src="" alt="Screenshot" style="width: 400px;"/></a> -->
+<!-- <img src="" alt="" style="width: 400px;"/></a> -->
 
 ### Installation
 (1) Clone the repository in a desired spot
 ```
 $ git clone {{GIT_REMOTE}}
 ```
-(2) Start an http-server in the project.
+(2) Start the application.
 ```
-{{REPO_NAME}}$ http-server
+{{REPO_NAME}}$ npm start
 ```
-(3) Open `http://localhost:path` (You will need to modify this URL based on your HTTP port and relative path.)
+(3) Open `http://localhost:path` (You will need to modify this URL based on your HTTP port environment variable and relative path.)
 
 <!-- Documentation -->
 <!-- ### Documentation -->
@@ -51,4 +52,4 @@ Contact me via <a href="mailto:{{AUTHOR_EMAIL}}" target="_blank"> email</a>.
 Help improve **{{REPO_NAME}}** by creating a <a href="{{ISSUES_URL}}" target="_blank">New Issue</a>.
 
 <!-- Copyright -->
-<sub>Copyright © {{AUTHOR}}. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="{{LICENSE}}" target="_blank">LICENSE</a></sub>
+<sub>Copyright © {{AUTHOR}}. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="{{GITHUB_URL}}/blob/master/LICENSE" target="_blank">LICENSE</a></sub>
