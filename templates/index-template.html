@@ -1,14 +1,16 @@
 <!-- Copyright © {{COPYRIGHT_YEARS}} {{AUTHOR}}. All rights reserved. -->
 
 <!--—————————————————————————————————————————————————————————————————————————*!
- * {{REPO_TITLE}} v{{VERSION}}
+ * {{REPO_TITLE}}
  *
- * This application is licensed under the {{LICENSE}}. The full text of the
- * {{LICENSE}} is available here:
- * {{GITHUB_URL}}/blob/master/LICENSE.
+ * This application is licensed under the {{LICENSE}}. See the full text
+ * here: {{GITHUB_URL}}/blob/master/LICENSE.
+ * Contact {{AUTHOR_EMAIL}} for questions regarding licensing.
  *
  * The application-specific source code can be accessed at
- * {{GIT_REMOTE}}.
+ * {{GIT_REMOTE}}. Help improve
+ * {{REPO_NAME}} by creating a new issue:
+ * {{ISSUES_URL}}
  *
  * Thank you for visiting!
  *
@@ -24,10 +26,10 @@
    * Google Analytics
   !*————————————————————————————————————————————————————————————————————————-->
   <!-- TODO
-  <script async src=""></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-*********-*"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push( [ 'js', new Date() ], [ 'config', 'UA-*******-*' ] );
+    window.dataLayer.push( [ 'js', new Date() ], [ 'config', 'UA-*********-*' ] );
   </script>
   -->
   <!--———————————————————————————————————————————————————————————————————————*!
@@ -70,7 +72,7 @@
   // optional data-main parameter. See
   // http://www.html5rocks.com/en/tutorials/speed/script-loading/ for more about
   // script loading. It helps to load all of the scripts with this method, so
-  // they are treated the same (and placed in the correct execution order)
+  // they are treated the same (and placed in the correct execution order).
   const loadURL = ( preloadURL, main ) => {
     const script = document.createElement( 'script' );
     if ( typeof main === 'string' ) {

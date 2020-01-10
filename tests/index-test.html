@@ -1,14 +1,16 @@
 <!-- Copyright © 2019-2020 Brandon Li. All rights reserved. -->
 
 <!--—————————————————————————————————————————————————————————————————————————*!
- * @brandonli8 Grunt Config v0.0.0-dev.11
+ * @brandonli8 Grunt Config
  *
- * This application is licensed under the MIT. The full text of the
- * MIT is available here:
- * https://github.com/brandonLi8/grunt-config/blob/master/LICENSE.
+ * This application is licensed under the MIT. See the full text
+ * here: https://github.com/brandonLi8/grunt-config/blob/master/LICENSE.
+ * Contact brandon.li820@gmail.com for questions regarding licensing.
  *
  * The application-specific source code can be accessed at
- * https://github.com/brandonLi8/grunt-config.git.
+ * https://github.com/brandonLi8/grunt-config.git. Help improve
+ * @brandonli8/grunt-config by creating a new issue:
+ * https://github.com/brandonLi8/truenit/issues
  *
  * Thank you for visiting!
  *
@@ -24,10 +26,10 @@
    * Google Analytics
   !*————————————————————————————————————————————————————————————————————————-->
   <!-- TODO
-  <script async src=""></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-*********-*"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push( [ 'js', new Date() ], [ 'config', 'UA-*******-*' ] );
+    window.dataLayer.push( [ 'js', new Date() ], [ 'config', 'UA-*********-*' ] );
   </script>
   -->
   <!--———————————————————————————————————————————————————————————————————————*!
@@ -70,7 +72,7 @@
   // optional data-main parameter. See
   // http://www.html5rocks.com/en/tutorials/speed/script-loading/ for more about
   // script loading. It helps to load all of the scripts with this method, so
-  // they are treated the same (and placed in the correct execution order)
+  // they are treated the same (and placed in the correct execution order).
   const loadURL = ( preloadURL, main ) => {
     const script = document.createElement( 'script' );
     if ( typeof main === 'string' ) {
