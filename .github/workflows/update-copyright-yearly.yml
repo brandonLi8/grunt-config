@@ -22,7 +22,7 @@ on:
   # https://en.wikipedia.org/wiki/Cron for more documentation of POSIX cron
   # syntax. This activates every 8th hour (UTC) on January 1st to be safe.
   schedule:
-    - cron:  '16 2 10 1 *'
+    - cron:  '0 0/8 1 1 *'
 
 jobs:
   build:
