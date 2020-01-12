@@ -68,14 +68,16 @@ module.exports = ( () => {
     wrapAsync( asyncTask ) {
       Util.assert( asyncTask.constructor.name === 'AsyncFunction', `invalid asyncTask: ${ asyncTask }` );
 
-      return Util.wrap( async ( ...args ) => {
-        const done = grunt.task.current.async();
+      return async function( ...args ) {
+        const done = this.async();
 
         await asyncTask( ...args ).catch( error => {
+
           Util.throw( `Task failed:\n${ error.stack || error }` );
         } );
+
         done();
-      } );
+      };
     },
 
     /**

@@ -103,9 +103,7 @@ module.exports = grunt => {
 
 
   grunt.registerTask( 'build', Util.wrapAsync( async () => {
-    const code = grunt.file.read( 'src/Generator.js');
-
-    grunt.file.write( 'hi.js', await Builder.optimizeAMD( '../sim-core/src/sim-core-config.js' ) );
+    grunt.file.write( 'hi.js', await Builder.build() );
   } ) );
 
   //----------------------------------------------------------------------------------------

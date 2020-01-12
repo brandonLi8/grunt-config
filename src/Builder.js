@@ -16,6 +16,7 @@ module.exports = ( () => {
   const Util = require( './Util' );
   const requirejs = require( 'requirejs' );
   const grunt = require( 'grunt' );
+  const Generator = require( './Generator' );
 
   // constants
   const MINIFY_DEFAULTS = {
@@ -23,8 +24,33 @@ module.exports = ( () => {
     mangle: true,
     beautify: false
   };
+  // Reference to the validated and parsed generator replacement values (see ./Generator.js for more documentation).
+  const GENERATOR_VALUES = Generator.getReplacementValuesMapping();
 
   class Builder {
+
+    static async build( minifyOptions ) {
+
+      const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/src/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
+
+      // Checks if lodash exists
+      const testLodash = '  if ( !window.hasOwnProperty( \'_\' ) ) {\n' +
+                         '    throw new Error( \'Underscore/Lodash not found: _\' );\n' +
+                         '  }\n';
+      // Checks if jQuery exists
+      const testJQuery = '  if ( !window.hasOwnProperty( \'$\' ) ) {\n' +
+                         '    throw new Error( \'jQuery not found: $\' );\n' +
+                         '  }\n';
+
+      let fullSource = requiresLodash + requireJS;
+
+      // Wrap with an IIFE
+      fullSource = `(function() {\n${fullSource}\n}());`;
+
+      fullSource = this.minify( fullSource, minifyOptions );
+      console.log( 'asdfasdf', fullSource);
+      return fullSource;
+    };
 
     /**
      * Minifies the given JS code using Terser.
@@ -73,6 +99,7 @@ module.exports = ( () => {
      * @returns {Promise.<string>} - The combined JS output from the optimizer
      */
     static optimizeAMD( configFile, options ) {
+
       options = {
         // {Object|boolean} - See https://github.com/requirejs/r.js/blob/master/build/example.build.js for the wrap
         // documentation, as it lists all of the available options.

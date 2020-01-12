@@ -5,7 +5,7 @@
     "email": "brandon.li820@gmail.com",
     "url": "https://brandonwli.com/"
   },
-  "version": "0.0.0-dev.13",
+  "version": "0.0.0-dev.14",
   "description": "Preconfigured/customizable grunt tools for linting, compiling, etc.",
   "license": "MIT",
   "main": "Gruntfile.js",
