@@ -42,13 +42,12 @@ module.exports = ( () => {
                          '    throw new Error( \'jQuery not found: $\' );\n' +
                          '  }\n';
 
-      let fullSource = requiresLodash + requireJS;
+      let fullSource = testLodash + requireJS;
 
       // Wrap with an IIFE
       fullSource = `(function() {\n${fullSource}\n}());`;
 
       fullSource = this.minify( fullSource, minifyOptions );
-      console.log( 'asdfasdf', fullSource);
       return fullSource;
     };
 
