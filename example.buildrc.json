@@ -1,0 +1,19 @@
+{
+  "sourceDirectory": ".",
+  "buildDirectory": "dist",
+  "requirejs": {
+    "directory": "js",
+    "requiresLodash": true,
+    "requiresJQuery": true,
+    "configFile": "rotational-motion-config.js",
+    "mainEntryFile": "rotational-motion-main.js",
+    "outputFile": "rotational-motion.min.js",
+    "stubModules": [ "text", "image" ],
+    "wrapIIFE": true,
+    "overrides": {}
+  },
+  "afterScript": "node after",
+  "babelTranspile": true,
+  "mangle": true,
+  "beautify": false
+}
