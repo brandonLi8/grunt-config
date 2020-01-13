@@ -31,7 +31,7 @@ module.exports = ( () => {
 
     static async build( minifyOptions ) {
 
-      const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/src/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
+      const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/js/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
 
       // Checks if lodash exists
       const testLodash = '  if ( !window.hasOwnProperty( \'_\' ) ) {\n' +
@@ -42,12 +42,12 @@ module.exports = ( () => {
                          '    throw new Error( \'jQuery not found: $\' );\n' +
                          '  }\n';
 
-      let fullSource = testLodash + requireJS;
-
-      // Wrap with an IIFE
+      let fullSource =  requireJS;
       fullSource = `(function() {\n${fullSource}\n}());`;
 
       fullSource = this.minify( fullSource, minifyOptions );
+            // // Wrap with an IIFE
+
       return fullSource;
     };
 
@@ -69,7 +69,7 @@ module.exports = ( () => {
       };
 
       // Do transpilation before minifying.
-      if ( options.babelTranspile ) code = Builder.transpile( code );
+      // if ( options.babelTranspile ) code = Builder.transpile( code );
 
       // Create the terser minify options. See https://terser.org/docs/api-reference#minify-options.
       const terserOptions = {
@@ -80,7 +80,8 @@ module.exports = ( () => {
           dead_code: true // remove unreachable code
         },
         output: {
-          beautify: options.beautify
+          beautify: options.beautify,
+          comments: ''
         }
       };
 
@@ -104,7 +105,7 @@ module.exports = ( () => {
         // documentation, as it lists all of the available options.
         wrap: false,
 
-        insertRequire: false,
+        insertRequire: `${ GENERATOR_VALUES.REPO_NAME }-main`,
         ...options
       };
       let output;
@@ -128,7 +129,8 @@ module.exports = ( () => {
         mainConfigFile: configFile,
 
         onBuildRead: ( moduleName, path, contents ) => {
-          return this.transpile( contents );
+
+          return this.transpile( contents, { compact: false, plugins: [ ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }] ], presets: null } );
         },
 
         // optimized output file
@@ -137,11 +139,12 @@ module.exports = ( () => {
         },
 
         // turn on preservation of comments that have a license in them
-        preserveLicenseComments: true,
+        preserveLicenseComments: false,
 
         // modules to stub out in the optimized file
         stubModules: [ 'text', 'image' ],
-
+        optimizeAllPluginResources: true,
+        inlineText: true,
         insertRequire: options.insertRequire ? [ options.insertRequire ] : null
       };
 
@@ -164,10 +167,9 @@ module.exports = ( () => {
      * @param {string} code - code to transpile
      * @returns {string} - the transpiled code
      */
-    static transpile( code ) {
+    static transpile( code, options ) {
 
-      // See options available at https://babeljs.io/docs/en/options
-      return babel.transform( code, {
+      options = {
         // Avoids a warning that this gets disabled for >500kb of source.
         compact: true,
         plugins: [ '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-transform-classes' ],
@@ -185,8 +187,12 @@ module.exports = ( () => {
               'ios_saf 11'
             ]
           }
-        } ] ]
-      } ).code;
+        } ] ],
+        ...options
+      };
+
+      // See options available at https://babeljs.io/docs/en/options
+      return babel.transform( code, options ).code;
     }
   }
 
