@@ -69,12 +69,13 @@ module.exports = ( () => {
       };
 
       // Do transpilation before minifying.
-      // if ( options.babelTranspile ) code = Builder.transpile( code );
+      if ( options.babelTranspile ) code = Builder.transpile( code );
 
       // Create the terser minify options. See https://terser.org/docs/api-reference#minify-options.
       const terserOptions = {
         mangle: options.mangle ? {
-          safari10: true
+          safari10: true,
+          module: true
         } : false,
         compress: {
           dead_code: true // remove unreachable code
@@ -172,8 +173,8 @@ module.exports = ( () => {
       options = {
         // Avoids a warning that this gets disabled for >500kb of source.
         compact: true,
-        plugins: [ '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-transform-classes' ],
-        presets: [ [ `${ process.cwd() }/node_modules/babel-preset-env`, {
+        // plugins: [ '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-transform-classes' ],
+        presets: [ [ `${ process.cwd() }/../grunt-config/node_modules/@babel/preset-env`, {
 
           // Parse as "script" type, so "this" will refer to "window" instead of being transpiled to `void 0` aka undefined
           modules: false,
@@ -188,6 +189,7 @@ module.exports = ( () => {
             ]
           }
         } ] ],
+
         ...options
       };
 
