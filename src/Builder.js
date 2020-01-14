@@ -1,11 +1,25 @@
 // Copyright © 2020 Brandon Li. All rights reserved.
 
 /**
- * Build encapsulation that minifies, mangles, requirejs optimizes?, ...etc.
+ * Builder/compiler that optimizes, minifies, mangles, and transpiles code.
+ *
+ * Requires the root repository that invoked the command to contain a buildrc.json file that configures the build
+ * options such as output location and source code location. See grunt-config/example.buildrc.json for an example
+ * buildrc file and full documentation of all available options.
+ *
+ * Uses Terser for minification and Babel for transpilation. See https://terser.org and https://babeljs.io.
+ *
+ * If the project is a requirejs project (indicated in the buildrc file), will use the r.js build optimizer to compile
+ * the project into one file before minifying and transpiling. See https://requirejs.org/docs/optimization.html.
+ * This file will only optimize the .js files in the source directory and move it to the build directory. There is
+ * an option to generate a _build.html file with the requirejs minified code as the only script. This only works if
+ * there is an index.html file.
+ *
+ * If the project isn't a requirejs project, this will minify each file in the source directory and copy it over
+ * to the build directory.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
-
 module.exports = ( () => {
   'use strict';
 
@@ -29,7 +43,7 @@ module.exports = ( () => {
 
   class Builder {
 
-    static async build( minifyOptions ) {
+    static async build() {
 
       const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/js/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
 
@@ -82,9 +96,18 @@ module.exports = ( () => {
         },
         output: {
           beautify: options.beautify,
-          comments: ''
+          comments: '',
+          preamble: `// Copyright © . All rights reserved.\n\n` +
+                    '/**\n' +
+                    ` * @license sim-core 0.0.0-dev.18\n` +
+                    ` * Released under MIT, https:\n` +
+                    ' */'
         }
       };
+/**
+ * @license almond 0.3.3 Copyright jQuery Foundation and other contributors.
+ * Released under MIT license, http://github.com/requirejs/almond/LICENSE
+ */
 
       const minify = terser.minify( code, terserOptions );
       if ( minify.error ) { Util.throw( minify.error ); }
