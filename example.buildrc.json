@@ -1,5 +1,18 @@
+/**
+ * This is an example buildrc.json file that demonstrates how to configure the
+ * grunt-config builder.
+ *
+ * THIS BUILD FILE WILL NOT WORK. It is referencing paths that probably
+ * do not exist on your machine. Just use it as a guide.
+ */
 {
+
+  // The directory (relative to the buildrc file) that contains your application
+  // source code. All of your scripts should be in a subdirectory under this
+  // path. This option is required.
   "sourceDirectory": ".",
+
+  //
   "buildDirectory": "dist",
   "requirejs": {
     "directory": "js",
