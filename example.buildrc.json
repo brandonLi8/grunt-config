@@ -16,6 +16,38 @@
   // files and subdirectories. This option is defaults to 'build'
   "buildDirectory": "build",
 
+  // Minification Options for minifying the source code. Maps to a object
+  // literal of minification options. If not specified, the defaults stated
+  // below will be used.
+  "minify": {
+
+    // Boolean that indicates if the Builder should use Terser to mangle names
+    // when minifying. See https://terser.org/docs/api-reference#mangle-options.
+    // Defaults to true.
+    "mangle": true,
+
+    // Boolean that indicates if the Builder should use the Terser beautifier
+    // when minifying. See https://terser.org/docs/api-reference#mangle-options.
+    // Defaults to false.
+    "beautify": false,
+
+    // Boolean that indicates if the Builder should use Babel to transpile code
+    // when minifying. See https://babeljs.io/. Defaults to true.
+    "babelTranspile": true,
+
+    // Override options to pass to Babel when transpiling. Will be ignored if
+    // babelTranspile is false. See https://babeljs.io/docs/en/options.
+    // See grunt-config/src/Builder.js transpile method for defaults.
+    "babelOptions": {},
+  },
+
+
+
+
+
+
+
+
 
   "requirejs": {
     "directory": "js",
@@ -29,7 +61,5 @@
     "overrides": {}
   },
   "afterScript": "node after",
-  "babelTranspile": true,
-  "mangle": true,
-  "beautify": false
+
 }
