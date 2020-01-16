@@ -9,11 +9,14 @@
 
   // The directory (relative to the buildrc file) that contains your application
   // source code. All of your scripts should be in a subdirectory under this
-  // path. This option is required.
+  // path. This option defaults to '.'
   "sourceDirectory": ".",
 
-  //
-  "buildDirectory": "dist",
+  // The directory (relative to the buildrc file) to save the outputted build
+  // files and subdirectories. This option is defaults to 'build'
+  "buildDirectory": "build",
+
+
   "requirejs": {
     "directory": "js",
     "requiresLodash": true,
