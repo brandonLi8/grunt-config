@@ -16,29 +16,33 @@
   // files and subdirectories. This option is defaults to 'build'
   "buildDirectory": "build",
 
-  // Minification Options for minifying the source code. Maps to a object
+  // Compress options for compiling the source code. Maps to a object
   // literal of minification options. If not specified, the defaults stated
   // below will be used.
-  "minify": {
+  "compress": {
+
+    // Boolean that indicates if the Builder should use Terser to minify code
+    // when building. See https://terser.org/. Defaults to true.
+    "minify": true,
 
     // Boolean that indicates if the Builder should use Terser to mangle names
-    // when minifying. See https://terser.org/docs/api-reference#mangle-options.
-    // Defaults to true.
+    // when building. See https://terser.org/docs/api-reference#mangle-options.
+    // Defaults to true. ** Will be ignored if minify is false. **
     "mangle": true,
 
-    // Boolean that indicates if the Builder should use the Terser beautifier
-    // when minifying. See https://terser.org/docs/api-reference#mangle-options.
-    // Defaults to false.
-    "beautify": false,
-
     // Boolean that indicates if the Builder should use Babel to transpile code
-    // when minifying. See https://babeljs.io/. Defaults to true.
+    // when building. See https://babeljs.io/. Defaults to true.
     "babelTranspile": true,
 
-    // Override options to pass to Babel when transpiling. Will be ignored if
-    // babelTranspile is false. See https://babeljs.io/docs/en/options.
+    // ** Override ** options to pass to Babel when transpiling. Will be ignored
+    // if babelTranspile is false. See https://babeljs.io/docs/en/options.
     // See grunt-config/src/Builder.js transpile method for defaults.
     "babelOptions": {},
+
+    // ** Override ** options to pass to Terser when minifying. Will be ignored
+    // if minify is false. See https://terser.org/docs/api-reference.
+    // See grunt-config/src/Builder.js minify method for defaults.
+    "minifyOptions": {}
   },
 
 
