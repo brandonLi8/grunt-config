@@ -5,7 +5,8 @@
  * further documentation.
  *
  * NOTE: THIS BUILD FILE WILL NOT WORK. It is referencing paths that probably
- * do not exist on your machine. Just use it as a guide.
+ * do not exist on your machine. It also contains comments, which aren't
+ * compatible with json files. Just use it as a guide.
  */
 {
 
@@ -28,7 +29,7 @@
     "minify": true,
 
     // Boolean that indicates if Terser should mangle names when minifying.
-    // Defaults to true. Will be ignored if minify is false.
+    // Defaults to true. Will be ignored if minify is false. Defaults to true.
     "mangle": true,
 
     // Optional override options to pass to Terser when minifying. Will be
