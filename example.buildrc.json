@@ -45,14 +45,13 @@
     "minifyOptions": {}
   },
 
-
-
-
-
-
-
-
-
+  // If provided, this will indicate that the project is a requirejs project and
+  // Builder will use the r.js optimizer before minifying and transpiling.
+  // See https://requirejs.org/docs/optimization.html
+  //
+  // If not provided, Builder will compile all of the .js files in the source
+  // directory and copy it to the build directory (with the same relative
+  // subdirectory paths).
   "requirejs": {
     "directory": "js",
     "requiresLodash": true,
@@ -65,5 +64,4 @@
     "overrides": {}
   },
   "afterScript": "node after",
-
 }
