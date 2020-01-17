@@ -47,21 +47,43 @@
 
   // If provided, this will indicate that the project is a requirejs project and
   // Builder will use the r.js optimizer before minifying and transpiling.
-  // See https://requirejs.org/docs/optimization.html
+  // See https://requirejs.org/docs/optimization.html. The following options
+  // are the defaults if provided (will be ignored if not provided).
   //
   // If not provided, Builder will compile all of the .js files in the source
   // directory and copy it to the build directory (with the same relative
   // subdirectory paths).
   "requirejs": {
-    "directory": "js",
-    "requiresLodash": true,
-    "requiresJQuery": true,
-    "configFile": "rotational-motion-config.js",
-    "mainEntryFile": "rotational-motion-main.js",
-    "outputFile": "rotational-motion.min.js",
-    "stubModules": [ "text", "image" ],
-    "wrapIIFE": true,
-    "overrides": {}
+
+    // The directory (relative to the sourceDirectory) that contains the
+    // requirejs source code. This option defaults to '/js'
+    "requirejsDirectory": "js",
+
+    // The requirejs config file. See https://requirejs.org/docs/api.html#config
+    // This path is relative to the requirejsDirectory. Will use this file
+    // to optimize the project. This option is required (if the requirejs key is
+    // provided).
+    "configFile": "project-name-config.js",
+
+    // The single entry point main file for requirejs that runs the project.
+    // This path is relative to the requirejsDir. This option is required (if
+    // the requirejs key is provided). This option is required.
+    "mainEntryFile": "project-name-main.js",
+
+    // The file to output the optimized requirejs project. This path is relative
+    // to the buildDirectory. This option is required (if the requirejs key is
+    // provided).
+    "outputFile": "project-name.min.js",
+
+    // Override options to pass to the r.js optimizer. See
+    // https://github.com/requirejs/r.js/blob/master/build/example.build.js
+    // for documentation, as it lists all of the available options.
+    "overrideOptions": {}
   },
-  "afterScript": "node after",
+
+  // If provided, Builder will run this command BEFORE building.
+  "preBuild": "node run before-building-script",
+
+  // If provided, Builder will run this command AFTER building.
+  "postBuild": "node run after-building-script"
 }

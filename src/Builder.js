@@ -59,7 +59,7 @@ module.exports = ( () => {
       let fullSource =  requireJS;
       fullSource = `(function() {\n${fullSource}\n}());`;
 
-      fullSource = this.minify( fullSource, minifyOptions );
+      fullSource = this.minify( fullSource );
             // // Wrap with an IIFE
 
       return fullSource;
@@ -165,8 +165,6 @@ module.exports = ( () => {
         // turn on preservation of comments that have a license in them
         preserveLicenseComments: false,
 
-        // modules to stub out in the optimized file
-        stubModules: [ 'text', 'image' ],
         optimizeAllPluginResources: true,
         inlineText: true,
         insertRequire: options.insertRequire ? [ options.insertRequire ] : null
