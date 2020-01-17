@@ -11,12 +11,11 @@
  *
  * If the project is a requirejs project (indicated in the buildrc file), will use the r.js build optimizer to compile
  * the project into one file before minifying and transpiling. See https://requirejs.org/docs/optimization.html.
- * This file will only optimize the .js files in the source directory and move it to the build directory. There is
- * an option to generate a _build.html file with the requirejs minified code as the only script. This only works if
- * there is an index.html file.
+ * There is an option to generate a _build.html file with the requirejs minified code as the only script. This only
+ * works if there is an index.html file.
  *
- * If the project isn't a requirejs project, this will minify each file in the source directory and copy it over
- * to the build directory.
+ * Otherwise, if the project isn't a requirejs project, this file will optimize the .js files in the source directory
+ * and copy it over it to the build directory (with the same relative subdirectory paths).
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
