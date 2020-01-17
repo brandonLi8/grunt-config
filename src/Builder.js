@@ -19,19 +19,28 @@
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
+
 module.exports = ( () => {
   'use strict';
 
   // modules
   const babel = require( '@babel/core' ); // eslint-disable-line require-statement-match
+  const Generator = require( './Generator' );
+  const grunt = require( 'grunt' );
   const path = require( 'path' );
+  const requirejs = require( 'requirejs' );
+  const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const terser = require( 'terser' );
   const Util = require( './Util' );
-  const requirejs = require( 'requirejs' );
-  const grunt = require( 'grunt' );
-  const Generator = require( './Generator' );
 
   // constants
+  // Read the buildrc file if it exists.
+  const BUILD_RC = grunt.file.isFile( 'buildrc.json' ) ? grunt.file.readJSON( 'buildrc.json' ) : undefined;
+
+
+
+
+
   const MINIFY_DEFAULTS = {
     babelTranspile: true,
     mangle: true,
@@ -42,26 +51,38 @@ module.exports = ( () => {
 
   class Builder {
 
+    /**
+     * Runs the builder/compiler such that it optimizes, minifies, mangles, and transpiles code based on a buildrc file.
+     * See the comment at the top of the file for more documentation.
+     * @public
+     */
     static async build() {
 
-      const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/js/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
+      // Check that the user has implemented the buildrc.json file.
+      Util.assert( BUILD_RC, 'buildrc.json is required for building and was not found.\n'
+        + 'See grunt-config/example.buildrc.json for an example.' );
 
-      // Checks if lodash exists
-      const testLodash = '  if ( !window.hasOwnProperty( \'_\' ) ) {\n' +
-                         '    throw new Error( \'Underscore/Lodash not found: _\' );\n' +
-                         '  }\n';
-      // Checks if jQuery exists
-      const testJQuery = '  if ( !window.hasOwnProperty( \'$\' ) ) {\n' +
-                         '    throw new Error( \'jQuery not found: $\' );\n' +
-                         '  }\n';
+      // If provided, run the preBuild command before building.
+      if ( BUILD_RC.preBuild ) shell.exec( BUILD_RC.preBuild, { silent: true } );
 
-      let fullSource =  requireJS;
-      fullSource = `(function() {\n${fullSource}\n}());`;
+      // const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/js/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
 
-      fullSource = this.minify( fullSource );
-            // // Wrap with an IIFE
+      // // Checks if lodash exists
+      // const testLodash = '  if ( !window.hasOwnProperty( \'_\' ) ) {\n' +
+      //                    '    throw new Error( \'Underscore/Lodash not found: _\' );\n' +
+      //                    '  }\n';
+      // // Checks if jQuery exists
+      // const testJQuery = '  if ( !window.hasOwnProperty( \'$\' ) ) {\n' +
+      //                    '    throw new Error( \'jQuery not found: $\' );\n' +
+      //                    '  }\n';
 
-      return fullSource;
+      // let fullSource =  requireJS;
+      // fullSource = `(function() {\n${fullSource}\n}());`;
+
+      // fullSource = this.minify( fullSource );
+      //       // // Wrap with an IIFE
+
+      // return fullSource;
     };
 
     /**
