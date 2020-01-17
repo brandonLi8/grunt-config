@@ -1,9 +1,11 @@
 /**
  * This is an example buildrc.json file that demonstrates how to configure the
- * grunt-config builder.
+ * grunt-config builder. The buildrc file is required for compiling/building
+ * projects via the `grunt build` command. See grunt-config/src/Builder for
+ * further documentation.
  *
- * THIS BUILD FILE WILL NOT WORK. It is referencing paths that probably
- * do not exist on your machine. Just use it as a guide.
+ * NOTE: THIS BUILD FILE WILL NOT WORK. It is referencing paths that probably
+ *       do not exist on your machine. Just use it as a guide.
  */
 {
 
