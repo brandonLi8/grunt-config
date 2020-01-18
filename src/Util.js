@@ -208,6 +208,15 @@ module.exports = ( () => {
     toRepoPath( relativePath ) { return path.join( path.basename( process.cwd() ), relativePath ); },
 
     /**
+     * Converts a relative path to the full absolute path.
+     * For instance, Util.toAbsolutePath( 'src/Util.js' ) => '/Users/John/grunt-config/src/Util.js'.
+     * @public
+     *
+     * @param {String} relativePath - relative path to convert (relative to the root directory of the project)
+     */
+    toAbsolutePath( relativePath ) { return path.join( process.cwd(), relativePath ); },
+
+    /**
      * A grunt-config specific convenience method to throw an error (assert a false value).
      * @public
      *

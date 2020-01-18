@@ -65,25 +65,74 @@ module.exports = ( () => {
       // If provided, run the preBuild command before building.
       if ( BUILD_RC.preBuild ) shell.exec( BUILD_RC.preBuild, { silent: true } );
 
-      // const requireJS = await this.optimizeAMD( path.join( process.cwd(), `/js/${ GENERATOR_VALUES.REPO_NAME }-config.js` ) );
+      // Read the source and build directory from the buildrc with defaults.
+      const sourceDirectory = Util.toAbsolutePath( BUILD_RC.sourceDirectory ? '.' );
+      const buildDirectory = Util.toAbsolutePath( BUILD_RC.buildDirectory ? 'build' );
 
-      // // Checks if lodash exists
-      // const testLodash = '  if ( !window.hasOwnProperty( \'_\' ) ) {\n' +
-      //                    '    throw new Error( \'Underscore/Lodash not found: _\' );\n' +
-      //                    '  }\n';
-      // // Checks if jQuery exists
-      // const testJQuery = '  if ( !window.hasOwnProperty( \'$\' ) ) {\n' +
-      //                    '    throw new Error( \'jQuery not found: $\' );\n' +
-      //                    '  }\n';
+      // If the project is a requirejs project.
+      if ( BUILD_RC.requirejs ) {
+        Util.assert( Object.getPrototypeOf( BUILD_RC.requirejs ) === Object.prototype,
+          'the buildrc.json requirejs key must map to a object.' );
 
-      // let fullSource =  requireJS;
-      // fullSource = `(function() {\n${fullSource}\n}());`;
+        // Optimize the requirejs project.
+        let optimzedRequireJs = `(function() {\n${ await this.optimizeAMD( BUILD_RC.requirejs ); }\n}());`;
 
-      // fullSource = this.minify( fullSource );
-      //       // // Wrap with an IIFE
+        // Minify the optimized requirejs.
+        optimzedRequireJs = this.minify( optimzedRequireJs );
 
-      // return fullSource;
+        // Write the optimized requirejs into the output file.
+        grunt.file.write( path.join( buildDirectory, BUILD_RC.requirejs.outputFile ), optimzedRequireJs );
+
+        if ( BUILD_RC.requirejs.generateBuildHtml ) {
+          Generator.registerValues
+        }
+      }
     };
+
+    /**
+     * "Compresses" a file based on options that are passed that indicate if the file should be
+     * If shouldThrow = true, this will throw an error if the first line was not a correct copyright statement.
+     * Otherwise, this will return a boolean indicating if the first line was a correct copyright statement.
+     * @public
+     *
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command.
+     * @param {boolean} shouldThrow - indicates if an error should be thrown if the copyright statement is incorrect.
+     * @returns {null|boolean} - if shouldThrow = false, will return a boolean indicating if the copyright was correct.
+     */
+    // static compressFile( filePath ) {
+
+    // }
+    /**
+     * Updates the copyright statement(s) of either a file or all files of a directory, depending on what is passed in.
+     * If the given path isn't a real file or directory, an error will be thrown. If the path is a directory, only files
+     * that don't fall into the IGNORE_PATTERN and have an extension in EXTENSION_COMMENT_PARSER_MAP will be updated.
+     * @public
+     *
+     * @param {String} path - either a file or directory to update copyright statement(s).
+     */
+    // static updateCopyright( path ) {
+    //   Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.toRepoPath( path ) }` );
+
+    //   // If the given path is a file, use updateFileCopyright to update the file.
+    //   if ( grunt.file.isFile( path ) ) this.updateFileCopyright( path );
+
+    //   // If the given path is a directory, update the copyright statement of all files.
+    //   if ( grunt.file.isDir( path ) ) {
+
+    //     // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
+    //     grunt.file.recurse( path, filePath => {
+
+    //       // Only update the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+    //       if ( !IGNORE_PATTERN.ignores( filePath ) && Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP ) {
+
+    //         // update the copyright statement
+    //         this.updateFileCopyright( filePath );
+    //       }
+    //     } );
+    //   }
+    // }
+
+
 
     /**
      * Minifies the given JS code using Terser.
