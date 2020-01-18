@@ -224,6 +224,58 @@ module.exports = ( () => {
      */
     throw( message ) { Util.assert( false, message ); },
 
+    /**
+     * Retrieves a nested property value of parsed json object. Uses an array of sub-paths to represent the nested
+     * keys. For instance, parseNestedPackageValue( PACKAGE_JSON [ 'foo', 'bar' ] ) gets PACKAGE_JSON.foo.bar.
+     * @public
+     *
+     * The value is then validated such that it must be either a number or a string. If the json object doesn't
+     * contain any of the sub-path keys, it errors out with a helpful error message to guide the user to correct it.
+     *
+     * @param {Object} json - the json object to parse
+     * @param {String[]} subpaths - the nested keys to parse from the json object
+     * @param {String} jsonName - the name of the json file, without the extension (e.g. 'package')
+     * @param {String} valueName - name of the value. Only used if the json object isn't implemented correctly
+     * @returns {number|string} - the parsed value
+     */
+    parseNestedJSONValue( json, subpaths, jsonName, valueName ) {
+      Util.assert( subpaths.every( path => typeof path === 'string' ) );
+      Util.assert( Object.getPrototypeOf( json ) === Object.prototype, `invalid json: ${ json }` );
+      Util.assert( typeof jsonName === 'string', `invalid jsonName: ${ jsonName }` );
+      Util.assert( typeof valueName === 'string', `invalid valueName: ${ valueName }` );
+
+      let value = json; // Create a flag for the the json object and traverse throw each nested path to the value.
+      let error = false; // Create a flag that indicates if a value isn't valid according to the subpaths.
+      subpaths.forEach( subpath => {
+        if ( !error && !Object.prototype.hasOwnProperty.call( value, subpath ) ) error = true;
+        value = value[ subpath ];
+      } );
+
+      // We have traversed through the Package to the current path. Double check that the value is a string or a number.
+      if ( !error && !( typeof value === 'number' || typeof value === 'string' ) ) error = true;
+
+      // If an error has occurred, log a helpful message.
+      if ( error ) {
+        // First, get the error message by recursively creating the error message.
+        const getErrorMessage = paths => {
+          // Base case - one path left is the value
+          if ( paths.length === 1 ) {
+            return `  "${ paths[ 0 ] }": ${ chalk.bold( `{{${ valueName }}}` ) }`;
+          }
+          else {
+            return `  "${ paths[ 0 ] }": {\n` +
+                   `  ${ Util.replaceAll( getErrorMessage( paths.slice( 1 ) ), '\n', '\n  ' ) }\n` +
+                   `  }${ paths.length === subpaths.length ? '' : ',' }`;
+          }
+        };
+        // Throw the error.
+        Util.throw( chalk.underline( `${ jsonName }.json` )
+          + ' was not implemented correctly. It should have something like: \n'
+          + '{\n' + getErrorMessage( subpaths ) + '\n  ...\n}' );
+      }
+      return value;
+    },
+
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getUTCFullYear()
   };
