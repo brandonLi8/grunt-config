@@ -52,7 +52,7 @@ module.exports = ( () => {
   class Builder {
 
     /**
-     * Runs the builder/compiler such that it optimizes, minifies, mangles, and transpiles code based on a buildrc file.
+     * The main API of this file. Runs the builder/compiler such that it optimizes, minifies, mangles, and transpiles code based on a buildrc file.
      * See the comment at the top of the file for more documentation.
      * @public
      */
@@ -287,6 +287,31 @@ module.exports = ( () => {
       return babel.transform( code, options ).code;
     }
   }
+
+  //----------------------------------------------------------------------------------------
+  // Helpers
+  //----------------------------------------------------------------------------------------
+
+  /**
+   * Validates the buildrc object literal, which is parsed from the buildrc.json file. See the comment at the top of the
+   * file for more documentation. See grunt-config/example.buildrc.json for documentation on the required and optional
+   * configuration options. Will throw errors if the buildrc doesn't exist or isn't implemented correctly.
+   */
+  function validateBuildRC() {
+    // First check that the user has implemented the buildrc.json file.
+    Util.assert( BUILD_RC, 'buildrc.json is required for building and was not found.\n'
+        + 'See grunt-config/example.buildrc.json for an example.' );
+
+    if ( BUILD_RC.requirejs ) {
+      const requirejsRequiredOptions = [ 'configFile', 'mainEntryFile', 'outputFile' ];
+
+      requirejsRequiredOptions.forEach( option => {
+        Util.assert( BUILD_RC.requirejs.hasOwnProperty( option ),  );
+      } );
+    }
+  }
+
+
 
   return Builder;
 } )();
