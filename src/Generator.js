@@ -77,9 +77,9 @@ module.exports = ( () => {
       if ( REPLACEMENT_VALUES.hasOwnProperty( replacementString ) ) return REPLACEMENT_VALUES[ replacementString ];
 
       // Reference the Schema from REPLACEMENT_STRINGS_SCHEMA
-      const schema = REPLACEMENT_STRINGS_SCHEMA[ replacementValue ];
+      const schema = REPLACEMENT_STRINGS_SCHEMA[ replacementString ];
 
-      // Reference the value to get.
+      // Reference the value to parse and validate.
       let value;
 
       // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
@@ -96,7 +96,7 @@ module.exports = ( () => {
       // Save the value into the REPLACEMENT_VALUES object to ensure the same value isn't validated twice.
       REPLACEMENT_VALUES[ replacementString ] = value;
       return value;
-    },
+    }
 
     /**
      * The main API of this file. Retrieves and validates values from package.json and replaces placeholder strings
