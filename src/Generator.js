@@ -31,12 +31,11 @@ module.exports = ( () => {
   const Util = require( './Util' );
 
   // constants
-  const PACKAGE_JSON = grunt.file.readJSON( 'package.json' ) || {};
-
   // Object literal that describes the replacement strings in template files to replace. Each key is the replacement
   // string (without the brackets for now) and correlates with one of the three values stated below:
   // 1. String[] - nested keys path to the package value. For example, PACKAGE_JSON.foo.bar would have nested keys
-  //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see UserConfig.parseNestedJSONValue()).
+  //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see
+  //               UserConfig.parseNestedJSONValue()).
   // 2. Object Literal - an object literal with:
   //                      - a path key that correlates to an array of the nested package keys as described in 1.
   //                      - a parse key that correlates to a function that is called to 'parse' a value that is
@@ -57,34 +56,47 @@ module.exports = ( () => {
     COPYRIGHT_YEARS: Util.CURRENT_YEAR  // Use the current year for now, then use ./Copyright to update after generating
   };
 
-  class Generator {
+  // Object literal that keeps track of the replacement values. This helps performance and ensures that replacement
+  // values that aren't needed aren't validated, providing a better user experience.
+  const REPLACEMENT_VALUES = {};
+
+  const Generator = {
 
     /**
-     * Retrieves and validates all values for replacement strings as defined in REPLACEMENT_STRINGS_SCHEMA.
-     * Will error out if package.json was not implemented correctly (see UserConfig.parseNestedJSONValue()).
+     * Retrieves and validates a single value for a replacement strings as defined in REPLACEMENT_STRINGS_SCHEMA.
+     * Will error out if package.json was not implemented correctly for the specific value only (see
+     * UserConfig.parseNestedJSONValue()).
      * @public
      *
+     * @public {String} replacementString - the replacementString that correlates with the value to get.
      * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
      */
-    static getReplacementValuesMapping() {
-      const mapping = {}; // the result mapping
+    getReplacementValue( replacementString ) {
 
-      Util.iterate( REPLACEMENT_STRINGS_SCHEMA, ( replacementString, schema ) => {
+      // If the value has already been retrieved, return it.
+      if ( REPLACEMENT_VALUES.hasOwnProperty( replacementString ) ) return REPLACEMENT_VALUES[ replacementString ];
 
-        // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
-        if ( Array.isArray( schema ) ) {
-          mapping[ replacementString ] = UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema, replacementString );
-        }
-        else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
-          mapping[ replacementString ] = schema.parse(
-            UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema.path, replacementString ) );
-        }
-        else {
-          mapping[ replacementString ] = schema;
-        }
-      } );
-      return mapping;
-    }
+      // Reference the Schema from REPLACEMENT_STRINGS_SCHEMA
+      const schema = REPLACEMENT_STRINGS_SCHEMA[ replacementValue ];
+
+      // Reference the value to get.
+      let value;
+
+      // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
+      if ( Array.isArray( schema ) ) {
+        value = UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema, replacementString );
+      }
+      else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
+        value = schema.parse( UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema.path, replacementString ) );
+      }
+      else {
+        value = schema;
+      }
+
+      // Save the value into the REPLACEMENT_VALUES object to ensure the same value isn't validated twice.
+      REPLACEMENT_VALUES[ replacementString ] = value;
+      return value;
+    },
 
     /**
      * The main API of this file. Retrieves and validates values from package.json and replaces placeholder strings
@@ -94,7 +106,7 @@ module.exports = ( () => {
      * @param {string} templateFilePath - path to the template file, relative to the root of THIS repository.
      * @param {string} outputFilePath - potential path to the output file, relative to the root of the repository.
      */
-    static generateFile( templateFilePath, outputFilePath ) {
+    generateFile( templateFilePath, outputFilePath ) {
 
       // Retrieve the template file via the grunt file reader.
       let template = grunt.file.read( path.dirname( __dirname ) + '/' + templateFilePath );
