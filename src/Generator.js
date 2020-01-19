@@ -51,7 +51,7 @@ module.exports = ( () => {
     REPO_NAME: [ 'name' ],
     VERSION: [ 'version' ],
     LICENSE: [ 'license' ],
-    GITHUB_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( '.git', '' ) },
+    GITHUB_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( /.git|git+/i, '' ) },
     REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
     COPYRIGHT_YEARS: Util.CURRENT_YEAR  // Use the current year for now, then use ./Copyright to update after generating
   };
