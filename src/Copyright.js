@@ -32,8 +32,6 @@ module.exports = ( () => {
   const Util = require( './Util' );
 
   // constants
-  // Reference to the validated and parsed generator replacement values (see ./Generator.js for more documentation).
-  const GENERATOR_VALUES = Generator.getReplacementValuesMapping();
 
   // Object literal that maps an extension key (without the .) to a parser function such that the parser returns a
   // correct one-line comment with comment delimiters in the respective language.
@@ -66,6 +64,9 @@ module.exports = ( () => {
       Util.assert( Util.getExtension( filePath ) in EXTENSION_COMMENT_PARSER_MAP,
         `${ filePath } is not supported for copyright statements.` );
 
+      // Reference to the validated and parsed generator author (see ./Generator.js for more documentation).
+      const author = Generator.getReplacementValuesMapping().AUTHOR;
+
       // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
       // start year is the current year. Solution from:
       // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
@@ -78,7 +79,7 @@ module.exports = ( () => {
       const yearsString = ( parseInt( startYear, 10 ) === endYear ) ? startYear : `${ startYear }-${ endYear }`;
 
       // Create the copyright line without the comment delimiters first. Then return the parsed value.
-      const copyrightContent = `Copyright © ${ yearsString } ${ GENERATOR_VALUES.AUTHOR }. All rights reserved.`;
+      const copyrightContent = `Copyright © ${ yearsString } ${ author }. All rights reserved.`;
       return EXTENSION_COMMENT_PARSER_MAP[ Util.getExtension( filePath ) ]( copyrightContent );
     }
 

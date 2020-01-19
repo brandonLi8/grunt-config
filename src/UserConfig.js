@@ -28,16 +28,18 @@ module.exports = ( () => {
     // Static References
     //----------------------------------------------------------------------------------------
 
-    // @public {Object} (grunt-config-internal) - reference to the repository package.json Object if it exists.
+    // @public {Object} (grunt-config-internal) - reference to the repository package.json object if it exists.
     PACKAGE_JSON: grunt.file.isFile( 'package.json' ) ? grunt.file.readJSON( 'package.json' ) : undefined,
 
     // @public {Object} (grunt-config-internal) - reference to the repository buildrc.json Object if it exists.
-    //                                             See ./Builder.js for more documentation of this file.
+    //                                            See ./Builder.js for more documentation of this file.
     BUILD_RC: grunt.file.isFile( 'package.json' ) ? grunt.file.readJSON( 'package.json' ) : undefined,
 
     // @public {String} (grunt-config-internal) - reference to the GITHUB_ACCESS_TOKEN environment variable if it
     //                                            exists. See ./Labeler.js for more documentation of this variable.
     GITHUB_ACCESS_TOKEN: process.env.GITHUB_ACCESS_TOKEN,
+
+    //----------------------------------------------------------------------------------------
 
     /**
      * Retrieves a nested property value of either PACKAGE_JSON or BUILD_RC. Uses an array of sub-paths to represent
@@ -72,9 +74,11 @@ module.exports = ( () => {
       if ( error ) {
         // First, get the error message by recursively creating the error message.
         const getErrorMessage = paths => {
+          valueName = valueName || subpaths[ subpaths.length - 1 ].toUpperCase();
+
           // Base case - one path left is the value
           if ( paths.length === 1 ) {
-            return `  "${ paths[ 0 ] }": ${ chalk.bold( `{{${ valueName || subpaths[ subpaths.length - 1 ] }}}` ) }`;
+            return `  "${ paths[ 0 ] }": ${ chalk.bold( `{{${ valueName }}}` ) }`;
           }
           else {
             return `  "${ paths[ 0 ] }": {\n` +
