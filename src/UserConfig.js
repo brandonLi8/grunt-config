@@ -1,4 +1,4 @@
-// Copyright © 2019-2020 Brandon Li. All rights reserved.
+// Copyright © 2020 Brandon Li. All rights reserved.
 
 /**
  * Utility class for referencing, validating, and parsing user-specific configuration values.
@@ -19,6 +19,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
+  const chalk = require( 'chalk' );
   const grunt = require( 'grunt' );
   const Util = require( './Util' );
 

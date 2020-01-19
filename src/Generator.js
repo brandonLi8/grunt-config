@@ -27,6 +27,7 @@ module.exports = ( () => {
   const chalk = require( 'chalk' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
+  const UserConfig = require( './UserConfig' );
   const Util = require( './Util' );
 
   // constants
@@ -35,7 +36,7 @@ module.exports = ( () => {
   // Object literal that describes the replacement strings in template files to replace. Each key is the replacement
   // string (without the brackets for now) and correlates with one of the three values stated below:
   // 1. String[] - nested keys path to the package value. For example, PACKAGE_JSON.foo.bar would have nested keys
-  //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see Util.parseNestedJSONValue()).
+  //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see UserConfig.parseNestedJSONValue()).
   // 2. Object Literal - an object literal with:
   //                      - a path key that correlates to an array of the nested package keys as described in 1.
   //                      - a parse key that correlates to a function that is called to 'parse' a value that is
@@ -60,7 +61,7 @@ module.exports = ( () => {
 
     /**
      * Retrieves and validates all values for replacement strings as defined in REPLACEMENT_STRINGS_SCHEMA.
-     * Will error out if package.json was not implemented correctly (see Util.parseNestedJSONValue()).
+     * Will error out if package.json was not implemented correctly (see UserConfig.parseNestedJSONValue()).
      * @public
      *
      * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
@@ -72,12 +73,11 @@ module.exports = ( () => {
 
         // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
         if ( Array.isArray( schema ) ) {
-          mapping[ replacementString ] = Util.parseNestedJSONValue(
-            PACKAGE_JSON, schema, 'package', replacementString );
+          mapping[ replacementString ] = UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema, replacementString );
         }
         else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
           mapping[ replacementString ] = schema.parse(
-            Util.parseNestedJSONValue( PACKAGE_JSON, schema.path, 'package', replacementString ) );
+            UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema.path, replacementString ) );
         }
         else {
           mapping[ replacementString ] = schema;
