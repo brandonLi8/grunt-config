@@ -65,7 +65,7 @@ module.exports = ( () => {
         `${ filePath } is not supported for copyright statements.` );
 
       // Reference to the validated and parsed generator author (see ./Generator.js for more documentation).
-      const author = Generator.getReplacementValuesMapping().AUTHOR;
+      const author = Generator.getReplacementValue( 'AUTHOR' );
 
       // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
       // start year is the current year. Solution from:

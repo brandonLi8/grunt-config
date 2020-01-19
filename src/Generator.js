@@ -60,7 +60,7 @@ module.exports = ( () => {
   // values that aren't needed aren't validated, providing a better user experience.
   const REPLACEMENT_VALUES = {};
 
-  const Generator = {
+  class Generator {
 
     /**
      * Retrieves and validates a single value for a replacement strings as defined in REPLACEMENT_STRINGS_SCHEMA.
@@ -71,7 +71,7 @@ module.exports = ( () => {
      * @public {String} replacementString - the replacementString that correlates with the value to get.
      * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
      */
-    getReplacementValue( replacementString ) {
+    static getReplacementValue( replacementString ) {
 
       // If the value has already been retrieved, return it.
       if ( REPLACEMENT_VALUES.hasOwnProperty( replacementString ) ) return REPLACEMENT_VALUES[ replacementString ];
@@ -106,16 +106,17 @@ module.exports = ( () => {
      * @param {string} templateFilePath - path to the template file, relative to the root of THIS repository.
      * @param {string} outputFilePath - potential path to the output file, relative to the root of the repository.
      */
-    generateFile( templateFilePath, outputFilePath ) {
+    static generateFile( templateFilePath, outputFilePath ) {
 
       // Retrieve the template file via the grunt file reader.
       let template = grunt.file.read( path.dirname( __dirname ) + '/' + templateFilePath );
 
-      // Create an object literal that maps replacement strings to their replacement values respectively.
-      const replacementValuesMapping = this.getReplacementValuesMapping();
-
       // Replace each replacement string (wrapped with brackets {{}}) with the respective parsed replacement value.
-      Util.iterate( replacementValuesMapping, ( replacementString, replacementValue ) => {
+      Util.iterate( REPLACEMENT_STRINGS_SCHEMA, replacementString => {
+
+        // Parse the replacement value
+        const replacementValue = Generator.getReplacementValue( replacementString );
+
         template = Util.replaceAll( template, `{{${ replacementString }}}`, replacementValue );
       } );
 
