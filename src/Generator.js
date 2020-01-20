@@ -10,12 +10,15 @@
  *    string '{{REPO_TITLE}}' is used in multiple template files to indicate the title of the project. In this case,
  *    the output file has this replaced with the actual repository title, as defined in the package.json name property.
  *
- *  - This class will retrieve the properties from the package.json object and in some cases parse it. However, there is
+ *  - This class will retrieve properties from the package.json object and in some cases parse it. However, there is
  *    a chance that the user might have not implemented some of the properties / sub-properties correctly, so this class
  *    will validate all of package.json to ensure all placeholder strings in REPLACEMENT_STRINGS_SCHEMA can be replaced.
  *
+ *  - Some placeholder values aren't determined by package.json and are calculated at run time. For instance,
+ *    'COPYRIGHT_YEARS' is determined at run time and depends on when the file was checked into git (see Copyright.js).
+ *    These values are registered at run time before generating the file and replacing template strings.
+ *
  * NOTE: Will error out and provide helpful error messages if package.json isn't implemented correctly.
- * NOTE: Copyright statements will be checked after generating based on when the file was checked into git.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
