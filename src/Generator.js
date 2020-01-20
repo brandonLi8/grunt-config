@@ -74,7 +74,7 @@ module.exports = ( () => {
      * UserConfig.parseNestedJSONValue()).
      * @public
      *
-     * @public {String} replacementString - the replacementString that correlates with the value to get.
+     * @param {String} replacementString - the replacementString that correlates with the value to get.
      * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
      */
     static getReplacementValue( replacementString ) {
@@ -95,8 +95,8 @@ module.exports = ( () => {
       else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
         value = schema.parse( UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema.path, replacementString ) );
       }
-      else {
-        value = schema;
+      else { // schema was null type, but wasn't registered.
+        Util.throw( `Tried to retrieve replacement value for {{${ replacementString }}} but it wasn't registered.` );
       }
 
       // Save the value into the REPLACEMENT_VALUES object to ensure the same value isn't validated twice.
@@ -105,15 +105,21 @@ module.exports = ( () => {
     }
 
     /**
-     * Registers a value for a replacement string such that the replacement string will be replaced. Used for replacement values that are computed at run time.
-     *
+     * Registers a value for a replacement string to REPLACEMENT_VALUES to be replaced for the next generated file.
+     * Used for replacement values that are computed at run time. The replacement string must be apart of
+     * REPLACEMENT_STRINGS_SCHEMA and correlate to a null value (see REPLACEMENT_STRINGS_SCHEMA declaration).
      * @public
      *
-     * @public {String} replacementString - the replacementString that correlates with the value to get.
-     * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
+     * @param {String} replacementString - the replacementString to register, without the {{}}
+     * @param {String|number} value - the replacement value to replace in the generated file.
      */
-    static registerReplacementValue( replacementString, value ) {
+    static registerRunTimeReplacementValue( replacementString, value ) {
+      Util.assert( typeof replacementString === 'string', `invalid replacementString: ${ replacementString }` );
+      Util.assert( [ 'string', 'number' ].includes( typeof value ), `invalid value: ${ value }` );
+      Util.assert( replacementString in REPLACEMENT_VALUES && REPLACEMENT_VALUES[ replacementValue ] === null,
+        `replacementString {{${ replacementString }}} not registered as a run-time replacement value.` );
 
+      REPLACEMENT_VALUES[ replacementString ] = value;
     }
 
     /**
