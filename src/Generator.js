@@ -34,8 +34,8 @@ module.exports = ( () => {
   const Util = require( './Util' );
 
   // constants
-  // Object literal that describes the replacement strings in template files to replace. Each key is the replacement
-  // string (without the brackets for now) and correlates with one of the two values stated below:
+  // Object literal that describes ALL replacement strings in template files to replace. Each key is the replacement
+  // string (without the brackets for now) and correlates with one of the three values stated below:
   // 1. String[] - nested keys path to the package value. For example, PACKAGE_JSON.foo.bar would have nested keys
   //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see
   //               UserConfig.parseNestedJSONValue()).
@@ -43,6 +43,8 @@ module.exports = ( () => {
   //                      - a path key that correlates to an array of the nested package keys as described in 1.
   //                      - a parse key that correlates to a function that is called to 'parse' a value that is
   //                        retrieved from the package object. The returned value is the replacement value.
+  // 3. Null - Indicates a replacement string whose value is determined at run time. These values are registered into
+  //           REPLACEMENT_VALUES at run time before generating the file and replacing template strings.
   const REPLACEMENT_STRINGS_SCHEMA = {
     AUTHOR: [ 'author', 'name' ],
     AUTHOR_EMAIL: [ 'author', 'email' ],
@@ -54,7 +56,10 @@ module.exports = ( () => {
     VERSION: [ 'version' ],
     LICENSE: [ 'license' ],
     GITHUB_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( /.git|git+/i, '' ) },
-    REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) }
+    REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
+    COPYRIGHT_YEARS: null,
+    INDEX_HEAD: null, // See Builder.js for more documentation.
+    BUILD_BODY: null // See Builder.js for more documentation.
   };
 
   // Object literal that keeps track of the replacement values. This helps performance and ensures that replacement
@@ -64,7 +69,7 @@ module.exports = ( () => {
   class Generator {
 
     /**
-     * Retrieves and validates a single value for a replacement strings as defined in REPLACEMENT_STRINGS_SCHEMA.
+     * Retrieves and validates a single value for a replacement string as defined in REPLACEMENT_STRINGS_SCHEMA.
      * Will error out if package.json was not implemented correctly for the specific value only (see
      * UserConfig.parseNestedJSONValue()).
      * @public
@@ -97,6 +102,18 @@ module.exports = ( () => {
       // Save the value into the REPLACEMENT_VALUES object to ensure the same value isn't validated twice.
       REPLACEMENT_VALUES[ replacementString ] = value;
       return value;
+    }
+
+    /**
+     * Registers a value for a replacement string such that the replacement string will be replaced. Used for replacement values that are computed at run time.
+     *
+     * @public
+     *
+     * @public {String} replacementString - the replacementString that correlates with the value to get.
+     * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
+     */
+    static registerReplacementValue( replacementString, value ) {
+
     }
 
     /**
