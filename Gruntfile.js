@@ -101,6 +101,19 @@ module.exports = grunt => {
     'statements are incorrect. See grunt-config/src/Copyright for more doc.\n',
     Util.wrap( path => { Copyright.checkCopyright( path || './' ); } ) );
 
+  /**
+   * Updates the newlines to match os.EOL of either a file or all files of a directory, depending on what is passed in.
+   * If the given path isn't a real file or directory, an error will be thrown. If the path is a directory, only files
+   * that don't fall into the IGNORE_PATTERN will be updated. If no argument is provided, ALL newlines in the root
+   * directory of the project will be updated
+   * @param {String} [path] - either a file or directory to update newlines in. If not provided, all files in
+   *                          the project will be updated.
+   */
+  grunt.registerTask( 'update-newlines',
+    'Updates the newlines to match os.EOL of either a file or all files of a directory, depending on what is passed ' +
+    'in (defaults to  the root directory of the repository that invoked this command).\n',
+    Util.wrap( path => { Util.updateNewlines( path || './' ); } ) );
+
 
   grunt.registerTask( 'build', Util.wrapAsync( async () => {
     grunt.file.write( 'hi.js', await Builder.build() );

@@ -222,12 +222,6 @@ module.exports = ( () => {
         } );
       }
     }
-
-    /**
-     * Method to update the newlines of either a file or all files of a directory, depending on what is passed in.
-     *
-     * @
-     */
   }
 
   return Copyright;

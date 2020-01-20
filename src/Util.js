@@ -11,7 +11,10 @@ module.exports = ( () => {
 
   // modules
   const chalk = require( 'chalk' );
+  const fs = require( 'fs' );
   const grunt = require( 'grunt' );
+  const ignore = require( 'ignore' );
+  const os = require( 'os' );
   const path = require( 'path' );
 
   const Util = {
@@ -245,6 +248,32 @@ module.exports = ( () => {
      * @param {string} [message] - message to throw
      */
     throw( message ) { Util.assert( false, message ); },
+
+    /**
+     * Method to update the newlines of either a file or all files of a directory to os.EOL, depending on what is
+     * passed in. If the given path isn't a real file or directory, an error will be thrown. If the path is a directory,
+     * only files that don't fall into the IGNORE_PATTERN will be updated.
+     * @public
+     *
+     * @param {String} path - either a file or directory to update newlines.
+     */
+    updateNewlines( path ) {
+      Util.assert( grunt.file.exists( path ), `path doesn't exist: ${ Util.toRepoPath( path ) }` );
+
+      // Base case: the path is a file. Now update the new lines.
+      if ( grunt.file.isFile( path ) ) {
+        fs.writeFileSync( path, Util.getFileLines( path ).join( os.EOL ) );
+      }
+      else {
+        // Recurse through the directory with grunt API. See https://gruntjs.com/api/grunt.file#grunt.file.recurse
+        grunt.file.recurse( path, filePath => {
+          // Only update the copyright statement if it's a supported file type and if it's not in the ignore pattern.
+          if ( !ignore().add( Util.IGNORE_PATTERN ).ignores( filePath ) ) {
+            Util.updateNewlines( filePath );
+          }
+        } );
+      }
+    },
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
     CURRENT_YEAR: new Date().getUTCFullYear(),
