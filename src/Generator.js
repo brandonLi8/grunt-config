@@ -1,8 +1,8 @@
 // Copyright © 2019-2020 Brandon Li. All rights reserved.
 
 /**
- * File Generator encapsulation that retrieves and validates values from package.json and replaces placeholder strings
- * from a template file with these values. The result is then outputted in a specified output file.
+ * File Generator encapsulation that retrieves, registers, and validates replacement values and replaces placeholder
+ * strings from a template file with these values. The result is then outputted in a specified output file.
  *
  * ## Background
  *  - A placeholder string is a string used in template files (see ../../templates) to indicate a string that changes

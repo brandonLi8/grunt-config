@@ -173,6 +173,27 @@ module.exports = ( () => {
     },
 
     /**
+     * Gets ALL substrings between delimiters of a string. For instance,
+     * Util.getInnerDelimeterStrings( 'Foo <div> Bar </div><div>Doe</div>', '<div>', '</div>' ) -> [ ' Bar ', 'Doe' ].
+     *
+     * NOTE: this method doesn't work well for nested delimiters like '<div>H<div>B</div></div>'. Only use this method
+     *       for delimiters that you know will 100% not have nested delimiters inside them.
+     * @public
+     *
+     * @param {String} string - the string to search for the strings in between delimiters
+     * @param {String} start - the start delimiter (e.g. '<div>')
+     * @param {String} end - the end delimiter (e.g. '</div>')
+     */
+    getInnerDelimeterStrings( string, start, end ) {
+
+      // First split the string with the inner delimiter strings with a regular expression
+      const innerDelimterStrings = string.match( new RegExp( `${ start }(.*?)${ end }`, 'gm' ) );
+
+      // Remove the delimiters from the inner strings and return it.
+      return innerDelimterStrings.map( innerString => innerString.replace( start, '' ).replace( end, '' ) );
+    },
+
+    /**
      * Convenience method to pluralize a word, adding the number in front. For example,
      * Util.pluralize( 'dog', 2 ) -> '2 dogs'.
      * Util.pluralize( 'dog', 1 ) => '1 dog'.
