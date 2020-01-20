@@ -116,7 +116,8 @@ module.exports = ( () => {
     static registerRunTimeReplacementValue( replacementString, value ) {
       Util.assert( typeof replacementString === 'string', `invalid replacementString: ${ replacementString }` );
       Util.assert( [ 'string', 'number' ].includes( typeof value ), `invalid value: ${ value }` );
-      Util.assert( replacementString in REPLACEMENT_VALUES && REPLACEMENT_VALUES[ replacementValue ] === null,
+      Util.assert( replacementString in REPLACEMENT_STRINGS_SCHEMA
+        && REPLACEMENT_STRINGS_SCHEMA[ replacementString ] === null,
         `replacementString {{${ replacementString }}} not registered as a run-time replacement value.` );
 
       REPLACEMENT_VALUES[ replacementString ] = value;
@@ -135,21 +136,20 @@ module.exports = ( () => {
       // Retrieve the template file via the grunt file reader.
       let template = grunt.file.read( path.dirname( __dirname ) + '/' + templateFilePath );
 
-      // Replace each replacement string (wrapped with brackets {{}}) with the respective parsed replacement value.
-      Util.iterate( REPLACEMENT_STRINGS_SCHEMA, replacementString => {
+      // Register the COPYRIGHT_YEARS replacement value. The require statement is in here to fix
+      // circular dependency problems.
+      this.registerRunTimeReplacementValue( 'COPYRIGHT_YEARS', require( './Copyright' ).computeCopyrightYears( outputFilePath ) );
 
-        // Parse the replacement value
+      // Replace each replacement string (wrapped with brackets {{}}) in the template file with the replacement value.
+      Util.getInnerDelimeterStrings( template, '{{', '}}' ).forEach( replacementString => {
+
+        // Parse the replacement value and replace all template values.
         const replacementValue = Generator.getReplacementValue( replacementString );
-
         template = Util.replaceAll( template, `{{${ replacementString }}}`, replacementValue );
       } );
 
       // Write to the repository's root directory.
       grunt.file.write( outputFilePath, template );
-
-      // Update the Copyright Statement now that the file has been generated. The require statement is in here to fix
-      // circular dependency problems.
-      require( './Copyright' ).updateFileCopyright( outputFilePath );
 
       Util.log( chalk.hex( '046200' )( `\nSuccessfully generated ${ Util.toRepoPath( outputFilePath ) }` ) );
     }
