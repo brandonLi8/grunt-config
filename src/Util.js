@@ -279,7 +279,7 @@ module.exports = ( () => {
     CURRENT_YEAR: new Date().getUTCFullYear(),
 
     // @public {String[]} - General pattern for files and directories to ignore for grunt-config.
-    IGNORE_PATTERN: [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build' ]
+    IGNORE_PATTERN: [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build', '**/templates' ]
   };
 
   return Util;

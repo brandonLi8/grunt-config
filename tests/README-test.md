@@ -15,7 +15,7 @@
 # @brandonli8 Grunt Config
 
 <!-- Badges go here. -->
-[![Actions Status](https://github.com/brandonLi8/grunt-config/workflows/CI/badge.svg)](https://github.com/brandonLi8/grunt-config/actions?query=workflow%3ACI)
+[![Actions Status](https:/hub.com/brandonLi8/grunt-config.git/workflows/CI/badge.svg)](https:/hub.com/brandonLi8/grunt-config.git/actions?query=workflow%3ACI)
 
 <!-- Description -->
 <blockquote align="left">
@@ -52,4 +52,4 @@ Contact me via <a href="mailto:brandon.li820@gmail.com" target="_blank"> email</
 Help improve **@brandonli8/grunt-config** by creating a <a href="https://github.com/brandonLi8/truenit/issues" target="_blank">New Issue</a>.
 
 <!-- Copyright -->
-<sub>Copyright © Brandon Li. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="https://github.com/brandonLi8/grunt-config/blob/master/LICENSE" target="_blank">LICENSE</a>.</sub>
+<sub>Copyright © Brandon Li. All Rights Reserved.&nbsp;&nbsp;<b>|</b>&nbsp;&nbsp;See the <a href="https:/hub.com/brandonLi8/grunt-config.git/blob/master/LICENSE" target="_blank">LICENSE</a>.</sub>
