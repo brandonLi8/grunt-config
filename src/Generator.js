@@ -35,7 +35,7 @@ module.exports = ( () => {
 
   // constants
   // Object literal that describes the replacement strings in template files to replace. Each key is the replacement
-  // string (without the brackets for now) and correlates with one of the three values stated below:
+  // string (without the brackets for now) and correlates with one of the two values stated below:
   // 1. String[] - nested keys path to the package value. For example, PACKAGE_JSON.foo.bar would have nested keys
   //               [ 'foo', 'bar' ]. PACKAGE_JSON is checked to have the nested keys (see
   //               UserConfig.parseNestedJSONValue()).
@@ -43,7 +43,6 @@ module.exports = ( () => {
   //                      - a path key that correlates to an array of the nested package keys as described in 1.
   //                      - a parse key that correlates to a function that is called to 'parse' a value that is
   //                        retrieved from the package object. The returned value is the replacement value.
-  // 3. * - the actual replacement value to replace the replacement string in the template file.
   const REPLACEMENT_STRINGS_SCHEMA = {
     AUTHOR: [ 'author', 'name' ],
     AUTHOR_EMAIL: [ 'author', 'email' ],
@@ -55,8 +54,7 @@ module.exports = ( () => {
     VERSION: [ 'version' ],
     LICENSE: [ 'license' ],
     GITHUB_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( /.git|git+/i, '' ) },
-    REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
-    COPYRIGHT_YEARS: Util.CURRENT_YEAR  // Use the current year for now, then use ./Copyright to update after generating
+    REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) }
   };
 
   // Object literal that keeps track of the replacement values. This helps performance and ensures that replacement

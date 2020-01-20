@@ -50,9 +50,33 @@ module.exports = ( () => {
   class Copyright {
 
     /**
-     * Utility method to generate a copyright statement for a file. The start year is computed from when the file was
+     * Utility method to compute the copyright years for a file. The start year is computed from when the file was
      * checked into git or the current year if it hasn't been checked-in yet. The end year is assumed to be the current
-     * year. Result includes the correct comment delimiters and follows the format described at the top of this file.
+     * year. If the given file path doesn't exist, it will return the current year as a string.
+     * @public
+     *
+     * @param {String} filePath - path of the file, relative to the root directory that invoked the command.
+     * @returns {String} - the copyright years string (e.g. '2019-2020')
+     */
+    static computeCopyrightYears( filePath ) {
+      Util.assert( typeof filePath === 'string', `invalid filePath: ${ filePath }` );
+
+      // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
+      // start year is the current year. Solution from:
+      // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
+      const startYear = shell.exec( `git log --follow --format=%aI -- ${ filePath } | tail -1`, { silent: true } )
+        .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
+
+      const endYear = Util.CURRENT_YEAR; // The end year is assumed to be the current year.
+
+      // Create and return year string or the year range string to use in the copyright statement.
+      return ( parseInt( startYear, 10 ) === endYear ) ? startYear : `${ startYear }-${ endYear }`;
+    }
+
+    /**
+     * Utility method to generate a copyright statement for a file. See computeCopyrightYears() for documentation on how
+     * the copyright years string is computed. Result includes the correct comment delimiters and follows the format
+     * described at the top of this file.
      * @public
      *
      * @param {String} filePath - path of the file, relative to the root directory that invoked the command.
@@ -67,16 +91,8 @@ module.exports = ( () => {
       // Reference to the validated and parsed generator author (see ./Generator.js for more documentation).
       const author = Generator.getReplacementValue( 'AUTHOR' );
 
-      // Compute the year the file was checked into git as the start year. If it hasn't been checked into git yet, the
-      // start year is the current year. Solution from:
-      // https://stackoverflow.com/questions/2390199/finding-the-date-time-a-file-was-first-added-to-a-git-repository
-      const startYear = shell.exec( `git log --follow --format=%aI -- ${ filePath } | tail -1`, { silent: true } )
-        .trim().split( '-' )[ 0 ] || Util.CURRENT_YEAR;
-
-      const endYear = Util.CURRENT_YEAR; // The end year is assumed to be the current year.
-
-      // Create the year string or the year range string to use in the copyright statement.
-      const yearsString = ( parseInt( startYear, 10 ) === endYear ) ? startYear : `${ startYear }-${ endYear }`;
+      // Reference the years string from computeCopyrightYears().
+      const yearsString = this.computeCopyrightYears( filePath );
 
       // Create the copyright line without the comment delimiters first. Then return the parsed value.
       const copyrightContent = `Copyright © ${ yearsString } ${ author }. All rights reserved.`;
