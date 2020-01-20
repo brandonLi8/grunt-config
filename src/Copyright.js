@@ -45,7 +45,7 @@ module.exports = ( () => {
   };
 
   // Files and directories to ignore when updating copyright statements of a directory. See updateAllCopyrights().
-  const IGNORE_PATTERN = ignore().add( [ '**/.git', '**/node_modules', '**/templates', '**/dist', '**/build' ] );
+  const IGNORE_PATTERN = ignore().add( Util.IGNORE_PATTERN );
 
   class Copyright {
 
@@ -222,6 +222,12 @@ module.exports = ( () => {
         } );
       }
     }
+
+    /**
+     * Method to update the newlines of either a file or all files of a directory, depending on what is passed in.
+     *
+     * @
+     */
   }
 
   return Copyright;

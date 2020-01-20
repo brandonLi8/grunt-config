@@ -247,7 +247,10 @@ module.exports = ( () => {
     throw( message ) { Util.assert( false, message ); },
 
     // @public {number} CURRENT_YEAR - Static reference to the current full year.
-    CURRENT_YEAR: new Date().getUTCFullYear()
+    CURRENT_YEAR: new Date().getUTCFullYear(),
+
+    // @public {String[]} - General pattern for files and directories to ignore for grunt-config.
+    IGNORE_PATTERN: [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build' ]
   };
 
   return Util;

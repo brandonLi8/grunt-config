@@ -27,10 +27,6 @@ module.exports = ( () => {
   const path = require( 'path' );
   const Util = require( './Util' );
 
-  // constants
-  // Files and directories to ignore when linting.
-  const IGNORE_PATTERN = [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build' ];
-
   class Linter {
 
     /**
@@ -77,7 +73,7 @@ module.exports = ( () => {
         rulePaths: [ `${ gruntConfigPath }/eslint/rules` ],
 
         // Files and directories to skip when linting.
-        ignorePattern: IGNORE_PATTERN
+        ignorePattern: Util.IGNORE_PATTERN
       } );
 
       //----------------------------------------------------------------------------------------
