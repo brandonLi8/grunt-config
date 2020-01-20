@@ -89,10 +89,10 @@ module.exports = ( () => {
       let value;
 
       // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
-      if ( Array.isArray( schema ) ) {
+      if ( schema && Array.isArray( schema ) ) {
         value = UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema, replacementString );
       }
-      else if ( Object.getPrototypeOf( schema ) === Object.prototype ) {
+      else if ( schema && Object.getPrototypeOf( schema ) === Object.prototype ) {
         value = schema.parse( UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema.path, replacementString ) );
       }
       else { // schema was null type, but wasn't registered.
@@ -140,8 +140,12 @@ module.exports = ( () => {
       // circular dependency problems.
       this.registerRunTimeReplacementValue( 'COPYRIGHT_YEARS', require( './Copyright' ).computeCopyrightYears( outputFilePath ) );
 
+      // Get the replacement strings in the template file that are registered in REPLACEMENT_STRINGS_SCHEMA.
+      const replacementStrings = Util.getInnerDelimeterStrings( template, '{{', '}}' )
+                                  .filter( str => str in REPLACEMENT_STRINGS_SCHEMA );
+
       // Replace each replacement string (wrapped with brackets {{}}) in the template file with the replacement value.
-      Util.getInnerDelimeterStrings( template, '{{', '}}' ).forEach( replacementString => {
+      replacementStrings.forEach( replacementString => {
 
         // Parse the replacement value and replace all template values.
         const replacementValue = Generator.getReplacementValue( replacementString );
