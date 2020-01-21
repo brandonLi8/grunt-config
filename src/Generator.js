@@ -28,6 +28,7 @@ module.exports = ( () => {
 
   // modules
   const chalk = require( 'chalk' );
+  const Copyright = require( './Copyright' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
   const UserConfig = require( './UserConfig' );
@@ -74,7 +75,7 @@ module.exports = ( () => {
      * UserConfig.parseNestedJSONValue()).
      * @public
      *
-     * @param {String} replacementString - the replacementString that correlates with the value to get.
+     * @param {String} replacementString - the replacementString that correlates with the value, without the brackets.
      * @returns {String|number} - the replacement value that correlates with the replacementString
      */
     static getReplacementValue( replacementString ) {
@@ -112,7 +113,7 @@ module.exports = ( () => {
      * REPLACEMENT_STRINGS_SCHEMA and correlate to a null value (see REPLACEMENT_STRINGS_SCHEMA declaration).
      * @public
      *
-     * @param {String} replacementString - the replacementString to register, without the {{}}
+     * @param {String} replacementString - the replacementString to register, without the brackets.
      * @param {String|number} value - the replacement value to replace in the generated file.
      */
     static registerRunTimeReplacementValue( replacementString, value ) {
@@ -122,6 +123,7 @@ module.exports = ( () => {
         && REPLACEMENT_STRINGS_SCHEMA[ replacementString ] === null,
         `replacementString {{${ replacementString }}} not registered as a run-time replacement value.` );
 
+      // Save the value into REPLACEMENT_VALUES for the next getReplacementValue call.
       REPLACEMENT_VALUES[ replacementString ] = value;
     }
 
@@ -138,9 +140,8 @@ module.exports = ( () => {
       // Retrieve the template file via the grunt file reader.
       let template = grunt.file.read( path.dirname( __dirname ) + '/' + templateFilePath );
 
-      // Register the COPYRIGHT_YEARS replacement value. The require statement is in here to fix
-      // circular dependency problems.
-      this.registerRunTimeReplacementValue( 'COPYRIGHT_YEARS', require( './Copyright' ).computeCopyrightYears( outputFilePath ) );
+      // Register the COPYRIGHT_YEARS replacement value.
+      this.registerRunTimeReplacementValue( 'COPYRIGHT_YEARS', Copyright.computeCopyrightYears( outputFilePath ) );
 
       // Get the replacement strings in the template file that are registered in REPLACEMENT_STRINGS_SCHEMA.
       const replacementStrings = Util.getInnerDelimeterStrings( template, '{{', '}}' )

@@ -24,7 +24,6 @@ module.exports = ( () => {
   // modules
   const chalk = require( 'chalk' );
   const fs = require( 'fs' );
-  const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
   const ignore = require( 'ignore' );
   const os = require( 'os' );
@@ -89,7 +88,8 @@ module.exports = ( () => {
         `${ filePath } is not supported for copyright statements.` );
 
       // Reference to the validated and parsed generator author (see ./Generator.js for more documentation).
-      const author = Generator.getReplacementValue( 'AUTHOR' );
+      // The require statement is in here to fix circular dependency problems.
+      const author = require( '.Generator' ).getReplacementValue( 'AUTHOR' );
 
       // Reference the years string from computeCopyrightYears().
       const yearsString = this.computeCopyrightYears( filePath );
