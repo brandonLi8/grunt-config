@@ -15,8 +15,8 @@
  *    will validate all of package.json to ensure all placeholder strings in REPLACEMENT_STRINGS_SCHEMA can be replaced.
  *
  *  - Some placeholder values aren't determined by package.json and are calculated at run time. For instance,
- *    'COPYRIGHT_YEARS' is determined at run time and depends on when the file was checked into git (see Copyright.js).
- *    These values are registered at run time before generating the file and replacing template strings.
+ *    'COPYRIGHT_YEARS' depends on when the file was checked into git (see Copyright.js), which is checked at run time.
+ *    These values are registered before replacing template strings in the generated file.
  *
  * NOTE: Will error out and provide helpful error messages if package.json isn't implemented correctly.
  *
@@ -44,7 +44,7 @@ module.exports = ( () => {
   //                      - a parse key that correlates to a function that is called to 'parse' a value that is
   //                        retrieved from the package object. The returned value is the replacement value.
   // 3. Null - Indicates a replacement string whose value is determined at run time. These values are registered into
-  //           REPLACEMENT_VALUES at run time before generating the file and replacing template strings.
+  //           REPLACEMENT_VALUES before replacing template strings in the generated file.
   const REPLACEMENT_STRINGS_SCHEMA = {
     AUTHOR: [ 'author', 'name' ],
     AUTHOR_EMAIL: [ 'author', 'email' ],
@@ -75,9 +75,11 @@ module.exports = ( () => {
      * @public
      *
      * @param {String} replacementString - the replacementString that correlates with the value to get.
-     * @returns {Object} mapping object that maps replacement strings (keys) to their replacement value.
+     * @returns {String|number} - the replacement value that correlates with the replacementString
      */
     static getReplacementValue( replacementString ) {
+      Util.assert( typeof replacementString === 'string', `invalid replacementString: ${ replacementString }` );
+      Util.assert( replacementString in REPLACEMENT_STRINGS_SCHEMA, `{{${ replacementString }}} not registered.` );
 
       // If the value has already been retrieved, return it.
       if ( REPLACEMENT_VALUES.hasOwnProperty( replacementString ) ) return REPLACEMENT_VALUES[ replacementString ];
@@ -95,11 +97,11 @@ module.exports = ( () => {
       else if ( schema && Object.getPrototypeOf( schema ) === Object.prototype ) {
         value = schema.parse( UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema.path, replacementString ) );
       }
-      else { // schema was null type, but wasn't registered.
+      else { // schema was null type, but wasn't registered into REPLACEMENT_VALUES.
         Util.throw( `Tried to retrieve replacement value for {{${ replacementString }}} but it wasn't registered.` );
       }
 
-      // Save the value into the REPLACEMENT_VALUES object to ensure the same value isn't validated twice.
+      // Save the value into the REPLACEMENT_VALUES object to ensure the same value isn't validated and parsed twice.
       REPLACEMENT_VALUES[ replacementString ] = value;
       return value;
     }
