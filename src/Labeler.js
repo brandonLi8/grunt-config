@@ -29,6 +29,7 @@ module.exports = ( () => {
   const githubLabelSync = require( 'github-label-sync' ); // eslint-disable-line require-statement-match
   const grunt = require( 'grunt' );
   const path = require( 'path' );
+  const UserConfig = require( './UserConfig' );
   const Util = require( './Util' );
 
   // constants
@@ -61,7 +62,7 @@ module.exports = ( () => {
       Util.assert( typeof allowAddedLabels === 'boolean', `invalid allowAddedLabels: ${ allowAddedLabels }` );
 
       // Assert that the GITHUB_ACCESS_TOKEN node environment variable exists (see top of file for more documentation).
-      Util.assert( process.env.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
+      Util.assert( UserConfig.GITHUB_ACCESS_TOKEN, `Could not retrieve the GITHUB_ACCESS_TOKEN environment variable.
 Labeler requires a GITHUB_ACCESS_TOKEN node environment variable for access to fetch and update labels.
 The token must have permission to write to the repository. See https://github.com/settings/tokens
 on how to create this token. The token GITHUB_ACCESS_TOKEN can be passed in the command line:\n
@@ -105,12 +106,12 @@ or defined in ~/.profile for permanent use (see https://help.ubuntu.com/communit
           labels,
           dryRun,
           allowAddedLabels,
-          accessToken: process.env.GITHUB_ACCESS_TOKEN
+          accessToken: UserConfig.GITHUB_ACCESS_TOKEN
         } );
       }
       catch( error ) {
         // Inform user of bad credentials.
-        Util.throw( `${ error.message } with GITHUB_ACCESS_TOKEN: ${ process.env.GITHUB_ACCESS_TOKEN }` );
+        Util.throw( `${ error.message } with GITHUB_ACCESS_TOKEN: ${ UserConfig.GITHUB_ACCESS_TOKEN }` );
       }
 
       //----------------------------------------------------------------------------------------
