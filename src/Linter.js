@@ -60,7 +60,7 @@ module.exports = ( () => {
         // Indicates where to store the target-specific cache file. Use md5 to hash the file name. This path is relative
         // to the root directory of which the command was invoked, so we use the Util.GRUNT_CONFIG_PATH to find the
         // correct path inside of grunt-config.
-        cacheFile: `${ Util.GRUNT_CONFIG_PATH }/eslint/cache/${ md5( path.basename( process.cwd() ) ) }.eslintcache`,
+        cacheFile: `${ Util.GRUNT_CONFIG_PATH }/eslint/cache/${ md5( path.basename( Util.REPO_PATH ) ) }.eslintcache`,
 
         // Indicates where the custom rules are. This path is relative to the root directory of which the command was
         // invoked, so we use the Util.GRUNT_CONFIG_PATH to find the correct rules path located inside of grunt-config
