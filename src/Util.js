@@ -282,7 +282,7 @@ module.exports = ( () => {
     IGNORE_PATTERN: [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build', '**/templates' ],
 
     // @public {String} - global path to grunt-config.
-    GRUNT_CONFIG_PATH: path.dirname( __dirname ) + '/',
+    GRUNT_CONFIG_PATH: path.dirname( __dirname ),
 
     // @public {String} - global path to the root repository that invoked the command.
     REPO_PATH: process.cwd()

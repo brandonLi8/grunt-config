@@ -21,7 +21,7 @@ module.exports = grunt => {
   const Util = require( './src/Util' );
 
   // constants
-  const GRUNT_CONFIG_PACKAGE = grunt.file.readJSON( `${ __dirname }/package.json` );
+  const GRUNT_CONFIG_PACKAGE = grunt.file.readJSON( Util.GRUNT_CONFIG_PATH + '/package.json' );
 
   //----------------------------------------------------------------------------------------
   // Check if a new version of grunt-config is available and print an update notification to prompt the user to update.

@@ -40,7 +40,7 @@ module.exports = ( () => {
   // 2. Object Literal - an object literal with:
   //                      - a color key that correlates to a color string as described in 1.
   //                      - a string array that contains aliases to other labels.
-  const LABELS_SCHEMA = grunt.file.readJSON( path.dirname( __dirname ) + '/github-labels-schema.json' );
+  const LABELS_SCHEMA = grunt.file.readJSON( Util.GRUNT_CONFIG_PATH + '/github-labels-schema.json' );
 
   //----------------------------------------------------------------------------------------
 
