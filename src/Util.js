@@ -230,7 +230,7 @@ module.exports = ( () => {
      *
      * @param {String} relativePath - relative path to convert (relative to the root directory of the project)
      */
-    toRepoPath( relativePath ) { return path.join( path.basename( process.cwd() ), relativePath ); },
+    toRepoPath( relativePath ) { return path.join( path.basename( Util.REPO_PATH ), relativePath ); },
 
     /**
      * Converts a relative path to the full absolute path.
@@ -239,7 +239,7 @@ module.exports = ( () => {
      *
      * @param {String} relativePath - relative path to convert (relative to the root directory of the project)
      */
-    toAbsolutePath( relativePath ) { return path.join( process.cwd(), relativePath ); },
+    toAbsolutePath( relativePath ) { return path.join( Util.REPO_PATH, relativePath ); },
 
     /**
      * A grunt-config specific convenience method to throw an error (assert a false value).
@@ -279,7 +279,13 @@ module.exports = ( () => {
     CURRENT_YEAR: new Date().getUTCFullYear(),
 
     // @public {String[]} - General pattern for files and directories to ignore for grunt-config.
-    IGNORE_PATTERN: [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build', '**/templates' ]
+    IGNORE_PATTERN: [ '**/.git', '**/node_modules', '**/third-party', '**/dist', '**/build', '**/templates' ],
+
+    // @public {String} - global path to grunt-config.
+    GRUNT_CONFIG_PATH: path.dirname( __dirname ) + '/',
+
+    // @public {String} - global path to the root repository that invoked the command.
+    REPO_PATH: process.cwd()
   };
 
   return Util;

@@ -137,8 +137,8 @@ module.exports = ( () => {
      */
     static generateFile( templateFilePath, outputFilePath ) {
 
-      // Retrieve the template file via the grunt file reader.
-      let template = grunt.file.read( path.dirname( __dirname ) + '/' + templateFilePath );
+      // Retrieve the template file via the grunt file reader, relative to GRUNT_CONFIG_PATH (grunt-config.)
+      let template = grunt.file.read( path.join( Util.GRUNT_CONFIG_PATH, templateFilePath ) );
 
       // Register the COPYRIGHT_YEARS replacement value.
       this.registerRunTimeReplacementValue( 'COPYRIGHT_YEARS', Copyright.computeCopyrightYears( outputFilePath ) );
@@ -156,7 +156,7 @@ module.exports = ( () => {
       } );
 
       // Write to the repository's root directory.
-      grunt.file.write( outputFilePath, template );
+      grunt.file.write( path.join( Util.REPO_PATH, outputFilePath ), template );
 
       Util.log( chalk.hex( '046200' )( `\nSuccessfully generated ${ Util.toRepoPath( outputFilePath ) }` ) );
     }
