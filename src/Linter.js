@@ -41,22 +41,16 @@ module.exports = ( () => {
     static eslint( useCache ) {
       Util.assert( typeof useCache === 'boolean', `invalid useCache: ${ useCache }` );
 
-      // The path to grunt-config relative to the root directory of which the command was invoked.
-      const gruntConfigPath = path.dirname( __dirname );
-
-      // The current working directory that is being linted, which is the root directory that invoked the command.
-      const currentWorkingDirectory = path.dirname( process.cwd() );
-
       // Use the Node.js ESLint API. See https://eslint.org/docs/developer-guide/nodejs-api.
       const linter = new eslint.CLIEngine( {
 
         // Use the ESlint configuration defined in ../eslint/.eslintrc.js
         baseConfig: {
-          extends: [ `${ gruntConfigPath }/eslint/.eslintrc.js` ]
+          extends: [ `${ Util.GRUNT_CONFIG_PATH }/eslint/.eslintrc.js` ]
         },
 
         // Current working directory - Lints the entire root directory that invoked the command
-        cwd: currentWorkingDirectory,
+        cwd: Util.REPO_PATH,
 
         // Caching checks changed files or when the list of rules is changed. Changing the implementation of
         // a custom rule does not invalidate the cache. Caches are formated in .eslintcache files inside of
@@ -64,13 +58,13 @@ module.exports = ( () => {
         cache: useCache,
 
         // Indicates where to store the target-specific cache file. Use md5 to hash the file name. This path is relative
-        // to the root directory of which the command was invoked, so we use the gruntConfigPath to find the correct
-        // path inside of grunt-config.
-        cacheFile: `${ gruntConfigPath }/eslint/cache/${ md5( path.basename( process.cwd() ) ) }.eslintcache`,
+        // to the root directory of which the command was invoked, so we use the Util.GRUNT_CONFIG_PATH to find the
+        // correct path inside of grunt-config.
+        cacheFile: `${ Util.GRUNT_CONFIG_PATH }/eslint/cache/${ md5( path.basename( process.cwd() ) ) }.eslintcache`,
 
         // Indicates where the custom rules are. This path is relative to the root directory of which the command was
-        // invoked, so we use the gruntConfigPath to find the correct rules path located inside of grunt-config
-        rulePaths: [ `${ gruntConfigPath }/eslint/rules` ],
+        // invoked, so we use the Util.GRUNT_CONFIG_PATH to find the correct rules path located inside of grunt-config
+        rulePaths: [ `${ Util.GRUNT_CONFIG_PATH }/eslint/rules` ],
 
         // Files and directories to skip when linting.
         ignorePattern: Util.IGNORE_PATTERN
@@ -81,7 +75,7 @@ module.exports = ( () => {
       Util.logln( `Linting ${ Util.toRepoPath( './' ) } ...` );
 
       // Run the ESlint step
-      const report = linter.executeOnFiles( path.basename( process.cwd() ) );
+      const report = linter.executeOnFiles( Util.REPO_PATH );
 
       // Pretty print results to console if any
       ( report.warningCount || report.errorCount ) && grunt.log.write( linter.getFormatter()( report.results ) );
