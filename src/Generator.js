@@ -92,7 +92,7 @@ module.exports = ( () => {
       let value;
 
       // Three different types of schema. See REPLACEMENT_STRINGS_SCHEMA for more documentation.
-      if ( schema && Array.isArray( schema ) ) {
+      if ( schema && _.isArray( schema ) ) {
         value = UserConfig.parseNestedJSONValue( 'PACKAGE_JSON', schema, replacementString );
       }
       else if ( schema && Object.getPrototypeOf( schema ) === Object.prototype ) {

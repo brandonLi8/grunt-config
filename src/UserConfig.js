@@ -76,7 +76,7 @@ module.exports = ( () => {
       if ( error ) {
         // First, get the error message by recursively creating the error message.
         const getErrorMessage = paths => {
-          valueName = valueName || subpaths[ subpaths.length - 1 ].toUpperCase();
+          valueName = valueName || _.last( subpaths ).toUpperCase();
 
           // Base case - one path left is the value
           if ( paths.length === 1 ) {
