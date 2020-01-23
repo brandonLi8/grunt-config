@@ -24,7 +24,6 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
   const babel = require( '@babel/core' ); // eslint-disable-line require-statement-match
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
@@ -60,7 +59,6 @@ module.exports = ( () => {
     generateBuildHtml: true,
     overrideOptions: {}
   };
-
   console.log( DEFAULT_REQUIRE_JS_OPTIONS )
 
 

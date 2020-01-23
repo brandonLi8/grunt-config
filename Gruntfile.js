@@ -10,6 +10,9 @@
 module.exports = grunt => {
   'use strict';
 
+  // globals
+  global._ = require( 'lodash' );
+
   // modules
   const Builder = require( './src/Builder' );
   const chalk = require( 'chalk' );
@@ -19,6 +22,7 @@ module.exports = grunt => {
   const Linter = require( './src/Linter' );
   const updateNotifier = require( 'update-notifier' ); // eslint-disable-line require-statement-match
   const Util = require( './src/Util' );
+
 
   // constants
   const GRUNT_CONFIG_PACKAGE = grunt.file.readJSON( Util.GRUNT_CONFIG_PATH + '/package.json' );
