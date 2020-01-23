@@ -12,7 +12,7 @@
  * support different file types in the future.
  *
  * The configuration for ESlint can be found in ./eslint/.eslintrc.js (relative to this file). It uses some default
- * rules (see documentation: https://eslint.org/docs/rules/) but also implements custom rules (see ./eslint/rules).
+ * rules (see https://eslint.org/docs/rules/) but also implements custom rules (see ./eslint/custom-rules).
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -30,7 +30,7 @@ module.exports = ( () => {
 
     /**
      * Lints the entire root directory that invoked the command, using the ESlint configuration defined in
-     * ./eslint/.eslintrc.js (relative to this file). Uses some custom rules (see ./eslint/rules).
+     * ./eslint/.eslintrc.js (relative to this file). Uses some custom rules (see ./eslint/custom-rules).
      * @public
      *
      * @param {boolean} useCache - indicates if the ESlint cache should be used. Caching doesn't re-lint files that
@@ -60,7 +60,7 @@ module.exports = ( () => {
 
         // Indicates where the custom rules are. This path is relative to grunt-config, so we use
         // Util.GRUNT_CONFIG_PATH to find the correct rules path located inside of grunt-config
-        rulePaths: [ `${ Util.GRUNT_CONFIG_PATH }/src/eslint/rules` ],
+        rulePaths: [ `${ Util.GRUNT_CONFIG_PATH }/src/eslint/custom-rules` ],
 
         // Files and directories to skip when linting.
         ignorePattern: Util.IGNORE_PATTERN
