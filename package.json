@@ -23,7 +23,6 @@
     "github-label-sync": "^1.4.2",
     "grunt": "~1.0.4",
     "ignore": "^5.1.4",
-    "md5": "^2.2.1",
     "requirejs": "^2.3.6",
     "shelljs": "^0.8.3",
     "terser": "^4.6.3",

@@ -1,4 +1,4 @@
-// Copyright © 2019-2020 Brandon Li. All rights reserved.
+// Copyright © 2020 Brandon Li. All rights reserved.
 
 /**
  * Custom ESlint rule that enforces the first line of each file to be a correctly implemented copyright statement,
@@ -16,7 +16,7 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const Copyright = require( '../../src/Copyright' );
+  const Copyright = require( '../../Copyright' );
 
   return {
 

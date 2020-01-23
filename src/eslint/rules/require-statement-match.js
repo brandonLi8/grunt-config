@@ -1,4 +1,4 @@
-// Copyright © 2019-2020 Brandon Li. All rights reserved.
+// Copyright © 2020 Brandon Li. All rights reserved.
 
 /**
  * Custom ESlint rule that checks that the module name (case sensitive) of a RequireJS statement matches the variable.
