@@ -24,22 +24,23 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  // const babel = require( '@babel/core' ); // eslint-disable-line require-statement-match
-  // const Generator = require( './Generator' );
-  // const grunt = require( 'grunt' );
-  // const path = require( 'path' );
-  // const requirejs = require( 'requirejs' );
-  // const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
-  // const terser = require( 'terser' );
-  // const Util = require( './Util' );
+  const _ = require( 'lodash' ); // eslint-disable-line require-statement-match
+  const babel = require( '@babel/core' ); // eslint-disable-line require-statement-match
+  const Generator = require( './Generator' );
+  const grunt = require( 'grunt' );
+  const path = require( 'path' );
+  const requirejs = require( 'requirejs' );
+  const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
+  const terser = require( 'terser' );
+  const Util = require( './Util' );
+  const UserConfig = require( './UserConfig' );
 
   // // constants
   // // Read the buildrc file if it exists.
-  // const BUILD_RC = grunt.file.isFile( 'buildrc.json' ) ? grunt.file.readJSON( 'buildrc.json' ) : undefined;
 
-  const BUILD_OPTIONS = {
-    sourceDirectory: ".",
-    buildDirectory: "build",
+  const DEFUALT_BUILD_OPTIONS = {
+    sourceDirectory: '.',
+    buildDirectory: 'build',
     compress: {
       minify: true,
       mangle: true,
@@ -51,15 +52,17 @@ module.exports = ( () => {
     preBuild: null,
     postBuild: null
   };
-  const REQUIRE_JS_OPTIONS = !BUILD_OPTIONS.requirejs ? null : {
-    configFile: 'js/project-name-config.js',
-    mainEntryFile: 'js/project-name-main.js',
-    outputFile: 'project-name.min.js',
+
+  const DEFAULT_REQUIRE_JS_OPTIONS = {
+    configFile: `js/${ Generator.getValue( 'REPO_NAME' ) }-config.js`,
+    mainEntryFile: `js/${ Generator.getValue( 'REPO_NAME' ) }-main.js`,
+    outputFile: `${ Generator.getValue( 'REPO_NAME' ) }-${ Generator.getValue( 'VERSION' ) }.min.js`,
     generateBuildHtml: true,
     overrideOptions: {}
   };
 
-  console.log( Object.keys( BUILD_OPTIONS ) )
+  console.log( DEFAULT_REQUIRE_JS_OPTIONS )
+
 
 //   const MINIFY_DEFAULTS = {
 //     babelTranspile: true,
@@ -67,7 +70,7 @@ module.exports = ( () => {
 //     beautify: false
 //   };
 //   // Reference to the validated and parsed generator replacement values (see ./Generator.js for more documentation).
-//   const GENERATOR_VALUES = Generator.getReplacementValuesMapping();
+//   const GENERATOR_VALUES = Generator.getValuesMapping();
 
 //   class Builder {
 

@@ -71,7 +71,7 @@ or defined in ~/.profile for permanent use (see https://help.ubuntu.com/communit
 
       // Parse the GitHub repository url. The url is parsed from the git-remote in package.json by Generator.
       // It should be of the form https://github.com/organization/repository_name.git
-      const gitRemote = Generator.getReplacementValue( 'GIT_REMOTE' );
+      const gitRemote = Generator.getValue( 'GIT_REMOTE' );
 
       // If the url isn't a GitHub url an error is thrown.
       Util.assert( gitRemote.includes( GITHUB_URL ), `Cannot generate labels with non-github remote: ${ gitRemote }` );

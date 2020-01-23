@@ -89,7 +89,7 @@ module.exports = ( () => {
 
       // Reference to the validated and parsed generator author (see ./Generator.js for more documentation).
       // The require statement is in here to fix circular dependency problems.
-      const author = require( './Generator' ).getReplacementValue( 'AUTHOR' );
+      const author = require( './Generator' ).getValue( 'AUTHOR' );
 
       // Reference the years string from computeCopyrightYears().
       const yearsString = this.computeCopyrightYears( filePath );

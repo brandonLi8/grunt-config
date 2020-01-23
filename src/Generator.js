@@ -78,7 +78,7 @@ module.exports = ( () => {
      * @param {String} replacementString - the replacementString that correlates with the value, without the brackets.
      * @returns {String|number} - the replacement value that correlates with the replacementString
      */
-    static getReplacementValue( replacementString ) {
+    static getValue( replacementString ) {
       Util.assert( typeof replacementString === 'string', `invalid replacementString: ${ replacementString }` );
       Util.assert( replacementString in REPLACEMENT_STRINGS_SCHEMA, `{{${ replacementString }}} not registered.` );
 
@@ -123,7 +123,7 @@ module.exports = ( () => {
         && REPLACEMENT_STRINGS_SCHEMA[ replacementString ] === null,
         `replacementString {{${ replacementString }}} not registered as a run-time replacement value.` );
 
-      // Save the value into REPLACEMENT_VALUES for the next getReplacementValue call.
+      // Save the value into REPLACEMENT_VALUES for the next getValue call.
       REPLACEMENT_VALUES[ replacementString ] = value;
     }
 
@@ -151,7 +151,7 @@ module.exports = ( () => {
       replacementStrings.forEach( replacementString => {
 
         // Parse the replacement value and replace all template values.
-        const replacementValue = Generator.getReplacementValue( replacementString );
+        const replacementValue = Generator.getValue( replacementString );
         template = Util.replaceAll( template, `{{${ replacementString }}}`, replacementValue );
       } );
 

@@ -35,7 +35,7 @@ module.exports = ( () => {
     // @public {Object} (grunt-config-internal) - reference to the repository buildrc.json object of the root repository
     //                                            that invoked the command, if it exists. See ./Builder.js for more
     //                                            documentation of this file.
-    BUILD_RC: grunt.file.isFile( 'package.json' ) ? grunt.file.readJSON( 'package.json' ) : undefined,
+    BUILD_RC: grunt.file.isFile( 'buildrc.json' ) ? grunt.file.readJSON( 'buildrc.json' ) : undefined,
 
     // @public {String} (grunt-config-internal) - reference to the GITHUB_ACCESS_TOKEN environment variable if it
     //                                            exists. See ./Labeler.js for more documentation of this variable.
