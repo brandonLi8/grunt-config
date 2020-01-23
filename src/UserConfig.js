@@ -95,7 +95,7 @@ module.exports = ( () => {
       }
       return value;
     }
-  }
+  };
 
   return UserConfig;
 } )();

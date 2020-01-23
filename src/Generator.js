@@ -83,7 +83,7 @@ module.exports = ( () => {
       Util.assert( replacementString in REPLACEMENT_STRINGS_SCHEMA, `{{${ replacementString }}} not registered.` );
 
       // If the value has already been retrieved, return it.
-      if ( REPLACEMENT_VALUES.hasOwnProperty( replacementString ) ) return REPLACEMENT_VALUES[ replacementString ];
+      if ( replacementString in REPLACEMENT_VALUES ) return REPLACEMENT_VALUES[ replacementString ];
 
       // Reference the Schema from REPLACEMENT_STRINGS_SCHEMA
       const schema = REPLACEMENT_STRINGS_SCHEMA[ replacementString ];

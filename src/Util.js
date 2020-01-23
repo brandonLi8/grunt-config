@@ -10,7 +10,6 @@ module.exports = ( () => {
   'use strict';
 
   // modules
-  const chalk = require( 'chalk' );
   const fs = require( 'fs' );
   const grunt = require( 'grunt' );
   const ignore = require( 'ignore' );

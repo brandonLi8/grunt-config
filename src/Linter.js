@@ -44,7 +44,7 @@ module.exports = ( () => {
 
         // Use the ESlint configuration defined in ./eslint/.eslintrc.js
         baseConfig: {
-          extends: [ `${ Util.GRUNT_CONFIG_PATH }/src/eslint/.eslintrc.js` ]
+          extends: [ path.join( Util.GRUNT_CONFIG_PATH, '/src/eslint/.eslintrc.js' ) ]
         },
 
         // Current working directory - Lints the entire root directory that invoked the command
@@ -60,7 +60,7 @@ module.exports = ( () => {
 
         // Indicates where the custom rules are. This path is relative to grunt-config, so we use
         // Util.GRUNT_CONFIG_PATH to find the correct rules path located inside of grunt-config
-        rulePaths: [ `${ Util.GRUNT_CONFIG_PATH }/src/eslint/custom-rules` ],
+        rulePaths: [ path.join( Util.GRUNT_CONFIG_PATH, '/src/eslint/custom-rules' ) ],
 
         // Files and directories to skip when linting.
         ignorePattern: Util.IGNORE_PATTERN
