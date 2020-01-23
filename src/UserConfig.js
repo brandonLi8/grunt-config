@@ -1,16 +1,15 @@
 // Copyright © 2020 Brandon Li. All rights reserved.
 
 /**
- * Utility class for referencing, validating, and parsing user-specific configuration values.
+ * Utility class for referencing and retrieving user-specific configuration options and values.
  *
  * User-specific configuration values are dynamic and depend on the user and its environment. For instance, the
- * package.json of every user will have slightly different values. Each key-value of package.json is a user-specific
- * value and determines Generator values.
+ * package.json of every user will have slightly different values. Each key-value pair of package.json is a
+ * user-specific value and determines Generator values.
  *
- * Contains static methods for validating user configuration value(s). These are placed into methods so that they are
- * only validated on the grunt command that needs the value(s) instead of every time this module is loaded. If any
- * configuration option(s) weren't implemented correctly, will provide a helpful error message to guide the user to
- * correct it.
+ * Contains static references that should be conditionally validated only in the grunt-task that uses it. Contains a
+ * convenience method to parse a value from either PACKAGE_JSON or BUILD_RC and provides a helpful error message if
+ * the file wasn't implemented correctly to guide the user to correct it.
  *
  * @author Brandon Li <brandon.li820@gmail.com>
  */
@@ -29,11 +28,13 @@ module.exports = ( () => {
     // Static References
     //----------------------------------------------------------------------------------------
 
-    // @public {Object} (grunt-config-internal) - reference to the repository package.json object if it exists.
+    // @public {Object} (grunt-config-internal) - reference to the package.json object of the root repository that
+    //                                            invoked the command, if it exists.
     PACKAGE_JSON: grunt.file.isFile( 'package.json' ) ? grunt.file.readJSON( 'package.json' ) : undefined,
 
-    // @public {Object} (grunt-config-internal) - reference to the repository buildrc.json Object if it exists.
-    //                                            See ./Builder.js for more documentation of this file.
+    // @public {Object} (grunt-config-internal) - reference to the repository buildrc.json object of the root repository
+    //                                            that invoked the command, if it exists. See ./Builder.js for more
+    //                                            documentation of this file.
     BUILD_RC: grunt.file.isFile( 'package.json' ) ? grunt.file.readJSON( 'package.json' ) : undefined,
 
     // @public {String} (grunt-config-internal) - reference to the GITHUB_ACCESS_TOKEN environment variable if it
@@ -93,14 +94,7 @@ module.exports = ( () => {
           + '{\n' + getErrorMessage( subpaths ) + '\n  ...\n}' );
       }
       return value;
-    },
-
-    //----------------------------------------------------------------------------------------
-    // Validators
-    //----------------------------------------------------------------------------------------
-
-
-
+    }
   }
 
   return UserConfig;
