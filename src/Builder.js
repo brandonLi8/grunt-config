@@ -1,45 +1,65 @@
 // Copyright © 2020 Brandon Li. All rights reserved.
 
-// /**
-//  * Builder/compiler that optimizes, minifies, mangles, and transpiles code.
-//  *
-//  * Requires the root repository that invoked the command to contain a buildrc.json file that configures the build
-//  * options such as output location and source code location. See grunt-config/example.buildrc.json for an example
-//  * buildrc file and full documentation of all available options.
-//  *
-//  * Uses Terser for minification and Babel for transpilation. See https://terser.org and https://babeljs.io.
-//  *
-//  * If the project is a requirejs project (indicated in the buildrc file), will use the r.js build optimizer to compile
-//  * the project into one file before minifying and transpiling. See https://requirejs.org/docs/optimization.html.
-//  * There is an option to generate a _build.html file with the requirejs minified code as the only script. This only
-//  * works if there is an index.html file.
-//  *
-//  * Otherwise, if the project isn't a requirejs project, this file will optimize the .js files in the source directory
-//  * and copy it over it to the build directory (with the same relative subdirectory paths).
-//  *
-//  * @author Brandon Li <brandon.li820@gmail.com>
-//  */
+/**
+ * Builder/compiler that optimizes, minifies, mangles, and transpiles code.
+ *
+ * Requires the root repository that invoked the command to contain a buildrc.json file that configures the build
+ * options such as output location and source code location. See grunt-config/example.buildrc.json for an example
+ * buildrc file and full documentation of all available options.
+ *
+ * Uses Terser for minification and Babel for transpilation. See https://terser.org and https://babeljs.io.
+ *
+ * If the project is a requirejs project (indicated in the buildrc file), will use the r.js build optimizer to compile
+ * the project into one file before minifying and transpiling. See https://requirejs.org/docs/optimization.html.
+ * There is an option to generate a _build.html file with the requirejs minified code as the only script. This only
+ * works if there is an index.html file.
+ *
+ * Otherwise, if the project isn't a requirejs project, this file will optimize the .js files in the source directory
+ * and copy it over it to the build directory (with the same relative subdirectory paths).
+ *
+ * @author Brandon Li <brandon.li820@gmail.com>
+ */
 
-// module.exports = ( () => {
-//   'use strict';
+module.exports = ( () => {
+  'use strict';
 
-//   // modules
-//   const babel = require( '@babel/core' ); // eslint-disable-line require-statement-match
-//   const Generator = require( './Generator' );
-//   const grunt = require( 'grunt' );
-//   const path = require( 'path' );
-//   const requirejs = require( 'requirejs' );
-//   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
-//   const terser = require( 'terser' );
-//   const Util = require( './Util' );
+  // modules
+  // const babel = require( '@babel/core' ); // eslint-disable-line require-statement-match
+  // const Generator = require( './Generator' );
+  // const grunt = require( 'grunt' );
+  // const path = require( 'path' );
+  // const requirejs = require( 'requirejs' );
+  // const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
+  // const terser = require( 'terser' );
+  // const Util = require( './Util' );
 
-//   // constants
-//   // Read the buildrc file if it exists.
-//   const BUILD_RC = grunt.file.isFile( 'buildrc.json' ) ? grunt.file.readJSON( 'buildrc.json' ) : undefined;
+  // // constants
+  // // Read the buildrc file if it exists.
+  // const BUILD_RC = grunt.file.isFile( 'buildrc.json' ) ? grunt.file.readJSON( 'buildrc.json' ) : undefined;
 
+  const BUILD_OPTIONS = {
+    sourceDirectory: ".",
+    buildDirectory: "build",
+    compress: {
+      minify: true,
+      mangle: true,
+      minifyOverrideOptions: {},
+      babelTranspile: true,
+      babelOverrideOptions: {}
+    },
+    requirejs: null,
+    preBuild: null,
+    postBuild: null
+  };
+  const REQUIRE_JS_OPTIONS = !BUILD_OPTIONS.requirejs ? null : {
+    configFile: 'js/project-name-config.js',
+    mainEntryFile: 'js/project-name-main.js',
+    outputFile: 'project-name.min.js',
+    generateBuildHtml: true,
+    overrideOptions: {}
+  };
 
-
-
+  console.log( Object.keys( BUILD_OPTIONS ) )
 
 //   const MINIFY_DEFAULTS = {
 //     babelTranspile: true,
@@ -314,4 +334,4 @@
 
 
 //   return Builder;
-// } )();
+} )();
