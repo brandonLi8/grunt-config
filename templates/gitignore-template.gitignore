@@ -51,3 +51,9 @@ yarn-error.log*
 ## Eslint
 *.eslintcache
 eslint/cache
+
+## Other
+*.lcov
+.grunt
+.nyc_output
+coverage
