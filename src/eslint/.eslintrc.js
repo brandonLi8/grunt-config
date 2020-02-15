@@ -40,7 +40,7 @@ module.exports = {
     'space-before-blocks': 2,
     'space-before-function-paren': [ 2, { asyncArrow: 'always', named: 'never', anonymous: 'never' } ],
     'space-in-parens': [ 2, 'always' ],
-    'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=' ] } ],
+    'spaced-comment': [ 2, 'always', { exceptions: [ '-', '*', '=', '----------------------------------------------------------------------------*' ] } ],
     'func-call-spacing': [ 2, 'never' ], // Should never have a space (e.g. foo ( args ) should be foo( args ))
     'template-curly-spacing': [ 2, 'always' ],
     'semi-spacing': 2,
