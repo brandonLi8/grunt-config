@@ -59,7 +59,6 @@ module.exports = ( () => {
     generateBuildHtml: true,
     overrideOptions: {}
   };
-  console.log( DEFAULT_REQUIRE_JS_OPTIONS )
 
 
 //   const MINIFY_DEFAULTS = {
