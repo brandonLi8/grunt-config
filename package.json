@@ -27,7 +27,7 @@
     "requirejs": "^2.3.6",
     "shelljs": "^0.8.3",
     "terser": "^4.6.6",
-    "update-notifier": "^4.0.0"
+    "update-notifier": "^4.1.0"
   },
   "bugs": {
     "url": "https://github.com/brandonLi8/truenit/issues",
