@@ -119,9 +119,7 @@ module.exports = grunt => {
     Util.wrap( path => { Util.updateNewlines( path || './' ); } ) );
 
 
-  grunt.registerTask( 'build', Util.wrapAsync( async () => {
-    grunt.file.write( 'hi.js', await Builder.build() );
-  } ) );
+  grunt.registerTask( 'build', Util.wrapAsync( async () => { await Builder.build(); } ) );
 
   //----------------------------------------------------------------------------------------
   // The following commands generate files.
