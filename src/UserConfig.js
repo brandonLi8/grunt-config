@@ -94,13 +94,7 @@ module.exports = ( () => {
           + '{\n' + getErrorMessage( subpaths ) + '\n  ...\n}' );
       }
       return value;
-    },
-
-    // validatePackageJson() {
-    //   Util.assert( UserConfig.PACKAGE_JSON,
-    //     'package.json is required for building and was not found.\n'
-    //     + 'See grunt-config/example.buildrc.json for an example.' );
-    // }
+    }
   };
 
   return UserConfig;
