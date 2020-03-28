@@ -62,17 +62,17 @@
     // provided).
     "configFile": "js/project-name-config.js",
 
-    // The single entry point main file for requirejs that runs the project.
-    // This path is relative to the sourceDirectory. This option is required (if
-    // the requirejs key is provided).
-    "mainEntryFile": "js/project-name-main.js",
+    // The single entry point main module name for requirejs that runs the
+    // project. You can use paths defined in your configFile to reference this
+    // module.
+    "mainEntry": "project-name-main",
 
     // The file to output the optimized requirejs project. This path is relative
     // to the buildDirectory. This option is required (if the requirejs key is
     // provided).
     "outputFile": "project-name.min.js",
 
-    // Indicates if Builder should generate a _build.html file in the
+    // Indicates if Builder should generate a index.html file in the
     // buildDirectory with the optimized requirejs code (outputted in the
     // output file) as the only script of the page. This only works if
     // there is an index.html file in the sourceDirectory. See
