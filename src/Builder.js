@@ -113,20 +113,30 @@ module.exports = ( () => {
 
         // Write the optimized requirejs into the output file.
         grunt.file.write( path.join( buildDirectory, buildConfiguration.requirejs.outputFile ), optimzedRequireJs );
-        newSize = fs.statSync( path.join( buildDirectory, buildConfiguration.requirejs.outputFile ) ).size;
 
         if ( buildConfiguration.requirejs.generateBuildHtml ) {
           Util.assert( grunt.file.isFile( path.join( sourceDirectory, 'index.html' ) ), 'no index.html file found' );
           originalSize += fs.statSync( path.join( sourceDirectory, 'index.html' ) ).size;
 
+          const indexHTML = grunt.file.read( path.join( sourceDirectory, 'index.html' ) );
+          const head = Util.getStringFrom( '<head>', '</head>', indexHTML );
+          const bodyStart = Util.getStringFrom( '<body', '>', indexHTML );
 
-          // grunt.file.write( path.join( buildDirectory, 'index.html' ),  )
+          Generator.registerRunTimeReplacementValue( 'BUILD_HEAD', head );
+          Generator.registerRunTimeReplacementValue( 'BUILD_BODY', bodyStart +
+            '<script>\n' + optimzedRequireJs + '\n</script>\n' + '</body>' );
+
+          const endFile = path.relative( Util.REPO_PATH, path.join( buildDirectory, 'index.html' ) );
+
+          Generator.generateFile( 'templates/index-build-template.html', endFile );
+          newSize = fs.statSync( path.join( buildDirectory, 'index.html' ) ).size;
+        }
+        else {
+          newSize = fs.statSync( path.join( buildDirectory, buildConfiguration.requirejs.outputFile ) ).size;
         }
       }
 
-
       grunt.log.writeln( '\n\nFinished...\n' );
-
       grunt.log.writeln( `Original Size: ${ originalSize } bytes` );
       grunt.log.writeln( `Minified Size: ${ newSize } bytes` );
       grunt.log.writeln( `Saved ${ ( originalSize - newSize ) } bytes (${ ( ( originalSize - newSize ) / originalSize * 100 ).toFixed( 2 ) }% saved)` );
@@ -164,7 +174,7 @@ module.exports = ( () => {
         output: {
           beautify: options.beautify,
           comments: '',
-          preamble: `// Copyright © . All rights reserved.\n\n` +
+          preamble: `// Copyright © ${ Generator.getValue( 'AUTHOR' ) }. All rights reserved.\n\n` +
                     '/**\n' +
                     ` * @license ${ Generator.getValue( 'REPO_NAME' ) } ${ Generator.getValue( 'VERSION' ) }\n` +
                     ` * Released under ${ Generator.getValue( 'LICENSE' ) }\n` +
