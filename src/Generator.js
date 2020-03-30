@@ -59,7 +59,7 @@ module.exports = ( () => {
     GITHUB_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( /.git|git+/i, '' ) },
     REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
     COPYRIGHT_YEARS: null,
-    INDEX_HEAD: null, // See Builder.js for more documentation.
+    BUILD_HEAD: null, // See Builder.js for more documentation.
     BUILD_BODY: null // See Builder.js for more documentation.
   };
 
