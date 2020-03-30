@@ -258,7 +258,7 @@ module.exports = ( () => {
         // Avoids a warning that this gets disabled for >500kb of source.
         compact: true,
         // plugins: [ '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-transform-classes' ],
-        presets: [ [ `${ process.cwd() }/../grunt-config/node_modules/@babel/preset-env`, {
+        presets: [ [ path.join( process.cwd(), '/node_modules/@babel/preset-env' ), {
           modules: false,
           targets: {
             browsers: [
