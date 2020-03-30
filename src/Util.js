@@ -196,6 +196,22 @@ module.exports = ( () => {
     },
 
     /**
+     * Gets the string between delimiters of a string using indexOf and includes the substrings. This also allows for
+     * whitespace in between.
+     * @public
+     *
+     * @param {String} start - the start delimiter (e.g. '<div>')
+     * @param {String} end - the end delimiter (e.g. '</div>')
+     * @param {String} string - the string to search for the strings in between delimiters
+     */
+    getStringFrom( start, end, string ) {
+      const startIndex = string.indexOf( start );
+      const endIndex = string.indexOf( end, startIndex + start.length ) + end.length + 1;
+
+      return string.substring( startIndex, endIndex )
+    },
+
+    /**
      * Convenience method to pluralize a word, adding the number in front. For example,
      * Util.pluralize( 'dog', 2 ) -> '2 dogs'.
      * Util.pluralize( 'dog', 1 ) => '1 dog'.
