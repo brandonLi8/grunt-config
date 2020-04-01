@@ -33,7 +33,7 @@
 ### Installation
 (1) Clone the repository in a desired spot
 ```
-$ git clone {{GIT_REMOTE}}
+$ git clone {{GITHUB_URL}}
 ```
 (2) Start the application.
 ```
