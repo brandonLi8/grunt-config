@@ -50,14 +50,14 @@ module.exports = ( () => {
     AUTHOR: [ 'author', 'name' ],
     AUTHOR_EMAIL: [ 'author', 'email' ],
     DESCRIPTION: [ 'description' ],
-    GIT_REMOTE: [ 'repository', 'url' ],
     HOMEPAGE: [ 'homepage' ],
     ISSUES_URL: [ 'bugs', 'url' ],
     REPO_NAME: [ 'name' ],
     VERSION: [ 'version' ],
     LICENSE: [ 'license' ],
-    GITHUB_URL: { path: [ 'repository', 'url' ], parse: value => value.replace( /.git|git+/i, '' ) },
-    REPO_TITLE: { path: [ 'name' ], parse: value => Util.toTitleCase( value ) },
+    GIT_REMOTE: { path: [ 'repository', 'url' ], parse: val => val.replace( /(^git\+)/, '' ) },
+    GITHUB_URL: { path: [ 'repository', 'url' ], parse: val => val.replace( /(^git\+)/, '' ).replace( /.git$/, '' ) },
+    REPO_TITLE: { path: [ 'name' ], parse: val => Util.toTitleCase( val ) },
     COPYRIGHT_YEARS: null,
     BUILD_HEAD: null, // See Builder.js for more documentation.
     BUILD_BODY: null // See Builder.js for more documentation.
