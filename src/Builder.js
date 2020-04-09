@@ -134,6 +134,10 @@ module.exports = ( () => {
         else {
           newSize = fs.statSync( path.join( buildDirectory, buildConfiguration.requirejs.outputFile ) ).size;
         }
+
+        if ( grunt.file.exists( path.join( Util.REPO_PATH, 'CNAME' ) ) ) {
+          grunt.file.copy( path.join( Util.REPO_PATH, 'CNAME' ), path.join( buildDirectory, 'CNAME' ) );
+        }
       }
 
       grunt.log.writeln( '\n\nFinished...\n' );
