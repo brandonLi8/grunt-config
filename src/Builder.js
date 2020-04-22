@@ -62,6 +62,20 @@ module.exports = ( () => {
     mangle: true,
     beautify: false
   };
+  const STRING_INCLUDES_POLYFILL = `if ( !String.prototype.includes ) {
+    String.prototype.includes = function( search, start ) {
+      if ( typeof start !== 'number' ) start = 0;
+
+      if ( start + search.length > this.length ) return false;
+      else return this.indexOf( search, start ) !== -1;
+    };
+  }`;
+  const ARRAY_INCLUDES_POLYFILL = `if ( !Array.prototype.includes ) {
+    Object.defineProperty( Array.prototype, 'includes', {
+      enumerable: false,
+      value: function( obj, start ) { return this.indexOf( obj, start ) !== -1 }
+    } );
+  }`;
 
   class Builder {
 
@@ -101,7 +115,11 @@ module.exports = ( () => {
         originalSize = optimized.originalSize;
 
         // Optimize the requirejs project.
-        let optimzedRequireJs = `(function() {\n${ optimized.code }\n}());`;
+        let optimzedRequireJs = `(function() {
+          ${ STRING_INCLUDES_POLYFILL }
+          ${ ARRAY_INCLUDES_POLYFILL }
+          ${ optimized.code }
+        }());`;
 
         // Babel-transpile
         if ( buildConfiguration.compress.babelTranspile ) {
@@ -224,7 +242,7 @@ module.exports = ( () => {
 
           return this.transpile( contents, {
             compact: false,
-            plugins: [ [ "@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true } ] ],
+            plugins: [ [ '@babel/plugin-proposal-object-rest-spread', { loose: true, useBuiltIns: true } ] ],
             presets: null
           } );
         },
@@ -261,7 +279,7 @@ module.exports = ( () => {
       options = {
         // Avoids a warning that this gets disabled for >500kb of source.
         compact: true,
-        // plugins: [ '@babel/plugin-proposal-object-rest-spread', '@babel/plugin-transform-classes' ],
+        plugins: [ '@babel/plugin-transform-object-assign' ],
         presets: [ [ path.join( process.cwd(), '/node_modules/@babel/preset-env' ), {
           modules: false,
           targets: {
