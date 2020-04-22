@@ -29,6 +29,7 @@ module.exports = ( () => {
   const Generator = require( './Generator' );
   const grunt = require( 'grunt' );
   const path = require( 'path' );
+  const Polyfill = require( './Polyfill' );
   const requirejs = require( 'requirejs' );
   const shell = require( 'shelljs' ); // eslint-disable-line require-statement-match
   const terser = require( 'terser' );
@@ -62,20 +63,6 @@ module.exports = ( () => {
     mangle: true,
     beautify: false
   };
-  const STRING_INCLUDES_POLYFILL = `if ( !String.prototype.includes ) {
-    String.prototype.includes = function( search, start ) {
-      if ( typeof start !== 'number' ) start = 0;
-
-      if ( start + search.length > this.length ) return false;
-      else return this.indexOf( search, start ) !== -1;
-    };
-  }`;
-  const ARRAY_INCLUDES_POLYFILL = `if ( !Array.prototype.includes ) {
-    Object.defineProperty( Array.prototype, 'includes', {
-      enumerable: false,
-      value: function( obj, start ) { return this.indexOf( obj, start ) !== -1 }
-    } );
-  }`;
 
   class Builder {
 
@@ -116,8 +103,9 @@ module.exports = ( () => {
 
         // Optimize the requirejs project.
         let optimzedRequireJs = `(function() {
-          ${ STRING_INCLUDES_POLYFILL }
-          ${ ARRAY_INCLUDES_POLYFILL }
+          ${ Polyfill.string.includes }
+          ${ Polyfill.array.includes }
+          ${ Polyfill.array.find }
           ${ optimized.code }
         }());`;
 
