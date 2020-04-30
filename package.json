@@ -27,7 +27,7 @@
     "lodash": "^4.17.15",
     "requirejs": "^2.3.6",
     "shelljs": "^0.8.3",
-    "terser": "^4.6.6",
+    "terser": "^4.6.13",
     "update-notifier": "^4.1.0"
   },
   "bugs": {
