@@ -15,7 +15,7 @@
   "dependencies": {
     "@babel/core": "^7.8.7",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
-    "@babel/plugin-transform-classes": "^7.8.6",
+    "@babel/plugin-transform-classes": "^7.12.1",
     "@babel/plugin-transform-object-assign": "^7.8.3",
     "@babel/preset-env": "^7.8.7",
     "almond": "^0.3.3",
